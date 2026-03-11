@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'claude/audit-wuv-summit-code-X4AHD']
 
 permissions:
   contents: read
