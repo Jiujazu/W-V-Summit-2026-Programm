@@ -214,39 +214,12 @@
   0%, 100% { box-shadow: 0 0 5px rgba(255,107,53,0.2); }
   50% { box-shadow: 0 0 15px rgba(213,84,213,0.3), 0 0 30px rgba(255,107,53,0.15); }
 }
-@keyframes nyanFly {
-  0% { transform: translateX(-200px) translateY(0); }
-  25% { transform: translateX(25vw) translateY(-20px); }
-  50% { transform: translateX(50vw) translateY(10px); }
-  75% { transform: translateX(75vw) translateY(-15px); }
-  100% { transform: translateX(calc(100vw + 200px)) translateY(0); }
-}
-@keyframes rainbowTrail {
-  0% { transform: translateX(-200px) translateY(0) scaleX(1); opacity: 0.7; }
-  25% { transform: translateX(25vw) translateY(-20px) scaleX(1); opacity: 0.7; }
-  50% { transform: translateX(50vw) translateY(10px) scaleX(1); opacity: 0.7; }
-  75% { transform: translateX(75vw) translateY(-15px) scaleX(1); opacity: 0.7; }
-  100% { transform: translateX(calc(100vw + 200px)) translateY(0) scaleX(1); opacity: 0; }
-}
-@keyframes shootingStar {
-  0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 0; }
-  5% { opacity: 1; }
-  70% { opacity: 1; }
-  100% { transform: translateX(300px) translateY(200px) rotate(-35deg); opacity: 0; }
-}
 @keyframes vhsGlitch {
   0%, 95%, 100% { transform: translateX(0); opacity: 0; }
   96% { transform: translateX(-5px); opacity: 0.8; }
   97% { transform: translateX(10px); opacity: 0.6; }
   98% { transform: translateX(-3px); opacity: 0.7; }
   99% { transform: translateX(7px); opacity: 0; }
-}
-@keyframes sparkleFloat {
-  0%, 100% { transform: translateY(0) scale(1); opacity: 0; }
-  10% { opacity: 1; }
-  50% { transform: translateY(-60px) scale(1.3); opacity: 0.8; }
-  90% { opacity: 0.2; }
-  100% { transform: translateY(-120px) scale(0.5); opacity: 0; }
 }
 @keyframes rainbowBorder {
   0% { border-color: #ff6b35; }
@@ -358,52 +331,6 @@
 }
 .retro-vignette { display: none; }
 
-/* Nyan Cat */
-[data-theme="retro"] .nyan-cat-wrap {
-  display: block;
-  position: fixed; top: 15vh; left: 0; width: 100%; height: 80px;
-  pointer-events: none; z-index: 50; overflow: hidden;
-}
-.nyan-cat-wrap { display: none; }
-.nyan-cat {
-  position: absolute; top: 0; left: 0;
-  width: 70px; height: 40px;
-  image-rendering: pixelated;
-  animation: nyanFly 8s linear infinite;
-  will-change: transform;
-}
-.nyan-rainbow {
-  position: absolute; top: 8px; left: 0;
-  width: 80px; height: 24px;
-  background: linear-gradient(180deg,
-    #ff0000 0%, #ff0000 16.6%,
-    #ff9900 16.6%, #ff9900 33.2%,
-    #ffff00 33.2%, #ffff00 49.8%,
-    #33ff00 49.8%, #33ff00 66.4%,
-    #0099ff 66.4%, #0099ff 83%,
-    #6633ff 83%, #6633ff 100%
-  );
-  border-radius: 2px;
-  animation: rainbowTrail 8s linear infinite;
-  animation-delay: -0.15s;
-  opacity: 0.7;
-  will-change: transform;
-}
-
-/* Shooting stars */
-[data-theme="retro"] .shooting-star {
-  display: block;
-  position: fixed; pointer-events: none; z-index: -1;
-  width: 80px; height: 2px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
-  border-radius: 2px;
-  will-change: transform, opacity;
-}
-.shooting-star { display: none; }
-.shooting-star:nth-child(1) { top: 8%; left: 10%; animation: shootingStar 3s ease-out infinite 0s; }
-.shooting-star:nth-child(2) { top: 22%; left: 60%; animation: shootingStar 4s ease-out infinite 2.5s; }
-.shooting-star:nth-child(3) { top: 5%; left: 35%; animation: shootingStar 3.5s ease-out infinite 5s; }
-
 /* VHS glitch line */
 [data-theme="retro"] .vhs-glitch {
   display: block;
@@ -416,15 +343,6 @@
 .vhs-glitch:nth-child(1) { top: 30%; animation: vhsGlitch 8s linear infinite; }
 .vhs-glitch:nth-child(2) { top: 65%; animation: vhsGlitch 11s linear infinite 3s; }
 
-/* Sparkle particles */
-[data-theme="retro"] .sparkle-container { display: block; }
-.sparkle-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 49; overflow: hidden; }
-.sparkle {
-  position: absolute; font-size: 14px;
-  animation: sparkleFloat 4s ease-in-out infinite;
-  will-change: transform, opacity;
-}
-
 /* Rainbow borders on retro cards */
 [data-theme="retro"] .session { animation: rainbowBorder 6s linear infinite; }
 [data-theme="retro"] .session.is-current { animation: rainbowBorder 3s linear infinite, synthPulse 3s ease-in-out infinite; }
@@ -434,9 +352,6 @@
 
 /* Konami mode - extra crazy */
 [data-theme="retro"].konami-active .retro-scanlines { background: repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 2px); }
-[data-theme="retro"].konami-active .nyan-cat { width: 100px; height: 58px; }
-[data-theme="retro"].konami-active .nyan-rainbow { width: 120px; height: 36px; }
-[data-theme="retro"].konami-active .nyan-cat-wrap { animation: none; }
 .konami-active .session { transition: all 0.3s; }
 .konami-active .session:hover, .konami-active .session:active { transform: scale(1.02) rotate(0.5deg); }
 
@@ -458,8 +373,19 @@ body { scrollbar-width: none; }
 
 /* Search */
 .search-wrap {
-  position: relative; margin-top: 8px;
+  position: relative; margin-top: 6px;
+  display: none;
 }
+.search-wrap.is-open { display: block; }
+.search-toggle {
+  background: var(--toggle-bg); border: none; cursor: pointer;
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; line-height: 1; transition: background .15s;
+  flex-shrink: 0;
+}
+.search-toggle:active { transform: scale(0.92); }
+.search-toggle.is-active { background: var(--pill-active-bg); }
 .search-input {
   width: 100%; padding: 9px 36px 9px 14px;
   background: var(--search-bg); border: 1px solid var(--search-border);
@@ -478,9 +404,11 @@ body { scrollbar-width: none; }
 /* Share Button */
 .share-btn {
   background: none; border: none; cursor: pointer;
-  font-size: 14px; padding: 2px 0; line-height: 1;
+  font-size: 16px; padding: 0; line-height: 1;
   color: var(--share-color); transition: color .15s;
   margin-left: auto;
+  min-width: 44px; min-height: 44px;
+  display: flex; align-items: center; justify-content: center;
 }
 .share-btn:active { color: var(--teal); }
 .share-toast {
@@ -495,20 +423,20 @@ body { scrollbar-width: none; }
 .header {
   position: sticky; top: 0; z-index: 100;
   background: linear-gradient(180deg, var(--bg) 92%, transparent);
-  padding: calc(var(--safe-top) + 14px) 16px 12px;
+  padding: calc(var(--safe-top) + 10px) 16px 8px;
 }
-.header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.header-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; }
-.header-title { font-size: 18px; font-weight: 800; line-height: 1.2; }
-.header-meta { font-size: 11px; color: var(--text-dim); text-align: right; line-height: 1.4; }
-.header-subtitle { font-size: 10px; color: var(--text-dim); font-weight: 300; margin-top: 2px; font-style: italic; }
+.header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.header-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; }
+.header-title { font-size: 16px; font-weight: 800; line-height: 1.2; }
+.header-meta { font-size: 10px; color: var(--text-dim); text-align: right; line-height: 1.4; }
+.header-subtitle { font-size: 9px; color: var(--text-dim); font-weight: 300; margin-top: 1px; font-style: italic; }
 .footer-disclaimer { font-size: 9px; opacity: 0.5; margin-top: 2px; display: inline-block; }
 
 /* Day Tabs */
-.day-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
+.day-tabs { display: flex; gap: 6px; margin-bottom: 6px; }
 .day-tab {
-  flex: 1; padding: 10px 0; border: none; border-radius: 10px; cursor: pointer;
-  font-family: inherit; font-size: 13px; font-weight: 700; letter-spacing: 0.3px;
+  flex: 1; padding: 8px 0; border: none; border-radius: 10px; cursor: pointer;
+  font-family: inherit; font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
   background: var(--tab-bg); color: var(--tab-color);
   transition: all .2s;
 }
@@ -531,6 +459,24 @@ button:focus-visible, .search-input:focus-visible {
   outline: 2px solid var(--teal);
   outline-offset: 2px;
 }
+
+/* Now & Next */
+.now-next { padding: 8px 16px 0; }
+.now-next-card {
+  background: var(--current-bg); border: 1px solid var(--current-border);
+  border-radius: 14px; padding: 12px 14px; margin-bottom: 6px;
+}
+.now-next-card.is-next-card {
+  background: var(--card); border-color: var(--next-border);
+}
+.now-next-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 6px;
+}
+.now-next-card.is-next-card .now-next-label { color: var(--gold); }
+.now-next-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.35; }
+.now-next-meta { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+.now-next-room { font-weight: 600; }
 
 /* Timeline */
 .timeline { padding: 4px 16px; }
@@ -574,13 +520,15 @@ button:focus-visible, .search-input:focus-visible {
 .badge-now { background: var(--accent); color: #fff; font-weight: 800; letter-spacing: 1px; animation: pulse 2s infinite; }
 .badge-next { background: var(--fav-active-bg); color: var(--gold); }
 
-.room-tag { font-size: 10px; color: var(--room-color); margin-left: 2px; white-space: nowrap; }
+.room-tag { font-size: 11px; font-weight: 600; color: var(--text-dim); margin-left: 2px; white-space: nowrap; background: var(--pill-bg); padding: 2px 8px; border-radius: 12px; }
 
 /* Fav Star */
 .fav-btn {
-  margin-left: 6px; background: none; border: none; cursor: pointer;
-  font-size: 18px; padding: 0; line-height: 1;
+  margin-left: 0; background: none; border: none; cursor: pointer;
+  font-size: 20px; padding: 0; line-height: 1;
   color: var(--text-faint); transition: color .15s;
+  min-width: 44px; min-height: 44px;
+  display: flex; align-items: center; justify-content: center;
 }
 .fav-btn.is-fav { color: var(--gold); }
 
@@ -593,7 +541,7 @@ button:focus-visible, .search-input:focus-visible {
   font-size: 13px; font-weight: 500; color: var(--text-dim);
   margin-top: 0;
 }
-.session-time-inline { font-size: 11px; font-weight: 400; color: var(--room-color); margin-left: 6px; }
+.session-time-inline { font-size: 12px; font-weight: 600; color: var(--text-dim); margin-left: 6px; font-variant-numeric: tabular-nums; }
 .session-speakers { font-size: 12px; color: var(--speakers-color); margin-top: 4px; line-height: 1.5; }
 .session-desc {
   font-size: 12.5px; color: var(--desc-color); margin-top: 10px;
@@ -642,6 +590,7 @@ button:focus-visible, .search-input:focus-visible {
       <div class="header-subtitle">Julians komplett inoffizieller Pocket-Guide</div>
     </div>
     <div class="header-meta">11.–12. März<br>München</div>
+    <button type="button" class="search-toggle" id="searchToggle" onclick="toggleSearchBar()" aria-label="Suche öffnen">🔍</button>
     <button type="button" class="music-toggle" id="musicToggle" onclick="toggleMusic()" aria-label="Synthwave Musik an/aus">🔇</button>
     <button type="button" class="theme-toggle synthwave-toggle" id="synthToggle" onclick="toggleSynthwave()" aria-label="Synthwave Modus">🌈</button>
     <button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Theme wechseln">🌙</button>
@@ -656,13 +605,14 @@ button:focus-visible, .search-input:focus-visible {
     <button type="button" class="filter-pill" data-filter="deep-dive" onclick="setFilter('deep-dive')">Deep Dives</button>
     <button type="button" class="filter-pill fav" data-filter="fav" onclick="toggleFavFilter()" aria-label="Nur Favoriten anzeigen">★ Favoriten</button>
   </div>
-  <div class="search-wrap">
+  <div class="search-wrap" id="searchWrap">
     <label for="searchInput" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Sessions durchsuchen</label>
     <input type="text" id="searchInput" class="search-input" placeholder="Suche nach Sessions, Speaker …" oninput="onSearch(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
     <button type="button" class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none" aria-label="Suche leeren">✕</button>
   </div>
 </div>
 
+<div class="now-next" id="nowNext"></div>
 <div class="timeline" id="timeline" role="list" aria-label="Programm-Sessions"></div>
 
 <noscript>
@@ -684,23 +634,9 @@ button:focus-visible, .search-input:focus-visible {
 <div class="retro-vignette"></div>
 <div class="retro-scanlines"></div>
 
-<!-- Nyan Cat -->
-<div class="nyan-cat-wrap">
-  <div class="nyan-rainbow"></div>
-  <img class="nyan-cat" src="https://media.giphy.com/media/gx54W1mSpeYMg/giphy.gif" alt="Nyan Cat" loading="lazy">
-</div>
-
-<!-- Shooting Stars -->
-<div class="shooting-star"></div>
-<div class="shooting-star"></div>
-<div class="shooting-star"></div>
-
 <!-- VHS Glitch Lines -->
 <div class="vhs-glitch"></div>
 <div class="vhs-glitch"></div>
-
-<!-- Sparkle Particles -->
-<div class="sparkle-container" id="sparkleContainer"></div>
 
 <script>
 "use strict";
@@ -864,6 +800,15 @@ const DAY_DATES = {1: "2026-03-11", 2: "2026-03-12"};
 function timeToMin(t) { const p = t.split(":"); return parseInt(p[0],10)*60+parseInt(p[1],10); }
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+function toggleSearchBar() {
+  var wrap = document.getElementById("searchWrap");
+  var btn = document.getElementById("searchToggle");
+  var isOpen = wrap.classList.toggle("is-open");
+  btn.classList.toggle("is-active", isOpen);
+  if (isOpen) document.getElementById("searchInput").focus();
+  else { clearSearch(); }
+}
+
 function onSearch(val) {
   searchQuery = val.trim().toLowerCase();
   document.getElementById("searchClear").style.display = searchQuery ? "flex" : "none";
@@ -966,6 +911,46 @@ function render() {
       }
     }
   }
+
+  // Render Now & Next section
+  var nnEl = document.getElementById("nowNext");
+  var nnHtml = '';
+  if (isToday && !searchQuery) {
+    var currentSessions = S.filter(function(s) { return currentIds.has(s.id); });
+    // Find next sessions
+    var nextSessions = [];
+    if (!currentIds.size) {
+      nextSessions = S.filter(function(s) { return nextIds.has(s.id); });
+    } else {
+      // Find what comes after current
+      var curEnd = 0;
+      currentSessions.forEach(function(s) { var e = timeToMin(s.end); if (e > curEnd) curEnd = e; });
+      var nextT = null;
+      var ds = S.filter(function(s) { return s.day===currentDay && s.type!=="break"; });
+      for (var ni = 0; ni < ds.length; ni++) {
+        var t = timeToMin(ds[ni].time);
+        if (t >= curEnd) {
+          if (nextT === null) nextT = t;
+          if (t === nextT) nextSessions.push(ds[ni]);
+          else break;
+        }
+      }
+    }
+
+    for (var ci = 0; ci < currentSessions.length; ci++) {
+      var cs = currentSessions[ci];
+      nnHtml += '<div class="now-next-card"><div class="now-next-label">Jetzt</div>';
+      nnHtml += '<div class="now-next-title">' + esc(cs.title) + '</div>';
+      nnHtml += '<div class="now-next-meta">' + esc(cs.time) + '–' + esc(cs.end) + (cs.room ? ' · <span class="now-next-room">' + esc(cs.room) + '</span>' : '') + '</div></div>';
+    }
+    for (var nxi = 0; nxi < nextSessions.length; nxi++) {
+      var ns = nextSessions[nxi];
+      nnHtml += '<div class="now-next-card is-next-card"><div class="now-next-label">Als Nächstes</div>';
+      nnHtml += '<div class="now-next-title">' + esc(ns.title) + '</div>';
+      nnHtml += '<div class="now-next-meta">' + esc(ns.time) + '–' + esc(ns.end) + (ns.room ? ' · <span class="now-next-room">' + esc(ns.room) + '</span>' : '') + '</div></div>';
+    }
+  }
+  nnEl.innerHTML = nnHtml;
 
   const isSearching = searchQuery.length > 0;
 
@@ -1165,24 +1150,6 @@ function toggleSynthwave() {
   }
 })();
 
-// === SPARKLE PARTICLES ===
-(function initSparkles() {
-  var container = document.getElementById("sparkleContainer");
-  if (!container) return;
-  var sparkles = ["✨", "⭐", "💫", "🌟", "✨", "⭐", "💫", "✨"];
-  for (var i = 0; i < sparkles.length; i++) {
-    var el = document.createElement("span");
-    el.className = "sparkle";
-    el.textContent = sparkles[i];
-    el.style.left = (5 + Math.random() * 90) + "%";
-    el.style.top = (20 + Math.random() * 70) + "%";
-    el.style.animationDelay = (Math.random() * 6) + "s";
-    el.style.animationDuration = (3 + Math.random() * 3) + "s";
-    el.style.fontSize = (10 + Math.random() * 10) + "px";
-    container.appendChild(el);
-  }
-})();
-
 // === KONAMI CODE EASTER EGG ===
 (function initKonami() {
   var code = [38,38,40,40,37,39,37,39,66,65]; // up up down down left right left right B A
@@ -1247,6 +1214,11 @@ applyTheme = function(theme) {
     toggleMusic();
   }
 };
+
+// Register service worker for offline support
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(function() {});
+}
 
 // Refresh every 30s for live tracking, pause when tab is hidden
 let refreshInterval = setInterval(render, 30000);
