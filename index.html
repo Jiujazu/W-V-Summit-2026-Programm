@@ -210,10 +210,6 @@
   0%, 100% { opacity: 0.2; }
   50% { opacity: 1; }
 }
-@keyframes chromaShift {
-  0%, 100% { filter: hue-rotate(0deg); }
-  50% { filter: hue-rotate(15deg); }
-}
 @keyframes synthPulse {
   0%, 100% { box-shadow: 0 0 5px rgba(255,107,53,0.2); }
   50% { box-shadow: 0 0 15px rgba(213,84,213,0.3), 0 0 30px rgba(255,107,53,0.15); }
@@ -361,7 +357,7 @@ body { scrollbar-width: none; }
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
   background: var(--teal); color: #000; padding: 8px 18px;
   border-radius: 20px; font-size: 12px; font-weight: 700;
-  z-index: 1000; animation: fadeIn .2s ease;
+  z-index: 10000; animation: fadeIn .2s ease;
   pointer-events: none;
 }
 
@@ -497,6 +493,11 @@ button:focus-visible, .search-input:focus-visible {
   flex-shrink: 0;
 }
 .theme-toggle:active { transform: scale(0.92); }
+
+/* Accessibility: reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
 </style>
 
 </head>
@@ -807,7 +808,7 @@ function render() {
     if (!currentIds.size) {
       let nextTime = null;
       for (let i = 0; i < ds.length; i++) {
-        var t = timeToMin(ds[i].time);
+        let t = timeToMin(ds[i].time);
         if (t > nowMin) {
           if (nextTime === null) nextTime = t;
           if (t === nextTime) nextIds.add(ds[i].id);
@@ -852,7 +853,7 @@ function render() {
 
   for (let gi = 0; gi < groups.length; gi++) {
     const g = groups[gi];
-    html += '<div class="time-marker"><div class="time-label">'+esc(g.time)+'</div><div class="time-line"></div></div>';
+    html += '<div class="time-marker" role="presentation"><div class="time-label">'+esc(g.time)+'</div><div class="time-line"></div></div>';
 
     for (let si = 0; si < g.sessions.length; si++) {
       const s = g.sessions[si];
@@ -869,11 +870,11 @@ function render() {
       if (isCur) cls += " is-current";
       if (isNxt) cls += " is-next";
 
-      var needsScroll = !scrollTargetAssigned && (isCur || isNxt);
+      let needsScroll = !scrollTargetAssigned && (isCur || isNxt);
       if (needsScroll) scrollTargetAssigned = true;
-      var scrollAttr = needsScroll ? ' id="scroll-target"' : '';
+      let scrollAttr = needsScroll ? ' id="scroll-target"' : '';
 
-      html += '<div class="'+cls+'" role="listitem" data-sid="'+esc(s.id)+'"'+scrollAttr+(hasDesc?' tabindex="0"':'')+'>';
+      html += '<div class="'+cls+'" role="listitem" data-sid="'+esc(s.id)+'"'+scrollAttr+(hasDesc?' tabindex="0" aria-expanded="'+(isExp?'true':'false')+'"':'')+'>';
 
       // Top row
       html += '<div class="session-top">';
@@ -907,7 +908,7 @@ function render() {
 
       // Expand hint
       if (hasDesc && !isExp) {
-        html += '<div class="expand-hint">\u25be Details antippen</div>';
+        html += '<div class="expand-hint">\u25be Details anzeigen</div>';
       }
 
       html += '</div>';
@@ -952,13 +953,14 @@ document.getElementById("timeline").addEventListener("keydown", function(e) {
 
 // Theme toggle: light -> dark -> retro -> light
 var THEMES = ["light", "dark", "retro"];
-var THEME_ICONS = {light: "\uD83C\uDF19", dark: "\uD83C\uDF15", retro: "\u2600\uFE0F"};
+var THEME_ICONS = {light: "\uD83C\uDF19", dark: "\uD83C\uDF1F", retro: "\u2600\uFE0F"};
 var THEME_COLORS = {light: "#f5f5f7", dark: "#0e0e12", retro: "#1a1028"};
 
 function applyTheme(theme) {
   if (theme === "light") document.documentElement.removeAttribute("data-theme");
   else document.documentElement.setAttribute("data-theme", theme);
-  document.getElementById("themeToggle").textContent = THEME_ICONS[theme];
+  var nextTheme = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
+  document.getElementById("themeToggle").textContent = THEME_ICONS[nextTheme];
   document.getElementById("metaThemeColor").setAttribute("content", THEME_COLORS[theme]);
   try { localStorage.setItem("wuv26_theme", theme); } catch(e) {}
 }
@@ -974,7 +976,7 @@ function toggleTheme() {
   var saved = null;
   try { saved = localStorage.getItem("wuv26_theme"); } catch(e) {}
   if (saved && THEMES.indexOf(saved) !== -1) applyTheme(saved);
-  else document.getElementById("themeToggle").textContent = THEME_ICONS.light;
+  else document.getElementById("themeToggle").textContent = THEME_ICONS.dark;
 })();
 
 // === SYNTHWAVE STARS ===
@@ -996,11 +998,10 @@ function toggleTheme() {
 // === SYNTHWAVE MUSIC ENGINE (Web Audio API) ===
 var synthCtx = null;
 var synthPlaying = false;
-var synthNodes = [];
 var synthIntervals = [];
 
 function createSynthwaveMusic() {
-  if (synthCtx) return synthCtx;
+  if (synthCtx && synthIntervals.length) return synthCtx;
   synthCtx = new (window.AudioContext || window.webkitAudioContext)();
 
   // Master volume
@@ -1114,13 +1115,14 @@ function toggleMusic() {
   if (!synthPlaying) {
     synthPlaying = true;
     createSynthwaveMusic();
+    if (synthCtx && synthCtx.state === "suspended") synthCtx.resume();
     btn.textContent = "🔊";
     btn.classList.add("playing");
   } else {
     synthPlaying = false;
     synthIntervals.forEach(function(id) { clearInterval(id); });
     synthIntervals = [];
-    if (synthCtx) { synthCtx.close(); synthCtx = null; }
+    if (synthCtx) { synthCtx.suspend(); }
     btn.textContent = "🔇";
     btn.classList.remove("playing");
   }
@@ -1140,7 +1142,6 @@ let refreshInterval = setInterval(render, 30000);
 document.addEventListener("visibilitychange", function() {
   clearInterval(refreshInterval);
   if (!document.hidden) {
-    shouldScrollToLive = true;
     render();
     refreshInterval = setInterval(render, 30000);
   }
