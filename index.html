@@ -171,10 +171,11 @@
 [data-theme="retro"] body { font-family: var(--retro-font); letter-spacing: 0.3px; }
 [data-theme="retro"] .header-label { letter-spacing: 4px; text-shadow: 0 0 12px rgba(255,107,53,0.4); }
 [data-theme="retro"] .header-title { text-shadow: 0 0 8px rgba(255,180,60,0.3); }
+[data-theme="retro"] .header-subtitle { color: #d554d5; font-style: normal; font-weight: 500; text-shadow: 0 0 8px rgba(213,84,213,0.4); }
 [data-theme="retro"] .session { border-radius: 4px; border: 1px solid rgba(255,180,60,0.1); }
 [data-theme="retro"] .session.is-current { box-shadow: var(--retro-glow); }
 [data-theme="retro"] .badge { border-radius: 2px; letter-spacing: 1.5px; }
-[data-theme="retro"] .badge-now { background: linear-gradient(90deg, #ff6b35, #d554d5); text-shadow: 0 0 6px rgba(255,255,255,0.3); }
+[data-theme="retro"] .badge-now { background: linear-gradient(90deg, #ff6b35, #d554d5); text-shadow: 0 0 6px rgba(255,255,255,0.3); animation: neonFlicker 3s ease-in-out infinite; }
 [data-theme="retro"] .badge-next { background: rgba(255,180,60,0.2); }
 [data-theme="retro"] .day-tab { border-radius: 2px; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; }
 [data-theme="retro"] .day-tab.active { background: linear-gradient(135deg, #ff6b35, #d554d5); }
@@ -182,6 +183,136 @@
 [data-theme="retro"] .search-input { border-radius: 2px; }
 [data-theme="retro"] .time-label { font-variant-numeric: tabular-nums; letter-spacing: 1px; }
 [data-theme="retro"] .time-line { background: linear-gradient(90deg, rgba(255,180,60,0.2), transparent); }
+[data-theme="retro"] .footer-disclaimer { color: #d554d5; opacity: 0.7; }
+
+/* Synthwave Animations */
+@keyframes neonFlicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.6; }
+  94% { opacity: 1; }
+  96% { opacity: 0.4; }
+  97% { opacity: 1; }
+}
+@keyframes retroGlow {
+  0%, 100% { text-shadow: 0 0 8px rgba(255,107,53,0.4), 0 0 20px rgba(255,107,53,0.2); }
+  50% { text-shadow: 0 0 12px rgba(255,107,53,0.6), 0 0 30px rgba(213,84,213,0.3), 0 0 50px rgba(255,107,53,0.1); }
+}
+@keyframes scanlineMove {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+@keyframes gridScroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 40px; }
+}
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+@keyframes chromaShift {
+  0%, 100% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(15deg); }
+}
+@keyframes synthPulse {
+  0%, 100% { box-shadow: 0 0 5px rgba(255,107,53,0.2); }
+  50% { box-shadow: 0 0 15px rgba(213,84,213,0.3), 0 0 30px rgba(255,107,53,0.15); }
+}
+
+/* Retro scanline overlay */
+[data-theme="retro"] .retro-scanlines {
+  display: block;
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 9998;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,0.03) 0px,
+    rgba(0,0,0,0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+.retro-scanlines { display: none; }
+
+/* Retro grid background */
+[data-theme="retro"] .retro-grid {
+  display: block;
+  position: fixed; bottom: 0; left: 0; width: 100%; height: 35vh;
+  pointer-events: none; z-index: -1;
+  background:
+    linear-gradient(rgba(26,16,40,0) 0%, rgba(26,16,40,0.6) 100%),
+    linear-gradient(90deg, rgba(255,107,53,0.07) 1px, transparent 1px),
+    linear-gradient(rgba(213,84,213,0.05) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+  animation: gridScroll 4s linear infinite;
+  mask-image: linear-gradient(transparent 0%, rgba(0,0,0,0.5) 100%);
+  -webkit-mask-image: linear-gradient(transparent 0%, rgba(0,0,0,0.5) 100%);
+}
+.retro-grid { display: none; }
+
+/* Retro sun */
+[data-theme="retro"] .retro-sun {
+  display: block;
+  position: fixed; bottom: 34vh; left: 50%; transform: translateX(-50%);
+  width: 120px; height: 60px;
+  border-radius: 120px 120px 0 0;
+  background: linear-gradient(180deg, #ff6b35 0%, #d554d5 50%, #7b2fbe 100%);
+  opacity: 0.25; pointer-events: none; z-index: -1;
+  box-shadow: 0 0 60px rgba(255,107,53,0.3), 0 0 120px rgba(213,84,213,0.15);
+  /* Horizontal line cutouts */
+  mask-image: repeating-linear-gradient(
+    180deg,
+    rgba(0,0,0,1) 0px, rgba(0,0,0,1) 6px,
+    transparent 6px, transparent 10px
+  );
+  -webkit-mask-image: repeating-linear-gradient(
+    180deg,
+    rgba(0,0,0,1) 0px, rgba(0,0,0,1) 6px,
+    transparent 6px, transparent 10px
+  );
+}
+.retro-sun { display: none; }
+
+/* Retro stars canvas */
+[data-theme="retro"] .retro-stars {
+  display: block;
+  position: fixed; top: 0; left: 0; width: 100%; height: 65vh;
+  pointer-events: none; z-index: -1;
+}
+.retro-stars { display: none; }
+
+/* Neon glow on retro header */
+[data-theme="retro"] .header-label { animation: retroGlow 4s ease-in-out infinite; }
+[data-theme="retro"] .header-title { animation: retroGlow 4s ease-in-out infinite 1s; }
+
+/* Retro session card hover glow */
+[data-theme="retro"] .session { transition: box-shadow 0.3s ease, border-color 0.3s ease; }
+[data-theme="retro"] .session:active { box-shadow: 0 0 20px rgba(213,84,213,0.2), 0 0 40px rgba(255,107,53,0.1); border-color: rgba(255,107,53,0.3); }
+
+/* Retro active tab neon */
+[data-theme="retro"] .day-tab.active { box-shadow: 0 0 12px rgba(255,107,53,0.3), 0 0 24px rgba(213,84,213,0.15); animation: synthPulse 3s ease-in-out infinite; }
+[data-theme="retro"] .filter-pill.active { box-shadow: 0 0 8px rgba(255,107,53,0.2); }
+
+/* Music toggle */
+.music-toggle {
+  background: var(--toggle-bg); border: none; cursor: pointer;
+  width: 32px; height: 32px; border-radius: 50%;
+  display: none; align-items: center; justify-content: center;
+  font-size: 16px; line-height: 1; transition: all .3s;
+  flex-shrink: 0; position: relative;
+}
+.music-toggle:active { transform: scale(0.92); }
+.music-toggle.playing { box-shadow: 0 0 12px rgba(213,84,213,0.4); }
+[data-theme="retro"] .music-toggle { display: flex; }
+
+/* CRT vignette effect */
+[data-theme="retro"] .retro-vignette {
+  display: block;
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 9997;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.4) 100%);
+}
+.retro-vignette { display: none; }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { background: var(--bg); }
@@ -244,6 +375,8 @@ body { scrollbar-width: none; }
 .header-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; }
 .header-title { font-size: 18px; font-weight: 800; line-height: 1.2; }
 .header-meta { font-size: 11px; color: var(--text-dim); text-align: right; line-height: 1.4; }
+.header-subtitle { font-size: 10px; color: var(--text-dim); font-weight: 300; margin-top: 2px; font-style: italic; }
+.footer-disclaimer { font-size: 9px; opacity: 0.5; margin-top: 2px; display: inline-block; }
 
 /* Day Tabs */
 .day-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
@@ -374,8 +507,10 @@ button:focus-visible, .search-input:focus-visible {
     <div>
       <div class="header-label">W&V Summit 2026</div>
       <div class="header-title">Programm</div>
+      <div class="header-subtitle">Der komplett inoffizielle Pocket-Guide</div>
     </div>
     <div class="header-meta">11.–12. März<br>München</div>
+    <button type="button" class="music-toggle" id="musicToggle" onclick="toggleMusic()" aria-label="Synthwave Musik an/aus">🔇</button>
     <button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Theme wechseln">☀️</button>
   </div>
   <div class="day-tabs">
@@ -404,10 +539,18 @@ button:focus-visible, .search-input:focus-visible {
 </noscript>
 
 <div class="footer">
-  Inoffizielle Programmübersicht · Alle Angaben ohne Gewähr<br>
-  Erstellt von <a href="https://www.linkedin.com/in/julianvandieken/" target="_blank" rel="noopener noreferrer" class="primary">Julian van Dieken</a>
-  · <a href="https://vandieken.com" target="_blank" rel="noopener noreferrer" class="secondary">vandieken.com</a>
+  ⚠️ Komplett inoffiziell · Alle Angaben ohne Gewähr<br>
+  Auf die Schnelle vibe-gecodet von <a href="https://www.linkedin.com/in/julianvandieken/" target="_blank" rel="noopener noreferrer" class="primary">Julian van Dieken</a>
+  · <a href="https://vandieken.com" target="_blank" rel="noopener noreferrer" class="secondary">vandieken.com</a><br>
+  <span class="footer-disclaimer">Bugs sind Features · Irrtümer sind Absicht · Beschwerden bitte an /dev/null</span>
 </div>
+
+<!-- Synthwave Retro Effects -->
+<div class="retro-stars" id="retroStars"></div>
+<div class="retro-sun"></div>
+<div class="retro-grid"></div>
+<div class="retro-vignette"></div>
+<div class="retro-scanlines"></div>
 
 <script>
 "use strict";
@@ -833,6 +976,164 @@ function toggleTheme() {
   if (saved && THEMES.indexOf(saved) !== -1) applyTheme(saved);
   else document.getElementById("themeToggle").textContent = THEME_ICONS.light;
 })();
+
+// === SYNTHWAVE STARS ===
+(function initStars() {
+  var canvas = document.getElementById("retroStars");
+  if (!canvas) return;
+  var stars = [];
+  for (var i = 0; i < 60; i++) {
+    var star = document.createElement("div");
+    star.style.cssText = "position:absolute;width:" + (1 + Math.random() * 2) + "px;height:" + (1 + Math.random() * 2) + "px;" +
+      "background:" + (Math.random() > 0.5 ? "#fff" : (Math.random() > 0.5 ? "#d554d5" : "#ff6b35")) + ";" +
+      "border-radius:50%;opacity:" + (0.1 + Math.random() * 0.5) + ";" +
+      "left:" + (Math.random() * 100) + "%;top:" + (Math.random() * 100) + "%;" +
+      "animation:starTwinkle " + (2 + Math.random() * 4) + "s ease-in-out infinite " + (Math.random() * 3) + "s;";
+    canvas.appendChild(star);
+  }
+})();
+
+// === SYNTHWAVE MUSIC ENGINE (Web Audio API) ===
+var synthCtx = null;
+var synthPlaying = false;
+var synthNodes = [];
+var synthIntervals = [];
+
+function createSynthwaveMusic() {
+  if (synthCtx) return synthCtx;
+  synthCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Master volume
+  var master = synthCtx.createGain();
+  master.gain.value = 0.15;
+  master.connect(synthCtx.destination);
+
+  // Bass synth - deep pulsing bass
+  function playBass() {
+    var bassNotes = [55, 55, 65.41, 73.42]; // A1, A1, C2, D2
+    var noteIdx = 0;
+    var interval = setInterval(function() {
+      if (!synthPlaying) return;
+      var osc = synthCtx.createOscillator();
+      var gain = synthCtx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.value = bassNotes[noteIdx % bassNotes.length];
+      gain.gain.setValueAtTime(0.3, synthCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, synthCtx.currentTime + 0.4);
+      osc.connect(gain);
+      gain.connect(master);
+      osc.start();
+      osc.stop(synthCtx.currentTime + 0.45);
+      noteIdx++;
+    }, 500);
+    synthIntervals.push(interval);
+  }
+
+  // Pad synth - dreamy chords
+  function playPad() {
+    var chords = [[220, 277.18, 329.63], [196, 246.94, 293.66], [174.61, 220, 261.63], [196, 246.94, 329.63]];
+    var chordIdx = 0;
+    var interval = setInterval(function() {
+      if (!synthPlaying) return;
+      var chord = chords[chordIdx % chords.length];
+      chord.forEach(function(freq) {
+        var osc = synthCtx.createOscillator();
+        var gain = synthCtx.createGain();
+        var filter = synthCtx.createBiquadFilter();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        filter.type = "lowpass";
+        filter.frequency.value = 800;
+        gain.gain.setValueAtTime(0, synthCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.08, synthCtx.currentTime + 0.3);
+        gain.gain.linearRampToValueAtTime(0, synthCtx.currentTime + 1.8);
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(master);
+        osc.start();
+        osc.stop(synthCtx.currentTime + 2);
+      });
+      chordIdx++;
+    }, 2000);
+    synthIntervals.push(interval);
+  }
+
+  // Arpeggio - sparkling high notes
+  function playArp() {
+    var notes = [523.25, 659.25, 783.99, 659.25, 523.25, 392, 523.25, 659.25]; // C5 E5 G5 etc
+    var noteIdx = 0;
+    var interval = setInterval(function() {
+      if (!synthPlaying) return;
+      var osc = synthCtx.createOscillator();
+      var gain = synthCtx.createGain();
+      var filter = synthCtx.createBiquadFilter();
+      osc.type = "triangle";
+      osc.frequency.value = notes[noteIdx % notes.length];
+      filter.type = "lowpass";
+      filter.frequency.value = 2000;
+      gain.gain.setValueAtTime(0.06, synthCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, synthCtx.currentTime + 0.3);
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(master);
+      osc.start();
+      osc.stop(synthCtx.currentTime + 0.35);
+      noteIdx++;
+    }, 250);
+    synthIntervals.push(interval);
+  }
+
+  // Kick drum
+  function playKick() {
+    var interval = setInterval(function() {
+      if (!synthPlaying) return;
+      var osc = synthCtx.createOscillator();
+      var gain = synthCtx.createGain();
+      osc.frequency.setValueAtTime(150, synthCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(0.01, synthCtx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.4, synthCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, synthCtx.currentTime + 0.15);
+      osc.connect(gain);
+      gain.connect(master);
+      osc.start();
+      osc.stop(synthCtx.currentTime + 0.2);
+    }, 1000);
+    synthIntervals.push(interval);
+  }
+
+  playBass();
+  playPad();
+  playArp();
+  playKick();
+
+  return synthCtx;
+}
+
+function toggleMusic() {
+  var btn = document.getElementById("musicToggle");
+  if (!synthPlaying) {
+    synthPlaying = true;
+    createSynthwaveMusic();
+    btn.textContent = "🔊";
+    btn.classList.add("playing");
+  } else {
+    synthPlaying = false;
+    synthIntervals.forEach(function(id) { clearInterval(id); });
+    synthIntervals = [];
+    if (synthCtx) { synthCtx.close(); synthCtx = null; }
+    btn.textContent = "🔇";
+    btn.classList.remove("playing");
+  }
+}
+
+// Stop music when leaving retro theme
+var origApplyTheme = applyTheme;
+applyTheme = function(theme) {
+  origApplyTheme(theme);
+  if (theme !== "retro" && synthPlaying) {
+    toggleMusic();
+  }
+};
 
 // Refresh every 30s for live tracking, pause when tab is hidden
 let refreshInterval = setInterval(render, 30000);
