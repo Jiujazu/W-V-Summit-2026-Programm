@@ -221,13 +221,6 @@
   98% { transform: translateX(-3px); opacity: 0.7; }
   99% { transform: translateX(7px); opacity: 0; }
 }
-@keyframes rainbowBorder {
-  0% { border-color: #ff6b35; }
-  25% { border-color: #d554d5; }
-  50% { border-color: #00e5c6; }
-  75% { border-color: #ffb43c; }
-  100% { border-color: #ff6b35; }
-}
 @keyframes crtFlicker {
   0%, 100% { opacity: 1; }
   50.1% { opacity: 0.98; }
@@ -343,7 +336,7 @@
 .vhs-glitch:nth-child(1) { top: 30%; animation: vhsGlitch 8s linear infinite; }
 .vhs-glitch:nth-child(2) { top: 65%; animation: vhsGlitch 11s linear infinite 3s; }
 
-/* Nyan Cat (small, retro only) */
+/* Nyan Cat (small, retro only, easter-egg only) */
 @keyframes nyanFly {
   0% { transform: translateX(-80px) translateY(0); }
   25% { transform: translateX(25vw) translateY(-10px); }
@@ -351,26 +344,27 @@
   75% { transform: translateX(75vw) translateY(-8px); }
   100% { transform: translateX(calc(100vw + 80px)) translateY(0); }
 }
-[data-theme="retro"] .nyan-cat-wrap {
+.nyan-cat-wrap { display: none; }
+.easter-active[data-theme="retro"] .nyan-cat-wrap {
   display: block;
   position: fixed; top: 12vh; left: 0; width: 100%; height: 50px;
   pointer-events: none; z-index: 50; overflow: hidden;
 }
-.nyan-cat-wrap { display: none; }
 .nyan-cat-img {
-  position: absolute; top: 0; left: 0;
+  position: absolute; top: 0; left: -80px;
   width: 40px; height: auto;
   image-rendering: pixelated;
   animation: nyanFly 12s linear infinite;
   will-change: transform;
+  font-size: 0; color: transparent; /* hide alt text if image fails */
 }
 
-/* Rainbow borders on retro cards */
-[data-theme="retro"] .session { animation: rainbowBorder 6s linear infinite; }
-[data-theme="retro"] .session.is-current { animation: rainbowBorder 3s linear infinite, synthPulse 3s ease-in-out infinite; }
+/* Retro cards — subtle glow, NO rainbow border animation (performance) */
+[data-theme="retro"] .session { border-color: rgba(255,180,60,0.15); }
+[data-theme="retro"] .session.is-current { animation: synthPulse 3s ease-in-out infinite; }
 
-/* CRT screen flicker */
-[data-theme="retro"] body { animation: crtFlicker 0.15s infinite; }
+/* CRT screen flicker — subtle, long interval */
+[data-theme="retro"] body { animation: crtFlicker 4s infinite; }
 
 /* Easter egg mode (shake or Konami) */
 [data-theme="retro"].easter-active .retro-scanlines { background: repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 2px); }
@@ -1522,6 +1516,16 @@ function toggleSynthwave() {
 var synthAudio = null;
 var synthPlaying = false;
 
+// Pre-create audio element on first user touch to unlock audio on iOS/Safari
+document.addEventListener("touchstart", function unlockAudio() {
+  if (!synthAudio) {
+    synthAudio = new Audio("music01.mp3");
+    synthAudio.loop = true;
+    synthAudio.volume = 0.4;
+  }
+  document.removeEventListener("touchstart", unlockAudio);
+}, { once: true });
+
 function toggleMusic() {
   var btn = document.getElementById("musicToggle");
   if (!synthPlaying) {
@@ -1530,16 +1534,19 @@ function toggleMusic() {
       synthAudio.loop = true;
       synthAudio.volume = 0.4;
     }
-    synthAudio.play().then(function() {
-      synthPlaying = true;
-      btn.textContent = "🔊";
-      btn.classList.add("playing");
-    }).catch(function() {
-      synthPlaying = false;
-      btn.textContent = "🔇";
-      btn.classList.remove("playing");
-      showToast("Audio: Tippe nochmal (Browser braucht User-Interaktion)");
-    });
+    var playPromise = synthAudio.play();
+    if (playPromise) {
+      playPromise.then(function() {
+        synthPlaying = true;
+        btn.textContent = "🔊";
+        btn.classList.add("playing");
+      }).catch(function(err) {
+        synthPlaying = false;
+        btn.textContent = "🔇";
+        btn.classList.remove("playing");
+        showToast("Audio: Tippe den 🔇 Button nochmal");
+      });
+    }
   } else {
     synthPlaying = false;
     if (synthAudio) synthAudio.pause();
