@@ -564,10 +564,12 @@ button:focus-visible, .search-input:focus-visible {
   margin-top: 0;
 }
 .session-time-inline { font-size: 12px; font-weight: 600; color: var(--text-dim); margin-left: 6px; font-variant-numeric: tabular-nums; }
-.session-speakers { font-size: 12px; color: var(--speakers-color); margin-top: 4px; line-height: 1.8; }
+.session-speakers { font-size: 12px; color: var(--speakers-color); margin-top: 6px; line-height: 1.5; }
+.speaker-line { display: block; margin-bottom: 2px; }
+.speaker-separator { display: none; }
 .speaker-name { font-weight: 600; color: var(--text); }
 .speaker-role { font-size: 11px; color: var(--text-dim); }
-.speaker-company { font-size: 10px; font-weight: 600; color: var(--teal); background: var(--badge-deep-bg); padding: 1px 6px; border-radius: 10px; white-space: nowrap; }
+.speaker-company { font-size: 10px; font-weight: 600; color: var(--text-dim); background: var(--pill-bg); padding: 1px 6px; border-radius: 10px; white-space: nowrap; }
 .session-desc {
   font-size: 12.5px; color: var(--desc-color); margin-top: 10px;
   line-height: 1.65; border-top: 1px solid var(--border); padding-top: 10px;
@@ -1314,7 +1316,7 @@ function render() {
       else html += '<span class="badge badge-main">Main Stage</span>';
 
       if (s.room && !isBrk) html += '<span class="room-tag">\ud83d\udccd '+esc(s.room)+'</span>';
-      if (!isBrk) html += '<button type="button" class="share-btn" aria-label="Session teilen">\u{1F4E4}</button><button type="button" class="fav-btn'+(isFav?' is-fav':'')+'" aria-label="'+(isFav?'Favorit entfernen':'Als Favorit markieren')+'">'+(isFav?'\u2605':'\u2606')+'</button>';
+      if (!isBrk) html += '<button type="button" class="fav-btn'+(isFav?' is-fav':'')+'" aria-label="'+(isFav?'Favorit entfernen':'Als Favorit markieren')+'">'+(isFav?'\u2605':'\u2606')+'</button>';
       html += '</div>';
 
       // Title
@@ -1326,7 +1328,7 @@ function render() {
 
       // Speakers (formatted: name bold, company as pill)
       if (s.speakers.length) {
-        html += '<div class="session-speakers">'+s.speakers.map(formatSpeakerHtml).join(' · ')+'</div>';
+        html += '<div class="session-speakers">'+s.speakers.map(function(sp) { return '<span class="speaker-line">'+formatSpeakerHtml(sp)+'</span>'; }).join('')+'</div>';
       }
 
       // Description
@@ -1359,7 +1361,6 @@ document.getElementById("timeline").addEventListener("click", function(e) {
   if (!card) return;
   var id = card.dataset.sid;
   if (e.target.closest(".fav-btn")) { toggleFav(id, e); return; }
-  if (e.target.closest(".share-btn")) { shareSession(id, e); return; }
   var s = S.find(function(x) { return x.id === id; });
   if (s && s.type !== "break" && s.desc) toggleExpand(id);
 });
@@ -1405,6 +1406,11 @@ function updateThemeUI() {
 }
 
 function toggleTheme() {
+  // If synthwave is on, turn it off first and go to the toggled base theme
+  if (synthwaveOn) {
+    synthwaveOn = false;
+    try { localStorage.setItem("wuv26_synth", "0"); } catch(e) {}
+  }
   baseTheme = baseTheme === "light" ? "dark" : "light";
   try { localStorage.setItem("wuv26_base", baseTheme); } catch(e) {}
   updateThemeUI();
@@ -1451,10 +1457,9 @@ function toggleSynthwave() {
     document.documentElement.classList.toggle("easter-active");
     var isActive = document.documentElement.classList.contains("easter-active");
     if (isActive) {
-      showToast("🌈 EASTER EGG ACTIVATED! 🌈");
+      showToast("🌈 EASTER EGG! Tippe 🔇 für Musik");
       // Auto-enable synthwave if not already on
       if (!synthwaveOn) toggleSynthwave();
-      if (!synthPlaying) toggleMusic();
     } else {
       showToast("Easter egg deactivated");
     }
@@ -1515,16 +1520,25 @@ function toggleSynthwave() {
 // === SYNTHWAVE MUSIC (MP3) ===
 var synthAudio = null;
 var synthPlaying = false;
+var audioUnlocked = false;
 
-// Pre-create audio element on first user touch to unlock audio on iOS/Safari
-document.addEventListener("touchstart", function unlockAudio() {
+// Unlock audio on first user interaction (iOS/Safari require play() in gesture)
+function unlockAudioContext() {
+  if (audioUnlocked) return;
   if (!synthAudio) {
     synthAudio = new Audio("music01.mp3");
     synthAudio.loop = true;
     synthAudio.volume = 0.4;
   }
-  document.removeEventListener("touchstart", unlockAudio);
-}, { once: true });
+  // Play+pause immediately to unlock the audio element
+  synthAudio.play().then(function() {
+    synthAudio.pause();
+    synthAudio.currentTime = 0;
+    audioUnlocked = true;
+  }).catch(function() {});
+}
+document.addEventListener("touchstart", unlockAudioContext, { once: true });
+document.addEventListener("click", unlockAudioContext, { once: true });
 
 function toggleMusic() {
   var btn = document.getElementById("musicToggle");
@@ -1534,22 +1548,18 @@ function toggleMusic() {
       synthAudio.loop = true;
       synthAudio.volume = 0.4;
     }
-    var playPromise = synthAudio.play();
-    if (playPromise) {
-      playPromise.then(function() {
-        synthPlaying = true;
-        btn.textContent = "🔊";
-        btn.classList.add("playing");
-      }).catch(function(err) {
-        synthPlaying = false;
-        btn.textContent = "🔇";
-        btn.classList.remove("playing");
-        showToast("Audio: Tippe den 🔇 Button nochmal");
-      });
-    }
+    synthAudio.play().then(function() {
+      synthPlaying = true;
+      btn.textContent = "🔊";
+      btn.classList.add("playing");
+    }).catch(function() {
+      synthPlaying = false;
+      btn.textContent = "🔇";
+      btn.classList.remove("playing");
+    });
   } else {
     synthPlaying = false;
-    if (synthAudio) synthAudio.pause();
+    synthAudio.pause();
     btn.textContent = "🔇";
     btn.classList.remove("playing");
   }
