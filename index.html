@@ -550,25 +550,34 @@ button:focus-visible, .search-input:focus-visible {
 
 /* Session Content */
 .session-title {
-  font-size: 14px; font-weight: 700; line-height: 1.35; color: var(--text);
-  margin-top: 2px;
+  font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--text);
+  margin-top: 4px;
 }
 .session.is-break .session-title {
   font-size: 13px; font-weight: 500; color: var(--text-dim);
   margin-top: 0;
 }
-.session-time-inline { font-size: 12px; font-weight: 600; color: var(--text-dim); margin-left: 6px; font-variant-numeric: tabular-nums; }
-.session-speakers { font-size: 12px; color: var(--speakers-color); margin-top: 6px; line-height: 1.5; }
-.speaker-line { display: block; margin-bottom: 2px; }
+.session-time-inline { font-size: 12px; font-weight: 500; color: var(--text-dim); margin-left: 6px; font-variant-numeric: tabular-nums; }
+/* Speaker block — visually separated from title */
+.session-speakers {
+  font-size: 12px; color: var(--speakers-color); margin-top: 8px; padding-top: 8px;
+  border-top: 1px solid var(--border); line-height: 1.6;
+}
+.speaker-line { display: block; margin-bottom: 1px; }
 .speaker-name { font-weight: 600; color: var(--text); }
 .speaker-role { font-size: 11px; color: var(--text-dim); }
 .speaker-company { font-size: 10px; font-weight: 600; color: var(--text-dim); background: var(--pill-bg); padding: 1px 6px; border-radius: 10px; white-space: nowrap; }
+/* Description — expanded details */
 .session-desc {
   font-size: 12.5px; color: var(--desc-color); margin-top: 10px;
   line-height: 1.65; border-top: 1px solid var(--border); padding-top: 10px;
   animation: fadeIn .25s ease;
 }
-.expand-hint { font-size: 11px; color: var(--text-dim); margin-top: 4px; opacity: 0.7; }
+/* Expand hint — colored, clearly tappable */
+.expand-hint {
+  font-size: 11px; font-weight: 600; color: var(--teal); margin-top: 8px;
+  padding: 4px 0;
+}
 
 /* Empty State */
 .empty { text-align: center; padding: 40px; color: var(--text-dim); font-size: 14px; }
@@ -930,13 +939,18 @@ function parseSpeaker(raw) {
   return { name: name, role: role, company: company, isMod: isMod, raw: raw };
 }
 
-function formatSpeakerHtml(raw) {
+function formatSpeakerHtml(raw, compact) {
   var p = parseSpeaker(raw);
   var h = '';
   if (p.isMod) h += '<span class="speaker-role">Mod: </span>';
   h += '<span class="speaker-name">' + esc(p.name) + '</span>';
-  if (p.role) h += ' <span class="speaker-role">' + esc(p.role) + '</span>';
-  if (p.company) h += ' <span class="speaker-company">' + esc(p.company) + '</span>';
+  // In compact mode (many speakers): only show company, skip role
+  if (compact) {
+    if (p.company) h += ' <span class="speaker-company">' + esc(p.company) + '</span>';
+  } else {
+    if (p.role) h += ' <span class="speaker-role">' + esc(p.role) + '</span>';
+    if (p.company) h += ' <span class="speaker-company">' + esc(p.company) + '</span>';
+  }
   return h;
 }
 
@@ -1328,7 +1342,8 @@ function render() {
 
       // Speakers (formatted: name bold, company as pill)
       if (s.speakers.length) {
-        html += '<div class="session-speakers">'+s.speakers.map(function(sp) { return '<span class="speaker-line">'+formatSpeakerHtml(sp)+'</span>'; }).join('')+'</div>';
+        var compact = s.speakers.length >= 3;
+        html += '<div class="session-speakers">'+s.speakers.map(function(sp) { return '<span class="speaker-line">'+formatSpeakerHtml(sp, compact)+'</span>'; }).join('')+'</div>';
       }
 
       // Description
@@ -1336,9 +1351,11 @@ function render() {
         html += '<div class="session-desc">'+esc(s.desc)+'</div>';
       }
 
-      // Expand hint
+      // Expand/collapse hint
       if (hasDesc && !isExp) {
         html += '<div class="expand-hint">\u25be Details anzeigen</div>';
+      } else if (hasDesc && isExp) {
+        html += '<div class="expand-hint">\u25b4 Weniger anzeigen</div>';
       }
 
       html += '</div>';
