@@ -452,7 +452,7 @@ body { scrollbar-width: none; }
 .header-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; }
 .header-title { font-size: 16px; font-weight: 800; line-height: 1.2; }
 .header-meta { font-size: 10px; color: var(--text-dim); text-align: right; line-height: 1.4; }
-.header-subtitle { font-size: 9px; color: var(--text-dim); font-weight: 300; margin-top: 1px; font-style: italic; }
+.header-subtitle { font-size: 11px; color: var(--text-dim); font-weight: 300; margin-top: 1px; font-style: italic; }
 .footer-disclaimer { font-size: 9px; opacity: 0.5; margin-top: 2px; display: inline-block; }
 
 /* Day Tabs */
@@ -466,12 +466,17 @@ body { scrollbar-width: none; }
 .day-tab.active { background: var(--accent); color: #fff; }
 
 /* Filter Pills */
-.filters { display: flex; gap: 5px; flex-wrap: wrap; }
+.filters { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+.filters::-webkit-scrollbar { display: none; }
 .filter-pill {
-  padding: 6px 12px; border: none; border-radius: 20px; cursor: pointer;
+  padding: 8px 14px; border: none; border-radius: 20px; cursor: pointer;
   font-family: inherit; font-size: 11px; font-weight: 600;
   background: var(--pill-bg); color: var(--pill-color);
-  transition: all .15s;
+  transition: all .15s; white-space: nowrap; flex-shrink: 0;
+}
+.filter-pill-action {
+  border: 1px dashed var(--border);
+  background: transparent;
 }
 .filter-pill.active { background: var(--pill-active-bg); color: var(--pill-active-color); }
 .filter-pill.fav { margin-left: auto; }
@@ -574,7 +579,7 @@ button:focus-visible, .search-input:focus-visible {
   line-height: 1.65; border-top: 1px solid var(--border); padding-top: 10px;
   animation: fadeIn .25s ease;
 }
-.expand-hint { font-size: 10px; color: var(--expand-color); margin-top: 4px; }
+.expand-hint { font-size: 11px; color: var(--text-dim); margin-top: 4px; opacity: 0.7; }
 
 /* Empty State */
 .empty { text-align: center; padding: 40px; color: var(--text-dim); font-size: 14px; }
@@ -688,9 +693,9 @@ button:focus-visible, .search-input:focus-visible {
     <button type="button" class="filter-pill active" data-filter="all" onclick="setFilter('all')">Alle</button>
     <button type="button" class="filter-pill" data-filter="main" onclick="setFilter('main')">Main Stage</button>
     <button type="button" class="filter-pill" data-filter="deep-dive" onclick="setFilter('deep-dive')">Deep Dives</button>
-    <button type="button" class="filter-pill" onclick="openDirectory('people')">👤 Speaker</button>
-    <button type="button" class="filter-pill" onclick="openDirectory('companies')">🏢 Firmen</button>
-    <a href="https://motorworld.de/wp-content/uploads/2022/04/MW-M_Event-Tagung_Wegefuehrung-Besucher_2021-09-.pdf" target="_blank" rel="noopener noreferrer" class="filter-pill" style="text-decoration:none">🗺 Lageplan</a>
+    <button type="button" class="filter-pill filter-pill-action" onclick="openDirectory('people')">👤 Speaker</button>
+    <button type="button" class="filter-pill filter-pill-action" onclick="openDirectory('companies')">🏢 Firmen</button>
+    <a href="https://motorworld.de/wp-content/uploads/2022/04/MW-M_Event-Tagung_Wegefuehrung-Besucher_2021-09-.pdf" target="_blank" rel="noopener noreferrer" class="filter-pill filter-pill-action" style="text-decoration:none">🗺 Lageplan ↗</a>
     <button type="button" class="filter-pill fav" data-filter="fav" onclick="toggleFavFilter()" aria-label="Nur Favoriten anzeigen">★ Favoriten</button>
   </div>
   <div class="search-wrap" id="searchWrap">
@@ -726,7 +731,6 @@ button:focus-visible, .search-input:focus-visible {
 </div>
 
 <div class="footer">
-  <a href="https://motorworld.de/wp-content/uploads/2022/04/MW-M_Event-Tagung_Wegefuehrung-Besucher_2021-09-.pdf" target="_blank" rel="noopener noreferrer" class="primary">🗺 Lageplan Motorworld München (PDF)</a><br>
   ⚠️ Komplett inoffiziell · Alle Angaben ohne Gewähr<br>
   Auf die Schnelle vibe-gecodet von <a href="https://www.linkedin.com/in/julianvandieken/" target="_blank" rel="noopener noreferrer" class="primary">Julian van Dieken</a>
   · <a href="https://vandieken.com" target="_blank" rel="noopener noreferrer" class="secondary">vandieken.com</a>
@@ -908,7 +912,7 @@ loadFavs();
 const DAY_DATES = {1: "2026-03-11", 2: "2026-03-12"};
 
 function timeToMin(t) { const p = t.split(":"); return parseInt(p[0],10)*60+parseInt(p[1],10); }
-function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
 // Parse "Name (Role | Company)" or "Mod: Name (Outlet)" format
 function parseSpeaker(raw) {
@@ -1030,7 +1034,7 @@ function renderDirectory() {
         lastLetter = letter;
       }
       var initials = p.name.split(" ").map(function(w) { return w.charAt(0); }).join("").substring(0, 2);
-      html += '<div class="directory-item" onclick="selectDirectoryItem(\'person\',\'' + esc(p.name.replace(/'/g, "\\'")) + '\')">';
+      html += '<div class="directory-item" data-dir-type="person" data-dir-value="' + esc(p.name) + '">';
       html += '<div class="directory-item-icon">' + esc(initials) + '</div>';
       html += '<div class="directory-item-info"><div class="directory-item-name">' + esc(p.name) + '</div>';
       if (p.company) html += '<div class="directory-item-meta">' + esc(p.role ? p.role + " · " : "") + esc(p.company) + '</div>';
@@ -1052,7 +1056,7 @@ function renderDirectory() {
         html += '<div class="directory-letter">' + esc(letter2) + '</div>';
         lastLetter = letter2;
       }
-      html += '<div class="directory-item" onclick="selectDirectoryItem(\'company\',\'' + esc(c.name.replace(/'/g, "\\'")) + '\')">';
+      html += '<div class="directory-item" data-dir-type="company" data-dir-value="' + esc(c.name) + '">';
       html += '<div class="directory-item-icon">🏢</div>';
       html += '<div class="directory-item-info"><div class="directory-item-name">' + esc(c.name) + '</div>';
       html += '<div class="directory-item-meta">' + c.sessions.length + ' Session' + (c.sessions.length > 1 ? 's' : '') + '</div>';
@@ -1066,9 +1070,28 @@ function renderDirectory() {
   list.innerHTML = html;
 }
 
+// Event delegation for directory item clicks (safe: no inline onclick)
+document.getElementById("directoryList").addEventListener("click", function(e) {
+  var item = e.target.closest(".directory-item");
+  if (!item) return;
+  var type = item.dataset.dirType;
+  var value = item.dataset.dirValue;
+  if (type && value) selectDirectoryItem(type, value);
+});
+
 function selectDirectoryItem(type, value) {
   closeDirectory();
-  // Use the search to filter sessions
+  // Check which day has results for this search
+  var hay1 = 0, hay2 = 0;
+  var q = value.toLowerCase();
+  for (var i = 0; i < S.length; i++) {
+    var h = (S[i].title + " " + S[i].speakers.join(" ") + " " + S[i].room + " " + S[i].desc).toLowerCase();
+    if (h.indexOf(q) > -1) { if (S[i].day === 1) hay1++; if (S[i].day === 2) hay2++; }
+  }
+  // Switch to the day with results if current day has none
+  if (currentDay === 1 && hay1 === 0 && hay2 > 0) setDay(2);
+  else if (currentDay === 2 && hay2 === 0 && hay1 > 0) setDay(1);
+  // Open search and filter
   document.getElementById("searchWrap").classList.add("is-open");
   document.getElementById("searchToggle").classList.add("is-active");
   document.getElementById("searchInput").value = value;
@@ -1084,11 +1107,13 @@ function toggleSearchBar() {
   else { clearSearch(); }
 }
 
+var searchDebounceTimer = null;
 function onSearch(val) {
   searchQuery = val.trim().toLowerCase();
   document.getElementById("searchClear").style.display = searchQuery ? "flex" : "none";
   shouldScrollToLive = false;
-  render();
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(render, 120);
 }
 function clearSearch() {
   searchQuery = "";
@@ -1253,7 +1278,7 @@ function render() {
 
   const tl = document.getElementById("timeline");
   if (!groups.length) {
-    tl.innerHTML = '<div class="empty">'+(isSearching?'Keine Treffer für \u201E'+esc(searchQuery)+'\u201C':showFavsOnly?'Keine Favoriten für diesen Tag.':'Keine Sessions gefunden.')+'</div>';
+    tl.innerHTML = '<div class="empty">'+(isSearching?'Keine Treffer für \u201E'+esc(searchQuery)+'\u201C':showFavsOnly?'Keine Favoriten für diesen Tag.<br><span style="font-size:12px;opacity:0.6">Tippe auf ☆ neben einer Session, um sie als Favorit zu speichern.</span>':'Keine Sessions gefunden.')+'</div>';
     return;
   }
 
@@ -1376,12 +1401,13 @@ function applyTheme(theme) {
 function updateThemeUI() {
   var effective = synthwaveOn ? "retro" : baseTheme;
   applyTheme(effective);
+  // Stop music when leaving retro
+  if (effective !== "retro" && synthPlaying) toggleMusic();
   // Light/dark toggle icon: show opposite
   document.getElementById("themeToggle").textContent = baseTheme === "light" ? "\uD83C\uDF19" : "\u2600\uFE0F";
   // Synthwave button glow
   var synthBtn = document.getElementById("synthToggle");
   synthBtn.classList.toggle("is-active", synthwaveOn);
-  // Music toggle visibility managed by CSS [data-theme="retro"]
 }
 
 function toggleTheme() {
@@ -1521,15 +1547,6 @@ function toggleMusic() {
     btn.classList.remove("playing");
   }
 }
-
-// Stop music when leaving retro theme
-var origApplyTheme = applyTheme;
-applyTheme = function(theme) {
-  origApplyTheme(theme);
-  if (theme !== "retro" && synthPlaying) {
-    toggleMusic();
-  }
-};
 
 // Register service worker for offline support
 if ("serviceWorker" in navigator) {
