@@ -1059,7 +1059,7 @@ function renderDirectory() {
   if (directoryMode === "people") {
     var filtered = peopleIndex.filter(function(p) {
       if (!directoryFilterText) return true;
-      return (p.name + " " + p.company + " " + p.role).toLowerCase().indexOf(directoryFilterText) > -1;
+      return (p.name + " " + p.company).toLowerCase().indexOf(directoryFilterText) > -1;
     });
     for (var i = 0; i < filtered.length; i++) {
       var p = filtered[i];
