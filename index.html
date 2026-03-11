@@ -529,7 +529,7 @@ button:focus-visible, .search-input:focus-visible {
 }
 .session.is-next { border-color: var(--next-border); }
 
-.session-top { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
+.session-top { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
 .session.is-break .session-top { margin-bottom: 0; }
 
 /* Badges */
@@ -544,15 +544,16 @@ button:focus-visible, .search-input:focus-visible {
 .badge-now { background: var(--accent); color: #fff; font-weight: 800; letter-spacing: 1px; animation: pulse 2s infinite; }
 .badge-next { background: var(--fav-active-bg); color: var(--gold); }
 
-.room-tag { font-size: 11px; font-weight: 600; color: var(--text-dim); margin-left: 2px; white-space: nowrap; background: var(--pill-bg); padding: 2px 8px; border-radius: 12px; }
+.room-tag { font-size: 11px; font-weight: 600; color: var(--text-dim); margin-left: 2px; white-space: nowrap; background: var(--pill-bg); padding: 2px 8px; border-radius: 12px; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
 
 /* Fav Star */
 .fav-btn {
-  margin-left: 0; background: none; border: none; cursor: pointer;
+  margin-left: auto; background: none; border: none; cursor: pointer;
   font-size: 20px; padding: 0; line-height: 1;
   color: var(--text-faint); transition: color .15s;
   min-width: 44px; min-height: 44px;
   display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
 .fav-btn.is-fav { color: var(--gold); }
 
@@ -1339,7 +1340,8 @@ function render() {
       else if (s.type==="deep-dive") html += '<span class="badge badge-deep">Deep Dive</span>';
       else html += '<span class="badge badge-main">Main Stage</span>';
 
-      if (s.room && !isBrk) html += '<span class="room-tag">\ud83d\udccd '+esc(s.room)+'</span>';
+      // Only show room tag if it adds information (not redundant with badge)
+      if (s.room && !isBrk && s.room !== "Mainstage") html += '<span class="room-tag">\ud83d\udccd '+esc(s.room)+'</span>';
       if (!isBrk) html += '<button type="button" class="fav-btn'+(isFav?' is-fav':'')+'" aria-label="'+(isFav?'Favorit entfernen':'Als Favorit markieren')+'">'+(isFav?'\u2605':'\u2606')+'</button>';
       html += '</div>';
 
