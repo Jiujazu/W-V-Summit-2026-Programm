@@ -497,9 +497,10 @@ function saveFavs() {
 }
 loadFavs();
 
+const DAY_DATES = {1: "2026-03-11", 2: "2026-03-12"};
+
 function timeToMin(t) { const p = t.split(":"); return parseInt(p[0],10)*60+parseInt(p[1],10); }
-const _escEl = document.createElement("div");
-function esc(s) { _escEl.textContent = s; return _escEl.innerHTML; }
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 function onSearch(val) {
   searchQuery = val.trim().toLowerCase();
@@ -523,8 +524,10 @@ function shareSession(id, e) {
 
   if (navigator.share) {
     navigator.share({ title: s.title, text: text }).catch(function() {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() { showToast("Kopiert!"); }).catch(function() { showToast("Kopieren fehlgeschlagen"); });
   } else {
-    navigator.clipboard.writeText(text).then(function() { showToast("Kopiert!"); }).catch(function() {});
+    showToast("Teilen nicht unterst\u00fctzt");
   }
 }
 
@@ -576,12 +579,12 @@ function toggleExpand(id) {
 
 function render() {
   const now = new Date();
-  const dayDate = currentDay === 1 ? "2026-03-11" : "2026-03-12";
+  const dayDate = DAY_DATES[currentDay];
   const isToday = localDateStr(now) === dayDate;
   const nowMin = now.getHours()*60+now.getMinutes();
 
   const currentIds = new Set();
-  let nextId = null;
+  const nextIds = new Set();
 
   if (isToday) {
     const ds = S.filter(function(s) { return s.day===currentDay && s.type!=="break"; });
@@ -590,20 +593,28 @@ function render() {
       if (nowMin>=timeToMin(s.time) && nowMin<timeToMin(s.end)) currentIds.add(s.id);
     }
     if (!currentIds.size) {
+      let nextTime = null;
       for (let i = 0; i < ds.length; i++) {
-        if (timeToMin(ds[i].time)>nowMin) { nextId=ds[i].id; break; }
+        var t = timeToMin(ds[i].time);
+        if (t > nowMin) {
+          if (nextTime === null) nextTime = t;
+          if (t === nextTime) nextIds.add(ds[i].id);
+          else break;
+        }
       }
     }
   }
 
+  const isSearching = searchQuery.length > 0;
+
   const filtered = S.filter(function(s) {
     if (s.day !== currentDay) return false;
-    if (showFavsOnly && !favs[s.id]) return false;
-    if (!searchQuery) {
+    if (showFavsOnly && !isSearching && !favs[s.id]) return false;
+    if (!isSearching) {
       if (currentFilter==="main" && s.type==="deep-dive") return false;
       if (currentFilter==="deep-dive" && s.type!=="deep-dive") return false;
     }
-    if (searchQuery) {
+    if (isSearching) {
       const hay = (s.title + " " + s.speakers.join(" ") + " " + s.room + " " + s.desc).toLowerCase();
       if (!hay.includes(searchQuery)) return false;
     }
@@ -620,11 +631,12 @@ function render() {
 
   const tl = document.getElementById("timeline");
   if (!groups.length) {
-    tl.innerHTML = '<div class="empty">'+(searchQuery?'Keine Treffer für \u201E'+esc(searchQuery)+'\u201C':showFavsOnly?'Keine Favoriten für diesen Tag.':'Keine Sessions gefunden.')+'</div>';
+    tl.innerHTML = '<div class="empty">'+(isSearching?'Keine Treffer für \u201E'+esc(searchQuery)+'\u201C':showFavsOnly?'Keine Favoriten für diesen Tag.':'Keine Sessions gefunden.')+'</div>';
     return;
   }
 
   let html = '';
+  let scrollTargetAssigned = false;
 
   for (let gi = 0; gi < groups.length; gi++) {
     const g = groups[gi];
@@ -633,7 +645,7 @@ function render() {
     for (let si = 0; si < g.sessions.length; si++) {
       const s = g.sessions[si];
       const isCur = currentIds.has(s.id);
-      const isNxt = s.id===nextId;
+      const isNxt = nextIds.has(s.id);
       const isExp = expandedIds[s.id];
       const isFav = favs[s.id];
       const isBrk = s.type==="break";
@@ -645,21 +657,23 @@ function render() {
       if (isCur) cls += " is-current";
       if (isNxt) cls += " is-next";
 
-      const scrollId = (isCur || (isNxt && !currentIds.size)) ? ' id="scroll-target"' : '';
+      var needsScroll = !scrollTargetAssigned && (isCur || isNxt);
+      if (needsScroll) scrollTargetAssigned = true;
+      var scrollAttr = needsScroll ? ' id="scroll-target"' : '';
 
-      html += '<div class="'+cls+'" role="listitem"'+scrollId+(hasDesc?' onclick="toggleExpand(\''+s.id+'\')" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();toggleExpand(\''+s.id+'\')}"':'')+'>';
+      html += '<div class="'+cls+'" role="listitem" data-sid="'+esc(s.id)+'"'+scrollAttr+(hasDesc?' tabindex="0"':'')+'>';
 
       // Top row
       html += '<div class="session-top">';
       if (isCur) html += '<span class="badge badge-now">JETZT</span>';
-      if (isNxt) html += '<span class="badge badge-next">Als Nächstes</span>';
+      if (isNxt) html += '<span class="badge badge-next">Als N\u00e4chstes</span>';
 
       if (isBrk) html += '<span class="badge badge-break">Pause</span>';
       else if (s.type==="deep-dive") html += '<span class="badge badge-deep">Deep Dive</span>';
       else html += '<span class="badge badge-main">Main Stage</span>';
 
       if (s.room && !isBrk) html += '<span class="room-tag">\ud83d\udccd '+esc(s.room)+'</span>';
-      if (!isBrk) html += '<button type="button" class="share-btn" onclick="shareSession(\''+s.id+'\',event)" aria-label="Session teilen">\u{1F4E4}</button><button type="button" class="fav-btn'+(isFav?' is-fav':'')+'" onclick="toggleFav(\''+s.id+'\',event)" aria-label="'+(isFav?'Favorit entfernen':'Als Favorit markieren')+'">'+(isFav?'\u2605':'\u2606')+'</button>';
+      if (!isBrk) html += '<button type="button" class="share-btn" aria-label="Session teilen">\u{1F4E4}</button><button type="button" class="fav-btn'+(isFav?' is-fav':'')+'" aria-label="'+(isFav?'Favorit entfernen':'Als Favorit markieren')+'">'+(isFav?'\u2605':'\u2606')+'</button>';
       html += '</div>';
 
       // Title
@@ -698,10 +712,29 @@ function render() {
   }
 }
 
+// Event delegation for timeline interactions (prevents XSS via inline handlers)
+document.getElementById("timeline").addEventListener("click", function(e) {
+  var card = e.target.closest("[data-sid]");
+  if (!card) return;
+  var id = card.dataset.sid;
+  if (e.target.closest(".fav-btn")) { toggleFav(id, e); return; }
+  if (e.target.closest(".share-btn")) { shareSession(id, e); return; }
+  var s = S.find(function(x) { return x.id === id; });
+  if (s && s.type !== "break" && s.desc) toggleExpand(id);
+});
+document.getElementById("timeline").addEventListener("keydown", function(e) {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  var card = e.target.closest("[data-sid]");
+  if (!card) return;
+  var id = card.dataset.sid;
+  var s = S.find(function(x) { return x.id === id; });
+  if (s && s.type !== "break" && s.desc) { e.preventDefault(); toggleExpand(id); }
+});
+
 // Auto-detect correct day
 (function autoDetectDay() {
   const today = localDateStr(new Date());
-  if (today === "2026-03-12") setDay(2);
+  if (today === DAY_DATES[2]) setDay(2);
   else setDay(1);
 })();
 
@@ -730,9 +763,8 @@ function toggleTheme() {
 // Refresh every 30s for live tracking, pause when tab is hidden
 let refreshInterval = setInterval(render, 30000);
 document.addEventListener("visibilitychange", function() {
-  if (document.hidden) {
-    clearInterval(refreshInterval);
-  } else {
+  clearInterval(refreshInterval);
+  if (!document.hidden) {
     shouldScrollToLive = true;
     render();
     refreshInterval = setInterval(render, 30000);
