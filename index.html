@@ -367,10 +367,42 @@
 .nyan-cat-wrap { display: none; }
 .nyan-cat {
   position: absolute; top: 0; left: 0;
-  width: 70px; height: 40px;
+  width: 54px; height: 36px;
   image-rendering: pixelated;
   animation: nyanFly 8s linear infinite;
   will-change: transform;
+  /* CSS pixel-art Nyan Cat: poptart body + cat features */
+  background:
+    /* poptart body */
+    linear-gradient(#ffcc99, #ffcc99) 9px 6px / 36px 24px no-repeat,
+    /* frosting */
+    linear-gradient(#ff99aa, #ff99aa) 12px 9px / 30px 18px no-repeat,
+    /* sprinkles */
+    linear-gradient(#ff3366, #ff3366) 15px 12px / 3px 3px no-repeat,
+    linear-gradient(#33ccff, #33ccff) 24px 15px / 3px 3px no-repeat,
+    linear-gradient(#ffff33, #ffff33) 33px 12px / 3px 3px no-repeat,
+    linear-gradient(#33ff66, #33ff66) 21px 21px / 3px 3px no-repeat,
+    linear-gradient(#ff3366, #ff3366) 30px 21px / 3px 3px no-repeat,
+    linear-gradient(#33ccff, #33ccff) 18px 15px / 3px 3px no-repeat,
+    /* cat head */
+    linear-gradient(#999, #999) 39px 9px / 12px 15px no-repeat,
+    /* ears */
+    linear-gradient(#999, #999) 39px 3px / 3px 6px no-repeat,
+    linear-gradient(#999, #999) 48px 3px / 3px 6px no-repeat,
+    /* ear inner */
+    linear-gradient(#ff99aa, #ff99aa) 39px 6px / 3px 3px no-repeat,
+    linear-gradient(#ff99aa, #ff99aa) 48px 6px / 3px 3px no-repeat,
+    /* eyes */
+    linear-gradient(#333, #333) 42px 12px / 3px 3px no-repeat,
+    linear-gradient(#333, #333) 48px 12px / 3px 3px no-repeat,
+    /* mouth/cheeks */
+    linear-gradient(#ff6688, #ff6688) 42px 18px / 3px 3px no-repeat,
+    linear-gradient(#ff6688, #ff6688) 48px 18px / 3px 3px no-repeat,
+    /* feet */
+    linear-gradient(#999, #999) 12px 30px / 6px 6px no-repeat,
+    linear-gradient(#999, #999) 30px 30px / 6px 6px no-repeat,
+    /* tail */
+    linear-gradient(#999, #999) 0px 15px / 12px 3px no-repeat;
 }
 .nyan-rainbow {
   position: absolute; top: 8px; left: 0;
@@ -434,7 +466,7 @@
 
 /* Konami mode - extra crazy */
 [data-theme="retro"].konami-active .retro-scanlines { background: repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 2px); }
-[data-theme="retro"].konami-active .nyan-cat { width: 100px; height: 58px; }
+[data-theme="retro"].konami-active .nyan-cat { transform: scale(1.5); }
 [data-theme="retro"].konami-active .nyan-rainbow { width: 120px; height: 36px; }
 [data-theme="retro"].konami-active .nyan-cat-wrap { animation: none; }
 .konami-active .session { transition: all 0.3s; }
@@ -687,7 +719,7 @@ button:focus-visible, .search-input:focus-visible {
 <!-- Nyan Cat -->
 <div class="nyan-cat-wrap">
   <div class="nyan-rainbow"></div>
-  <img class="nyan-cat" src="https://media.giphy.com/media/gx54W1mSpeYMg/giphy.gif" alt="Nyan Cat" loading="lazy">
+  <div class="nyan-cat" aria-hidden="true"></div>
 </div>
 
 <!-- Shooting Stars -->
