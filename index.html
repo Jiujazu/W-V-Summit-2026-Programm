@@ -1375,10 +1375,7 @@ function render() {
           html += '<div class="session-speakers">'+s.speakers.map(function(sp) { return '<span class="speaker-line">'+formatSpeakerHtml(sp, compact)+'</span>'; }).join('')+'</div>';
           html += '<div class="expand-hint">\u25b4 Speaker ausblenden</div>';
         } else {
-          // Show compact speaker summary when collapsed
-          var names = s.speakers.map(function(sp) { return parseSpeaker(sp).name; });
-          var summary = names.length <= 2 ? names.join(', ') : names.slice(0,2).join(', ') + ' +' + (names.length - 2);
-          html += '<div class="expand-hint">\u25be '+esc(summary)+'</div>';
+          html += '<div class="expand-hint">\u25be Personen anzeigen ('+s.speakers.length+')</div>';
         }
       }
 
