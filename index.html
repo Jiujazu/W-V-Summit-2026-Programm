@@ -169,7 +169,7 @@
 
 /* Retro visual overrides */
 [data-theme="retro"] body { font-family: var(--retro-font); letter-spacing: 0.3px; }
-[data-theme="retro"] .header-label { letter-spacing: 4px; text-shadow: 0 0 12px rgba(255,107,53,0.4); }
+[data-theme="retro"] .header-label-inline { letter-spacing: 2px; text-shadow: 0 0 12px rgba(255,107,53,0.4); }
 [data-theme="retro"] .header-title { text-shadow: 0 0 8px rgba(255,180,60,0.3); }
 [data-theme="retro"] .header-subtitle { color: #d554d5; font-style: normal; font-weight: 500; text-shadow: 0 0 8px rgba(213,84,213,0.4); }
 [data-theme="retro"] .session { border-radius: 4px; border: 1px solid rgba(255,180,60,0.1); }
@@ -292,7 +292,7 @@
 .retro-stars { display: none; }
 
 /* Neon glow on retro header */
-[data-theme="retro"] .header-label { animation: retroGlow 4s ease-in-out infinite; }
+[data-theme="retro"] .header-label-inline { animation: retroGlow 4s ease-in-out infinite; }
 [data-theme="retro"] .header-title { animation: retroGlow 4s ease-in-out infinite 1s; }
 
 /* Retro session card hover glow */
@@ -336,13 +336,13 @@
 .vhs-glitch:nth-child(1) { top: 30%; animation: vhsGlitch 8s linear infinite; }
 .vhs-glitch:nth-child(2) { top: 65%; animation: vhsGlitch 11s linear infinite 3s; }
 
-/* Nyan Cat — static, centered below footer, retro only */
+/* Nyan Cat — full-width in header, retro only */
 .nyan-cat-wrap { display: none; }
 [data-theme="retro"] .nyan-cat-wrap {
-  display: block; text-align: center; padding: 8px 0 24px;
+  display: block; text-align: center; padding: 4px 0 2px;
 }
 .nyan-cat-img {
-  width: 48px; height: auto;
+  width: 100%; height: auto;
   image-rendering: pixelated;
   font-size: 0; color: transparent;
 }
@@ -430,8 +430,8 @@ body { scrollbar-width: none; }
   padding: calc(var(--safe-top) + 10px) 16px 8px;
 }
 .header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-.header-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; }
 .header-title { font-size: 16px; font-weight: 800; line-height: 1.2; }
+.header-label-inline { font-size: 13px; font-weight: 600; color: var(--accent); }
 .header-meta { font-size: 10px; color: var(--text-dim); text-align: right; line-height: 1.4; }
 .header-subtitle { font-size: 11px; color: var(--text-dim); font-weight: 300; margin-top: 1px; font-style: italic; }
 .footer-disclaimer { font-size: 9px; opacity: 0.5; margin-top: 2px; display: inline-block; }
@@ -695,8 +695,7 @@ button:focus-visible, .search-input:focus-visible {
 <div class="header" id="header">
   <div class="header-row">
     <div>
-      <div class="header-label">W&V Summit 2026</div>
-      <div class="header-title">Programm</div>
+      <div class="header-title">Programm <span class="header-label-inline">W&amp;V Summit 2026</span></div>
       <div class="header-subtitle">Julians komplett inoffizieller Pocket-Guide</div>
     </div>
     <div class="header-meta">11.–12. März<br>München</div>
@@ -704,6 +703,9 @@ button:focus-visible, .search-input:focus-visible {
     <button type="button" class="music-toggle" id="musicToggle" onclick="toggleMusic()" aria-label="Synthwave Musik an/aus">🔇</button>
     <button type="button" class="theme-toggle synthwave-toggle" id="synthToggle" onclick="toggleSynthwave()" aria-label="Synthwave Modus">🌈</button>
     <button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Theme wechseln">🌙</button>
+  </div>
+  <div class="nyan-cat-wrap">
+    <img class="nyan-cat-img" src="nyan-cat.gif" alt="Nyan Cat" loading="lazy">
   </div>
   <div class="day-tabs">
     <button type="button" class="day-tab active" data-day="1" onclick="setDay(1)">Mi 11. März</button>
@@ -762,9 +764,6 @@ button:focus-visible, .search-input:focus-visible {
   · <a href="https://vandieken.com" target="_blank" rel="noopener noreferrer" class="secondary">vandieken.com</a>
 </div>
 
-<div class="nyan-cat-wrap">
-  <img class="nyan-cat-img" src="nyan-cat.gif" alt="Nyan Cat" loading="lazy">
-</div>
 
 <!-- Synthwave Retro Effects -->
 <div class="retro-stars" id="retroStars"></div>
