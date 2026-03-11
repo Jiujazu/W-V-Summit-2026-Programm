@@ -214,6 +214,54 @@
   0%, 100% { box-shadow: 0 0 5px rgba(255,107,53,0.2); }
   50% { box-shadow: 0 0 15px rgba(213,84,213,0.3), 0 0 30px rgba(255,107,53,0.15); }
 }
+@keyframes nyanFly {
+  0% { transform: translateX(-200px) translateY(0); }
+  25% { transform: translateX(25vw) translateY(-20px); }
+  50% { transform: translateX(50vw) translateY(10px); }
+  75% { transform: translateX(75vw) translateY(-15px); }
+  100% { transform: translateX(calc(100vw + 200px)) translateY(0); }
+}
+@keyframes rainbowTrail {
+  0% { transform: translateX(-200px) translateY(0) scaleX(1); opacity: 0.7; }
+  25% { transform: translateX(25vw) translateY(-20px) scaleX(1); opacity: 0.7; }
+  50% { transform: translateX(50vw) translateY(10px) scaleX(1); opacity: 0.7; }
+  75% { transform: translateX(75vw) translateY(-15px) scaleX(1); opacity: 0.7; }
+  100% { transform: translateX(calc(100vw + 200px)) translateY(0) scaleX(1); opacity: 0; }
+}
+@keyframes shootingStar {
+  0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 0; }
+  5% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateX(300px) translateY(200px) rotate(-35deg); opacity: 0; }
+}
+@keyframes vhsGlitch {
+  0%, 95%, 100% { transform: translateX(0); opacity: 0; }
+  96% { transform: translateX(-5px); opacity: 0.8; }
+  97% { transform: translateX(10px); opacity: 0.6; }
+  98% { transform: translateX(-3px); opacity: 0.7; }
+  99% { transform: translateX(7px); opacity: 0; }
+}
+@keyframes sparkleFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translateY(-60px) scale(1.3); opacity: 0.8; }
+  90% { opacity: 0.2; }
+  100% { transform: translateY(-120px) scale(0.5); opacity: 0; }
+}
+@keyframes rainbowBorder {
+  0% { border-color: #ff6b35; }
+  25% { border-color: #d554d5; }
+  50% { border-color: #00e5c6; }
+  75% { border-color: #ffb43c; }
+  100% { border-color: #ff6b35; }
+}
+@keyframes crtFlicker {
+  0%, 100% { opacity: 1; }
+  50.1% { opacity: 0.98; }
+  50.2% { opacity: 1; }
+  75.1% { opacity: 0.97; }
+  75.3% { opacity: 1; }
+}
 
 /* Retro scanline overlay */
 [data-theme="retro"] .retro-scanlines {
@@ -310,6 +358,88 @@
 }
 .retro-vignette { display: none; }
 
+/* Nyan Cat */
+[data-theme="retro"] .nyan-cat-wrap {
+  display: block;
+  position: fixed; top: 15vh; left: 0; width: 100%; height: 80px;
+  pointer-events: none; z-index: 50; overflow: hidden;
+}
+.nyan-cat-wrap { display: none; }
+.nyan-cat {
+  position: absolute; top: 0; left: 0;
+  width: 70px; height: 40px;
+  image-rendering: pixelated;
+  animation: nyanFly 8s linear infinite;
+  will-change: transform;
+}
+.nyan-rainbow {
+  position: absolute; top: 8px; left: 0;
+  width: 80px; height: 24px;
+  background: linear-gradient(180deg,
+    #ff0000 0%, #ff0000 16.6%,
+    #ff9900 16.6%, #ff9900 33.2%,
+    #ffff00 33.2%, #ffff00 49.8%,
+    #33ff00 49.8%, #33ff00 66.4%,
+    #0099ff 66.4%, #0099ff 83%,
+    #6633ff 83%, #6633ff 100%
+  );
+  border-radius: 2px;
+  animation: rainbowTrail 8s linear infinite;
+  animation-delay: -0.15s;
+  opacity: 0.7;
+  will-change: transform;
+}
+
+/* Shooting stars */
+[data-theme="retro"] .shooting-star {
+  display: block;
+  position: fixed; pointer-events: none; z-index: -1;
+  width: 80px; height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+  border-radius: 2px;
+  will-change: transform, opacity;
+}
+.shooting-star { display: none; }
+.shooting-star:nth-child(1) { top: 8%; left: 10%; animation: shootingStar 3s ease-out infinite 0s; }
+.shooting-star:nth-child(2) { top: 22%; left: 60%; animation: shootingStar 4s ease-out infinite 2.5s; }
+.shooting-star:nth-child(3) { top: 5%; left: 35%; animation: shootingStar 3.5s ease-out infinite 5s; }
+
+/* VHS glitch line */
+[data-theme="retro"] .vhs-glitch {
+  display: block;
+  position: fixed; left: 0; width: 100%; height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4) 20%, rgba(213,84,213,0.3) 50%, rgba(255,107,53,0.3) 80%, transparent);
+  pointer-events: none; z-index: 9996;
+  will-change: transform, opacity;
+}
+.vhs-glitch { display: none; }
+.vhs-glitch:nth-child(1) { top: 30%; animation: vhsGlitch 8s linear infinite; }
+.vhs-glitch:nth-child(2) { top: 65%; animation: vhsGlitch 11s linear infinite 3s; }
+
+/* Sparkle particles */
+[data-theme="retro"] .sparkle-container { display: block; }
+.sparkle-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 49; overflow: hidden; }
+.sparkle {
+  position: absolute; font-size: 14px;
+  animation: sparkleFloat 4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Rainbow borders on retro cards */
+[data-theme="retro"] .session { animation: rainbowBorder 6s linear infinite; }
+[data-theme="retro"] .session.is-current { animation: rainbowBorder 3s linear infinite, synthPulse 3s ease-in-out infinite; }
+
+/* CRT screen flicker */
+[data-theme="retro"] body { animation: crtFlicker 0.15s infinite; }
+
+/* Konami mode - extra crazy */
+[data-theme="retro"].konami-active .retro-scanlines { background: repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 2px); }
+[data-theme="retro"].konami-active .nyan-cat { width: 100px; height: 58px; }
+[data-theme="retro"].konami-active .nyan-rainbow { width: 120px; height: 36px; }
+[data-theme="retro"].konami-active .nyan-cat-wrap { animation: none; }
+.konami-active .session { transition: all 0.3s; }
+.konami-active .session:hover, .konami-active .session:active { transform: scale(1.02) rotate(0.5deg); }
+
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { background: var(--bg); }
 body {
@@ -357,7 +487,7 @@ body { scrollbar-width: none; }
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
   background: var(--teal); color: #000; padding: 8px 18px;
   border-radius: 20px; font-size: 12px; font-weight: 700;
-  z-index: 10000; animation: fadeIn .2s ease;
+  z-index: 99999; animation: fadeIn .2s ease;
   pointer-events: none;
 }
 
@@ -508,7 +638,7 @@ button:focus-visible, .search-input:focus-visible {
     <div>
       <div class="header-label">W&V Summit 2026</div>
       <div class="header-title">Programm</div>
-      <div class="header-subtitle">Der komplett inoffizielle Pocket-Guide</div>
+      <div class="header-subtitle">Julians komplett inoffizieller Pocket-Guide</div>
     </div>
     <div class="header-meta">11.–12. März<br>München</div>
     <button type="button" class="music-toggle" id="musicToggle" onclick="toggleMusic()" aria-label="Synthwave Musik an/aus">🔇</button>
@@ -542,8 +672,7 @@ button:focus-visible, .search-input:focus-visible {
 <div class="footer">
   ⚠️ Komplett inoffiziell · Alle Angaben ohne Gewähr<br>
   Auf die Schnelle vibe-gecodet von <a href="https://www.linkedin.com/in/julianvandieken/" target="_blank" rel="noopener noreferrer" class="primary">Julian van Dieken</a>
-  · <a href="https://vandieken.com" target="_blank" rel="noopener noreferrer" class="secondary">vandieken.com</a><br>
-  <span class="footer-disclaimer">Bugs sind Features · Irrtümer sind Absicht · Beschwerden bitte an /dev/null</span>
+  · <a href="https://vandieken.com" target="_blank" rel="noopener noreferrer" class="secondary">vandieken.com</a>
 </div>
 
 <!-- Synthwave Retro Effects -->
@@ -552,6 +681,24 @@ button:focus-visible, .search-input:focus-visible {
 <div class="retro-grid"></div>
 <div class="retro-vignette"></div>
 <div class="retro-scanlines"></div>
+
+<!-- Nyan Cat -->
+<div class="nyan-cat-wrap">
+  <div class="nyan-rainbow"></div>
+  <img class="nyan-cat" src="https://media.giphy.com/media/gx54W1mSpeYMg/giphy.gif" alt="Nyan Cat" loading="lazy">
+</div>
+
+<!-- Shooting Stars -->
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+
+<!-- VHS Glitch Lines -->
+<div class="vhs-glitch"></div>
+<div class="vhs-glitch"></div>
+
+<!-- Sparkle Particles -->
+<div class="sparkle-container" id="sparkleContainer"></div>
 
 <script>
 "use strict";
@@ -993,6 +1140,50 @@ function toggleTheme() {
       "animation:starTwinkle " + (2 + Math.random() * 4) + "s ease-in-out infinite " + (Math.random() * 3) + "s;";
     canvas.appendChild(star);
   }
+})();
+
+// === SPARKLE PARTICLES ===
+(function initSparkles() {
+  var container = document.getElementById("sparkleContainer");
+  if (!container) return;
+  var sparkles = ["✨", "⭐", "💫", "🌟", "✨", "⭐", "💫", "✨"];
+  for (var i = 0; i < sparkles.length; i++) {
+    var el = document.createElement("span");
+    el.className = "sparkle";
+    el.textContent = sparkles[i];
+    el.style.left = (5 + Math.random() * 90) + "%";
+    el.style.top = (20 + Math.random() * 70) + "%";
+    el.style.animationDelay = (Math.random() * 6) + "s";
+    el.style.animationDuration = (3 + Math.random() * 3) + "s";
+    el.style.fontSize = (10 + Math.random() * 10) + "px";
+    container.appendChild(el);
+  }
+})();
+
+// === KONAMI CODE EASTER EGG ===
+(function initKonami() {
+  var code = [38,38,40,40,37,39,37,39,66,65]; // up up down down left right left right B A
+  var pos = 0;
+  document.addEventListener("keydown", function(e) {
+    if (e.keyCode === code[pos]) {
+      pos++;
+      if (pos === code.length) {
+        pos = 0;
+        document.documentElement.classList.toggle("konami-active");
+        var isActive = document.documentElement.classList.contains("konami-active");
+        if (isActive) {
+          showToast("🌈 KONAMI MODE ACTIVATED! 🌈");
+          // Start music if in retro theme and not playing
+          var theme = document.documentElement.getAttribute("data-theme");
+          if (theme === "retro" && !synthPlaying) toggleMusic();
+        } else {
+          showToast("Konami mode deactivated");
+        }
+      }
+    } else {
+      pos = 0;
+    }
+  });
 })();
 
 // === SYNTHWAVE MUSIC ENGINE (Web Audio API) ===
