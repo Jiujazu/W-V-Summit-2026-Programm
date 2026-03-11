@@ -1,4 +1,4 @@
-var CACHE = "wuv26-v2";
+var CACHE = "wuv26-v3";
 var ASSETS = ["/", "/index.html", "/music01.mp3", "/nyan-cat.gif"];
 
 self.addEventListener("install", function(e) {
@@ -22,13 +22,18 @@ self.addEventListener("activate", function(e) {
 });
 
 self.addEventListener("fetch", function(e) {
+  // Only cache GET requests
+  if (e.request.method !== "GET") return;
+
   e.respondWith(
     caches.match(e.request).then(function(cached) {
       if (cached) return cached;
       return fetch(e.request).then(function(response) {
         if (response && response.status === 200 && response.type === "basic") {
           var clone = response.clone();
-          caches.open(CACHE).then(function(cache) { cache.put(e.request, clone); });
+          caches.open(CACHE).then(function(cache) {
+            cache.put(e.request, clone);
+          }).catch(function() { /* quota exceeded — ignore */ });
         }
         return response;
       }).catch(function() {
