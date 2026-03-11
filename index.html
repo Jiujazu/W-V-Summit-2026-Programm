@@ -13,15 +13,15 @@
 <meta property="og:title" content="W&V Summit 2026 – Programm (Mobile)">
 <meta property="og:description" content="Das komplette Programm des W&V Summit am 11. & 12. März 2026 in München – mobil-optimiert mit Favoriten, Filtern und Live-Tracking.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://julianvandieken.github.io/wuv-summit-2026/">
-<meta property="og:image" content="https://julianvandieken.github.io/wuv-summit-2026/og-image.jpg">
+<meta property="og:url" content="https://jiujazu.github.io/W-V-Summit-2026-Programm/">
+<meta property="og:image" content="https://jiujazu.github.io/W-V-Summit-2026-Programm/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="de_DE">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="W&V Summit 2026 – Programm (Mobile)">
 <meta name="twitter:description" content="Komplettes Programm, mobil-optimiert. Favoriten, Filter, Live-Tracking.">
-<meta name="twitter:image" content="https://julianvandieken.github.io/wuv-summit-2026/og-image.jpg">
+<meta name="twitter:image" content="https://jiujazu.github.io/W-V-Summit-2026-Programm/og-image.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,500;9..40,700;9..40,800&display=swap" rel="stylesheet">
@@ -418,16 +418,7 @@ body { scrollbar-width: none; }
   font-size: 11px; display: flex; align-items: center; justify-content: center;
 }
 
-/* Share Button */
-.share-btn {
-  background: none; border: none; cursor: pointer;
-  font-size: 16px; padding: 0; line-height: 1;
-  color: var(--share-color); transition: color .15s;
-  margin-left: auto;
-  min-width: 44px; min-height: 44px;
-  display: flex; align-items: center; justify-content: center;
-}
-.share-btn:active { color: var(--teal); }
+/* Toast notification */
 .share-toast {
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
   background: var(--teal); color: #000; padding: 8px 18px;
@@ -569,7 +560,6 @@ button:focus-visible, .search-input:focus-visible {
 .session-time-inline { font-size: 12px; font-weight: 600; color: var(--text-dim); margin-left: 6px; font-variant-numeric: tabular-nums; }
 .session-speakers { font-size: 12px; color: var(--speakers-color); margin-top: 6px; line-height: 1.5; }
 .speaker-line { display: block; margin-bottom: 2px; }
-.speaker-separator { display: none; }
 .speaker-name { font-weight: 600; color: var(--text); }
 .speaker-role { font-size: 11px; color: var(--text-dim); }
 .speaker-company { font-size: 10px; font-weight: 600; color: var(--text-dim); background: var(--pill-bg); padding: 1px 6px; border-radius: 10px; white-space: nowrap; }
@@ -1123,22 +1113,6 @@ function clearSearch() {
   document.getElementById("searchInput").value = "";
   document.getElementById("searchClear").style.display = "none";
   render();
-}
-
-function shareSession(id, e) {
-  if (e) e.stopPropagation();
-  const s = S.find(function(x) { return x.id === id; });
-  if (!s) return;
-  const day = s.day === 1 ? "Mi 11.03." : "Do 12.03.";
-  const text = s.title + "\n" + day + " " + s.time + "–" + s.end + (s.room ? " | " + s.room : "") + "\n" + (s.speakers.length ? s.speakers.join(", ") : "") + "\n\n#WuVSummit";
-
-  if (navigator.share) {
-    navigator.share({ title: s.title, text: text }).catch(function() {});
-  } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(function() { showToast("Kopiert!"); }).catch(function() { showToast("Kopieren fehlgeschlagen"); });
-  } else {
-    showToast("Teilen nicht unterst\u00fctzt");
-  }
 }
 
 function showToast(msg) {
