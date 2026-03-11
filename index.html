@@ -114,6 +114,75 @@
   --toggle-bg: rgba(255,255,255,0.08);
 }
 
+/*
+ * Retro Theme
+ * Inspiriert von: NASA Graphics Standards Manual (1976), 70s Brand Identity,
+ * 80s Synthwave Neon und klassischen Corporate Design Manuals.
+ * Quellen:
+ *   https://page-online.de/kreation/designarchiv-brand-guidelines-von-1963-bis-heute/
+ *   https://brandingstyleguides.com/
+ */
+[data-theme="retro"] {
+  --bg: #1a1028;
+  --card: rgba(255,180,60,0.06);
+  --card-break: rgba(255,180,60,0.03);
+  --accent: #ff6b35;
+  --teal: #00e5c6;
+  --gold: #ffb43c;
+  --text: #f0e6d2;
+  --text-dim: rgba(240,230,210,0.55);
+  --text-faint: rgba(240,230,210,0.15);
+  --border: rgba(255,180,60,0.12);
+  --search-bg: rgba(255,180,60,0.08);
+  --search-border: rgba(255,180,60,0.15);
+  --search-placeholder: rgba(240,230,210,0.3);
+  --search-clear-bg: rgba(255,107,53,0.2);
+  --search-clear-color: rgba(240,230,210,0.5);
+  --tab-bg: rgba(255,180,60,0.08);
+  --tab-color: rgba(240,230,210,0.5);
+  --pill-bg: rgba(255,180,60,0.06);
+  --pill-color: rgba(240,230,210,0.4);
+  --pill-active-bg: rgba(255,107,53,0.25);
+  --pill-active-color: #f0e6d2;
+  --badge-main-bg: rgba(255,107,53,0.2);
+  --badge-deep-bg: rgba(0,229,198,0.15);
+  --badge-break-bg: rgba(255,180,60,0.08);
+  --badge-break-color: rgba(240,230,210,0.4);
+  --share-color: rgba(240,230,210,0.2);
+  --room-color: rgba(255,180,60,0.5);
+  --speakers-color: rgba(240,230,210,0.5);
+  --desc-color: rgba(240,230,210,0.65);
+  --expand-color: rgba(255,180,60,0.25);
+  --footer-color: rgba(240,230,210,0.2);
+  --footer-primary: rgba(255,180,60,0.5);
+  --footer-secondary: rgba(240,230,210,0.25);
+  --current-bg: linear-gradient(135deg, rgba(255,107,53,0.15), rgba(213,84,213,0.08));
+  --current-border: rgba(255,107,53,0.4);
+  --next-border: rgba(255,180,60,0.3);
+  --fav-active-bg: rgba(255,180,60,0.2);
+  --time-color: rgba(255,180,60,0.6);
+  --toggle-bg: rgba(255,180,60,0.1);
+  /* Retro-specific overrides */
+  --retro-glow: 0 0 20px rgba(255,107,53,0.15);
+  --retro-font: 'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Retro visual overrides */
+[data-theme="retro"] body { font-family: var(--retro-font); letter-spacing: 0.3px; }
+[data-theme="retro"] .header-label { letter-spacing: 4px; text-shadow: 0 0 12px rgba(255,107,53,0.4); }
+[data-theme="retro"] .header-title { text-shadow: 0 0 8px rgba(255,180,60,0.3); }
+[data-theme="retro"] .session { border-radius: 4px; border: 1px solid rgba(255,180,60,0.1); }
+[data-theme="retro"] .session.is-current { box-shadow: var(--retro-glow); }
+[data-theme="retro"] .badge { border-radius: 2px; letter-spacing: 1.5px; }
+[data-theme="retro"] .badge-now { background: linear-gradient(90deg, #ff6b35, #d554d5); text-shadow: 0 0 6px rgba(255,255,255,0.3); }
+[data-theme="retro"] .badge-next { background: rgba(255,180,60,0.2); }
+[data-theme="retro"] .day-tab { border-radius: 2px; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; }
+[data-theme="retro"] .day-tab.active { background: linear-gradient(135deg, #ff6b35, #d554d5); }
+[data-theme="retro"] .filter-pill { border-radius: 2px; text-transform: uppercase; letter-spacing: 0.8px; }
+[data-theme="retro"] .search-input { border-radius: 2px; }
+[data-theme="retro"] .time-label { font-variant-numeric: tabular-nums; letter-spacing: 1px; }
+[data-theme="retro"] .time-line { background: linear-gradient(90deg, rgba(255,180,60,0.2), transparent); }
+
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { background: var(--bg); }
 body {
@@ -738,26 +807,31 @@ document.getElementById("timeline").addEventListener("keydown", function(e) {
   else setDay(1);
 })();
 
-// Theme toggle
-function toggleTheme() {
-  var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-  var newTheme = isDark ? "light" : "dark";
-  document.documentElement.setAttribute("data-theme", newTheme === "dark" ? "dark" : "");
-  if (newTheme === "light") document.documentElement.removeAttribute("data-theme");
-  document.getElementById("themeToggle").textContent = newTheme === "dark" ? "\u2600\uFE0F" : "\uD83C\uDF19";
-  document.getElementById("metaThemeColor").setAttribute("content", newTheme === "dark" ? "#0e0e12" : "#f5f5f7");
-  try { localStorage.setItem("wuv26_theme", newTheme); } catch(e) {}
+// Theme toggle: light -> dark -> retro -> light
+var THEMES = ["light", "dark", "retro"];
+var THEME_ICONS = {light: "\uD83C\uDF19", dark: "\uD83C\uDF15", retro: "\u2600\uFE0F"};
+var THEME_COLORS = {light: "#f5f5f7", dark: "#0e0e12", retro: "#1a1028"};
+
+function applyTheme(theme) {
+  if (theme === "light") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.setAttribute("data-theme", theme);
+  document.getElementById("themeToggle").textContent = THEME_ICONS[theme];
+  document.getElementById("metaThemeColor").setAttribute("content", THEME_COLORS[theme]);
+  try { localStorage.setItem("wuv26_theme", theme); } catch(e) {}
 }
+
+function toggleTheme() {
+  var current = document.documentElement.getAttribute("data-theme") || "light";
+  var idx = THEMES.indexOf(current);
+  var next = THEMES[(idx + 1) % THEMES.length];
+  applyTheme(next);
+}
+
 (function initTheme() {
   var saved = null;
   try { saved = localStorage.getItem("wuv26_theme"); } catch(e) {}
-  if (saved === "dark") {
-    document.documentElement.setAttribute("data-theme", "dark");
-    document.getElementById("themeToggle").textContent = "\u2600\uFE0F";
-    document.getElementById("metaThemeColor").setAttribute("content", "#0e0e12");
-  } else {
-    document.getElementById("themeToggle").textContent = "\uD83C\uDF19";
-  }
+  if (saved && THEMES.indexOf(saved) !== -1) applyTheme(saved);
+  else document.getElementById("themeToggle").textContent = THEME_ICONS.light;
 })();
 
 // Refresh every 30s for live tracking, pause when tab is hidden
