@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>W&V Summit 2026 – Programm</title>
+<meta name="description" content="Das komplette Programm des W&V Summit am 11. & 12. März 2026 in München – mobil-optimiert mit Favoriten, Filtern und Live-Tracking.">
+<meta name="theme-color" content="#0e0e12">
+
+<!-- OG Meta Tags for LinkedIn Preview -->
+
+<meta property="og:title" content="W&V Summit 2026 – Programm (Mobile)">
+<meta property="og:description" content="Das komplette Programm des W&V Summit am 11. & 12. März 2026 in München – mobil-optimiert mit Favoriten, Filtern und Live-Tracking.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://julianvandieken.github.io/wuv-summit-2026/">
+<meta property="og:image" content="https://julianvandieken.github.io/wuv-summit-2026/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="de_DE">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="W&V Summit 2026 – Programm (Mobile)">
+<meta name="twitter:description" content="Komplettes Programm, mobil-optimiert. Favoriten, Filter, Live-Tracking.">
+<meta name="twitter:image" content="https://julianvandieken.github.io/wuv-summit-2026/og-image.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,500;9..40,700;9..40,800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0e0e12;
+  --card: rgba(255,255,255,0.04);
+  --card-break: rgba(255,255,255,0.02);
+  --accent: #ff5a3c;
+  --teal: #00d2be;
+  --gold: #ffc800;
+  --text: #e8e8ec;
+  --text-dim: rgba(255,255,255,0.4);
+  --text-faint: rgba(255,255,255,0.15);
+  --border: rgba(255,255,255,0.06);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { background: var(--bg); }
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text);
+  max-width: 520px; margin: 0 auto;
+  min-height: 100vh; min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 80px;
+}
+::-webkit-scrollbar { display: none; }
+body { scrollbar-width: none; }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+/* Search */
+.search-wrap {
+  position: relative; margin-top: 8px;
+}
+.search-input {
+  width: 100%; padding: 9px 36px 9px 14px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; color: var(--text); font-family: inherit; font-size: 13px;
+  outline: none; transition: border-color .15s;
+}
+.search-input::placeholder { color: rgba(255,255,255,0.25); }
+.search-input:focus { border-color: rgba(255,255,255,0.2); }
+.search-clear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.1); border: none; color: rgba(255,255,255,0.4);
+  width: 22px; height: 22px; border-radius: 50%; cursor: pointer;
+  font-size: 11px; display: flex; align-items: center; justify-content: center;
+}
+
+/* Share Button */
+.share-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 14px; padding: 2px 0; line-height: 1;
+  color: rgba(255,255,255,0.15); transition: color .15s;
+  margin-left: auto;
+}
+.share-btn:active { color: var(--teal); }
+.share-toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--teal); color: #000; padding: 8px 18px;
+  border-radius: 20px; font-size: 12px; font-weight: 700;
+  z-index: 1000; animation: fadeIn .2s ease;
+  pointer-events: none;
+}
+
+/* Header */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: linear-gradient(180deg, var(--bg) 92%, transparent);
+  padding: calc(var(--safe-top) + 14px) 16px 12px;
+}
+.header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.header-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; }
+.header-title { font-size: 18px; font-weight: 800; line-height: 1.2; }
+.header-meta { font-size: 11px; color: var(--text-dim); text-align: right; line-height: 1.4; }
+
+/* Day Tabs */
+.day-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
+.day-tab {
+  flex: 1; padding: 10px 0; border: none; border-radius: 10px; cursor: pointer;
+  font-family: inherit; font-size: 13px; font-weight: 700; letter-spacing: 0.3px;
+  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.45);
+  transition: all .2s;
+}
+.day-tab.active { background: var(--accent); color: #fff; }
+
+/* Filter Pills */
+.filters { display: flex; gap: 5px; flex-wrap: wrap; }
+.filter-pill {
+  padding: 6px 12px; border: none; border-radius: 20px; cursor: pointer;
+  font-family: inherit; font-size: 11px; font-weight: 600;
+  background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.35);
+  transition: all .15s;
+}
+.filter-pill.active { background: rgba(255,255,255,0.15); color: #fff; }
+.filter-pill.fav { margin-left: auto; }
+.filter-pill.fav.active { background: rgba(255,200,0,0.2); color: var(--gold); }
+
+/* Focus styles for accessibility */
+button:focus-visible, .search-input:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+/* Timeline */
+.timeline { padding: 4px 16px; }
+.time-marker {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 0 6px;
+}
+.time-label {
+  font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.5);
+  font-variant-numeric: tabular-nums; min-width: 42px;
+}
+.time-line { flex: 1; height: 1px; background: var(--border); }
+
+/* Session Card */
+.session {
+  background: var(--card); border-radius: 14px;
+  padding: 14px; margin-bottom: 6px;
+  border: 1px solid transparent;
+  transition: all .2s;
+}
+.session.is-expandable { cursor: pointer; }
+.session.is-break { background: var(--card-break); }
+.session.is-current {
+  background: linear-gradient(135deg, rgba(255,90,60,0.12), rgba(255,90,60,0.04));
+  border-color: rgba(255,90,60,0.3);
+}
+.session.is-next { border-color: rgba(255,200,0,0.2); }
+
+.session-top { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
+.session.is-break .session-top { margin-bottom: 0; }
+
+/* Badges */
+.badge {
+  font-size: 10px; padding: 2px 8px; border-radius: 20px;
+  font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+  white-space: nowrap;
+}
+.badge-main { background: rgba(255,90,60,0.15); color: var(--accent); }
+.badge-deep { background: rgba(0,210,190,0.15); color: var(--teal); }
+.badge-break { background: rgba(255,255,255,0.08); color: var(--text-dim); font-weight: 600; }
+.badge-now { background: var(--accent); color: #fff; font-weight: 800; letter-spacing: 1px; animation: pulse 2s infinite; }
+.badge-next { background: rgba(255,200,0,0.2); color: var(--gold); }
+
+.room-tag { font-size: 10px; color: rgba(255,255,255,0.25); margin-left: 2px; white-space: nowrap; }
+
+/* Fav Star */
+.fav-btn {
+  margin-left: 6px; background: none; border: none; cursor: pointer;
+  font-size: 18px; padding: 0; line-height: 1;
+  color: var(--text-faint); transition: color .15s;
+}
+.fav-btn.is-fav { color: var(--gold); }
+
+/* Session Content */
+.session-title {
+  font-size: 14px; font-weight: 700; line-height: 1.35; color: var(--text);
+  margin-top: 2px;
+}
+.session.is-break .session-title {
+  font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.3);
+  margin-top: 0;
+}
+.session-time-inline { font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.25); margin-left: 6px; }
+.session-speakers { font-size: 12px; color: var(--text-dim); margin-top: 4px; line-height: 1.5; }
+.session-desc {
+  font-size: 12.5px; color: rgba(255,255,255,0.55); margin-top: 10px;
+  line-height: 1.65; border-top: 1px solid var(--border); padding-top: 10px;
+  animation: fadeIn .25s ease;
+}
+.expand-hint { font-size: 10px; color: var(--text-faint); margin-top: 4px; }
+
+/* Empty State */
+.empty { text-align: center; padding: 40px; color: rgba(255,255,255,0.3); font-size: 14px; }
+
+/* Footer */
+.footer {
+  text-align: center; padding: 32px 16px 16px;
+  font-size: 10px; color: rgba(255,255,255,0.2); line-height: 1.8;
+}
+.footer a { text-decoration: none; transition: color .15s; }
+.footer a.primary { color: rgba(255,255,255,0.35); text-decoration: underline; text-underline-offset: 2px; }
+.footer a.secondary { color: rgba(255,255,255,0.2); }
+</style>
+
+</head>
+<body>
+
+<div class="header" id="header">
+  <div class="header-row">
+    <div>
+      <div class="header-label">W&V Summit 2026</div>
+      <div class="header-title">Programm</div>
+    </div>
+    <div class="header-meta">11.–12. März<br>München</div>
+  </div>
+  <div class="day-tabs">
+    <button type="button" class="day-tab active" data-day="1" onclick="setDay(1)">Mi 11. März</button>
+    <button type="button" class="day-tab" data-day="2" onclick="setDay(2)">Do 12. März</button>
+  </div>
+  <div class="filters">
+    <button type="button" class="filter-pill active" data-filter="all" onclick="setFilter('all')">Alle</button>
+    <button type="button" class="filter-pill" data-filter="main" onclick="setFilter('main')">Main Stage</button>
+    <button type="button" class="filter-pill" data-filter="deep-dive" onclick="setFilter('deep-dive')">Deep Dives</button>
+    <button type="button" class="filter-pill fav" data-filter="fav" onclick="toggleFavFilter()" aria-label="Nur Favoriten anzeigen">★ Favoriten</button>
+  </div>
+  <div class="search-wrap">
+    <label for="searchInput" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Sessions durchsuchen</label>
+    <input type="text" id="searchInput" class="search-input" placeholder="Suche nach Sessions, Speaker …" oninput="onSearch(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+    <button type="button" class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none" aria-label="Suche leeren">✕</button>
+  </div>
+</div>
+
+<div class="timeline" id="timeline" role="list" aria-label="Programm-Sessions"></div>
+
+<noscript>
+  <div style="text-align:center;padding:40px 16px;color:rgba(255,255,255,0.5);font-size:14px;">
+    JavaScript wird benötigt, um das Programm anzuzeigen.
+  </div>
+</noscript>
+
+<div class="footer">
+  Inoffizielle Programmübersicht · Alle Angaben ohne Gewähr<br>
+  Erstellt von <a href="https://www.linkedin.com/in/julianvandieken/" target="_blank" rel="noopener noreferrer" class="primary">Julian van Dieken</a>
+  · <a href="https://vandieken.com" target="_blank" rel="noopener noreferrer" class="secondary">vandieken.com</a>
+</div>
+
+<script>
+"use strict";
+
+const S = [
+  {id:"d1-0",day:1,time:"09:00",end:"09:55",title:"Warm-up & Pre-Coffee",type:"break",speakers:[],desc:"",room:""},
+  {id:"d1-0b",day:1,time:"09:55",end:"10:00",title:"Opening",type:"main",speakers:[],desc:"",room:"Mainstage"},
+  {id:"d1-1",day:1,time:"10:00",end:"10:30",title:"Opening Keynote: Shape your brand future",type:"main",room:"Mainstage",
+    speakers:["Ben Ballensiefen (CEO | KANTAR Germany)"],
+    desc:"Ben Ballensiefen zeigt anhand aktueller Kantar-Insights die zentralen Treiber von Markenstärke: Vertrauen, Differenzierung und kreative Wirksamkeit – plus Marketing-Investitionstrends und Budgets."},
+  {id:"d1-2",day:1,time:"10:30",end:"10:45",title:"Wenn Bilder sprechen: So verändert visuelle Kommunikation unsere Arbeitswelt",type:"main",room:"Mainstage",
+    speakers:["Daniela Nyarko (Head of Strategic Sales EMEA | Canva)"],
+    desc:"Visuelle Kommunikation schafft Klarheit, Verbindung und steigert die Produktivität. Daniela Nyarko zeigt, wie Teams durch visuelle Zusammenarbeit besser erreichen."},
+  {id:"d1-3",day:1,time:"10:45",end:"11:00",title:"Human Touch statt Autopilot: Marketing im Zeitalter der totalen Automatisierung",type:"main",room:"Mainstage",
+    speakers:["André Soulier (Gründer | Nayoki)","Stephan Fehske (CEO | addfame)","Raimund Löffler (Director Creation & Innovation | addfame)"],
+    desc:"KI liefert Content in Rekordzeit – aber ohne menschliche Führung droht der Verlust von Differenzierung und Emotion. Warum der Human Touch zum entscheidenden USP wird."},
+  {id:"d1-4",day:1,time:"11:00",end:"11:30",title:"W&V PANEL: Zwischen Werbeeffizienz und Verschwendung – Wie Werbewirkung vergleichbar wird",type:"main",room:"Mainstage",
+    speakers:["Daniel Jäger (Deutsche Telekom / OWM)","Thomas Töpfer (Head of Paid Media | REWE Group)","Christian Zimmer (GF | Welect)","Dirk Bruns (Director Branding Solutions DACH | Google)","Mod: Rolf Schröter (W&V)"],
+    desc:"Jeder zweite Werbeeuro verfehlt seine Zielgruppe. Big-Tech misst in eigener Währung. Dieses Panel bringt Ordnung ins Messchaos: Welche Standards braucht es?"},
+  {id:"d1-5",day:1,time:"11:30",end:"11:45",title:"Der Teufel trägt … Attention. Impact. Brand Safety.",type:"main",room:"Mainstage",
+    speakers:["Dimitri Herber (GF Marketing | Weischer Cinema)"],
+    desc:"Medienkanäle sind wie Schuhe – für jeden Anlass das richtige Paar. Warum Cinema bei keiner Bewegtbildkampagne fehlen sollte."},
+  {id:"d1-6",day:1,time:"11:45",end:"12:00",title:"Von Linear vs CTV zu Total TV",type:"main",room:"Mainstage",
+    speakers:["Christian Russ (Commercial Director DACH & FRITES | Samsung Ads)"],
+    desc:"Christian Russ zeigt den Wandel zu einem Total-TV-Ansatz mit Samsung-Ads-Daten: intelligenteres Targeting, überzeugenderes Storytelling und messbare Ergebnisse über die gesamte TV-Landschaft."},
+  {id:"d1-7",day:1,time:"12:00",end:"12:30",title:"PANEL: 50plus und Schluss? – Differenzierter Blick auf diese Zielgruppen",type:"main",room:"Mainstage",
+    speakers:["Malte Hildebrandt (GF | Screenforce)","Kristina Bulle (CMO | Procter & Gamble)","Ines Imdahl (GF | Rheingold-Salon)","Mod: Rolf Schröter (W&V)"],
+    desc:"Die größte, finanzstärkste Altersgruppe – kaum erforscht. 50+ stehen für 57% des LEH-Umsatzes. Was Werbungtreibende konkret mitnehmen können."},
+  {id:"d1-8",day:1,time:"12:30",end:"13:30",title:"Lunch & Networking",type:"break",speakers:[],desc:"",room:""},
+  {id:"d1-dd1a",day:1,time:"13:30",end:"14:15",title:"Ein Quantum Trust: Warum Vertrauen stärker wirkt als Reichweite",type:"deep-dive",room:"Kleine Lokhalle",
+    speakers:["Ralf Hape (CEO | ARD MEDIA)","Dr. Markus Riese (GF | BRmedia)","Annika Svitil (Korrespondentin | BR)","Christian Limpert (ARD)","Mod: Manuela Pauker (W&V)"],
+    desc:"In einer Medienwelt voller Desinformation werden unabhängige, faktenbasierte Medien zum Stabilitätsfaktor. Vertrauen schafft Orientierung für Menschen und Wirkung für Marken."},
+  {id:"d1-dd1b",day:1,time:"13:30",end:"14:15",title:"Relevanz statt Beschallung: BAYER mit integrierter Husten-KI",type:"deep-dive",room:"Hans Joachim Strietzel Stuck",
+    speakers:["Jan Gräwen (CCO | YOC AG)","Jusof Ellinger (Media Lead | Bayer Vital)","Mod: Christiane Treckmann (W&V)"],
+    desc:"Bayer entwickelte eine KI zur Erkennung von Hustensymptomen und integrierte sie in eine High-Impact Kampagne für Phytohustil – mit nachweislicher Steigerung von Markenbekanntheit und Kaufbereitschaft."},
+  {id:"d1-dd1c",day:1,time:"13:30",end:"14:15",title:"Marketing neu definiert: End-to-End Kampagnen mit Adobe",type:"deep-dive",room:"Rollenprüfstand",
+    speakers:["Irmi Hobmaier (Software-Entwicklerin | eggs unimedia)","Martin Brösamle (Leiter Vertrieb & Marketing | eggs unimedia)","Mod: Stefanie Gruber (W&V)"],
+    desc:"Ein durchgängiger End-to-End-Prozess für KI-gestützte Planung, Umsetzung und Optimierung von Marketingkampagnen – von der ersten Idee bis zur messbaren Performance mit Adobe Technologien."},
+  {id:"d1-dd1d",day:1,time:"13:30",end:"14:15",title:"Data First oder Fail: Neue Spielregeln für Marketing im KI-Zeitalter",type:"deep-dive",room:"Drivers Hall",
+    speakers:["Ann-Catherine Lukes (Director Global Data Strategy | Mediaplus Germany)","Mod: Conrad Breyer (W&V)"],
+    desc:"Echte KI-Skalierung bleibt oft aus – weil Technologie nicht das Problem ist. Warum erfolgreiche KI-Implementierung bei Datenorganisation, Workflows und Führung beginnt."},
+  {id:"d1-dd2a",day:1,time:"14:30",end:"15:15",title:"Von SEO zu GEO – Transformation der E-Commerce-Suche 2026",type:"deep-dive",room:"Drivers Hall",
+    speakers:["Mario Träger (SEO Experte | B+M Webworks)","Bernhard Ollefs (Paid Experte | B+M Webworks)","Mod: Conrad Breyer (W&V)"],
+    desc:"2026 entscheiden nicht mehr 10 blaue Links, sondern Google AI, ChatGPT und Shopping-Assistenten. Der Weg führt von SEO zu GEO (Generative Engine Optimization) und Agentic Commerce."},
+  {id:"d1-dd2b",day:1,time:"14:30",end:"15:15",title:"KI und menschliche Kreativität: Die neue Symbiose in Social Media",type:"deep-dive",room:"Kleine Lokhalle",
+    speakers:["Lorenz Beringer (CEO | LOBECO)","Andreas Torwesten (Director Brand Building | LOBECO)","Frederik Paschko (Director Sports & Consumer Goods | LOBECO)","Mod: Christiane Treckmann (W&V)"],
+    desc:"2023 bevorzugten 60% der User KI-Inhalte, 2025 nur noch 26%. Menschen wollen Echtes! LOBECO zeigt Erfolgsfaktoren für authentischen Social Content mit der richtigen KI-Dosis."},
+  {id:"d1-dd2c",day:1,time:"14:30",end:"15:15",title:"Zwischen Reichweite und Kontrolle: Open Web vs. Walled Gardens",type:"deep-dive",room:"Rollenprüfstand",
+    speakers:["Daniel Pölkemann (Axel Springer SE)","Jana Moran (MD DACH | Utiq)","Markus Forster (Sr. Director Sales | Adform)","Ulli Hegge (CEO | netID)","Nicole Mortier (SVP | Virtual Minds)","Mod: Rolf Schröter (W&V)"],
+    desc:"Strategische Unterschiede zwischen Open Web und Walled Gardens: Datenhoheit, Markttransparenz, Skalierbarkeit und nachhaltige Monetarisierung."},
+  {id:"d1-dd2d",day:1,time:"14:30",end:"15:15",title:"Community-First-Marketing in der Zero-Click-Welt",type:"deep-dive",room:"Hans Joachim Strietzel Stuck",
+    speakers:["Oliver Wendt (Head of Enterprise Sales DACH | Reddit)","Daniel Karim (Reddit)","Kevin Klieber (Reddit)","Marco Siegmund (Siemens AG)","Hannah Giesler (Mediaplus International)","Mod: Annette Mattgey (W&V)"],
+    desc:"120 Mio. Reddit-Nutzer:innen täglich. Reddit-Deutschland zeigt mit Siemens-Case, wie Community-First-Marketing funktioniert – wo Kaufentscheidungen und Meinungen wirklich entstehen."},
+  {id:"d1-9",day:1,time:"15:30",end:"16:00",title:"W&V PANEL: Algorithmen, Content-Massen, KI – und DU mittendrin",type:"main",room:"Mainstage",
+    speakers:["Christine Wolburg (Chief Brand Officer | VW)","Sebastian Bayer (GF | dm)","Anja Martensen (Director | The Trade Desk)","Christian Hahn (Leiter Marketing & Media | Deutsche Telekom)"],
+    desc:"In der Aufmerksamkeitsökonomie zählt nicht Reichweite, sondern Relevanz mit Substanz. Wie Marken sich im Overload differenzieren: strategisch, kreativ und wirksam."},
+  {id:"d1-9b",day:1,time:"16:00",end:"17:00",title:"Top U33 Marketing Challenge",type:"main",room:"Rollenprüfstand",
+    speakers:["Tobias Baumann (Seat/Cupra)","Pierre Heidicker (Bernstein Badshop)","Marlene Leonhartsberger (Ski Austria)","Vertreter:innen der Top U33"],
+    desc:"Aus realen Marketing-Herausforderungen werden konkrete Lösungsansätze."},
+  {id:"d1-10",day:1,time:"16:00",end:"16:15",title:"Konvergenz mit Konsequenz: Wie die Bewegtbildzukunft gelingt",type:"main",room:"Mainstage",
+    speakers:["Frank Vogel (GF | Ad Alliance)","Interview: Rolf Schröter (W&V)"],
+    desc:"Fragmentierte Nutzung, unterschiedliche Messlogiken – welche Weichen müssen gestellt werden, damit Video wirkungsvoll, fair und verlässlich bleibt?"},
+  {id:"d1-11",day:1,time:"16:15",end:"16:45",title:"PANEL: Total Video, Audio oder Crossmedia – Wie Contentumfelder Reichweite schlagen",type:"main",room:"Mainstage",
+    speakers:["Susanne Müller (GF | BCN)","Iris Plach (VP Sales & Marketing | Sky Media)","Stefan Mölling (CEO | Radio Marketing Service)","Mod: Verena Gründel (DMEXCO)"],
+    desc:"2026 triumphiert Qualität des Umfelds über reine Reichweite. Praxisbeispiele aus Total Video, Audio und Crossmedia. Smarter Mediamix statt Kanalschlacht."},
+  {id:"d1-12",day:1,time:"16:45",end:"17:00",title:"Own your Aura! Warum Aura und Mythos wichtiger sind als KPIs",type:"main",room:"Mainstage",
+    speakers:["Lukas Cottrell (CEO | Peter Schmidt Group)"],
+    desc:"Bei aller KI-Faszination: Marken, die Mythos und Aura strategisch aufbauen, werden wertvoller als performanceorientierte Wettbewerber."},
+  {id:"d1-13",day:1,time:"17:00",end:"17:15",title:"Warum Marken wieder mutiger werden müssen – und wie Media messbar Wirkung erzeugt",type:"main",room:"Mainstage",
+    speakers:["Volker Neumann (Managing Director | JOM Group)"],
+    desc:"Nachhaltiges Wachstum entsteht durch Sichtbarkeit und Ambition. Praxisbeispiel FROSTA: Markenwerte messbar aufbauen und Umsatzeffekte steigern."},
+  {id:"d1-14",day:1,time:"17:15",end:"18:15",title:"BrandZ Award: KANTAR prämiert die weltweit wertvollsten Marken",type:"main",room:"Mainstage",
+    speakers:["Jonas Kütt (CMO | KANTAR Germany)"],
+    desc:"Prämierung der wertvollsten Marken durch das BrandZ-Ranking. Überraschende Insights, klare Trends und Einordnung von Kantar-Experte Jonas Kütt."},
+  {id:"d1-15",day:1,time:"18:15",end:"23:00",title:"Aftershow & Get-together mit Häppchen & Drinks",type:"break",room:"",
+    speakers:["BAYERN 3 DJ Alex Lauder (powered by BRmedia)"],desc:""},
+  {id:"d1-16",day:1,time:"19:20",end:"19:30",title:"Preisverleihung Agentur des Jahres",type:"main",room:"Open Stage",
+    speakers:["Larissa Pohl (Präsidentin | GWA)"],
+    desc:"W&V kürt die Agentur des Jahres – Kreativität, Wirksamkeit und Kultur. Laudatio hält GWA-Präsidentin Larissa Pohl."},
+  {id:"d1-17",day:1,time:"19:30",end:"20:00",title:"W&V PANEL: Neue Anforderungen, neue Regeln – Was Marken heute brauchen",type:"main",room:"Open Stage",
+    speakers:["Giuseppe Fiordispina (Marketing Dir. CUPRA & SEAT)","Katrin Menne (Head of Brand & Content | Merck)","Leonie Schlüssler (Co-Founderin | The Fritten)","Mod: Conrad Breyer (W&V)"],
+    desc:"Marken verändern Tempo, Tools und Anspruch. Was sie brauchen, passt oft nicht mehr zu klassischen Agenturmodellen. Wie Agenturen sich aufstellen müssen."},
+  // DAY 2
+  {id:"d2-0",day:2,time:"09:00",end:"09:55",title:"Warm-Up & Pre-Coffee",type:"break",speakers:[],desc:"",room:""},
+  {id:"d2-1",day:2,time:"09:15",end:"09:45",title:"How to build a career in an AI era: What to learn. How to lead. What to let go.",type:"main",room:"Mainstage",
+    speakers:["Philipp Schlenkhoff (Co-Founder | AI Transformation Institute)","Conrad Schlenkhoff (Co-Founder | AI Transformation Institute)"],
+    desc:"Führung entscheidet über Karrieren. Im KI-Zeitalter: Entscheidungen unter Unsicherheit treffen. Welche Karrierepfade entstehen? Was lohnt sich zu lernen? Was loslassen?"},
+  {id:"d2-1b",day:2,time:"09:15",end:"09:45",title:"OPEN STAGE: B2Besser – B2H als Hidden Champion im KI-Zeitalter",type:"main",room:"Open Stage (Networking Area)",
+    speakers:["Leonhard Kemnitzer (Baumüller)","Petra Dietrich (TRUMPF)","Dominik Heigemeir (Festo)","Marc Hibschenberger (SAP)","Mod: Dennis Güth (wob)"],
+    desc:"B2B Meetup (powered by bvik): Daten, Technologie und Kreativität im B2B-Marketing."},
+  {id:"d2-1c",day:2,time:"09:55",end:"10:00",title:"Opening",type:"main",room:"Mainstage",
+    speakers:["Rolf Schröter","Lena Herrmann"],desc:""},
+  {id:"d2-2",day:2,time:"10:00",end:"10:30",title:"6 Thesen für die Zukunft des Marketings",type:"main",room:"Mainstage",
+    speakers:["Klaus-Peter Schulz (GF | Die Mediaagenturen e.V.)","Susanne Kunz (GF | OWM)","Lisa Groening (Content Ops Manager | H&M)","Nils Franzen (Penny Marketing & Rewe Group Media)","Patricia Kircher (Sr. Brand Managerin | Rügenwalder Mühle)","Véronique Franzen (Managing Partner | GWA/Publicis Media)"],
+    desc:"Sechs Keynotes, sechs Thesen: Marke, Media, Kreation, Leadership, Transformation und Innovation. Pointierte Impulse von Branchenvertreter:innen und Top U33."},
+  {id:"d2-2b",day:2,time:"10:30",end:"11:30",title:"Top U33 Spotlight: Die Top U33 stellen sich vor",type:"main",room:"Rollenprüfstand",
+    speakers:["Top U33 / 2025","Mod: Annika Spitz (Cosnova)"],desc:""},
+  {id:"d2-3",day:2,time:"10:30",end:"10:45",title:"Retail Media: Von Demand Capture zu Demand Creation",type:"main",room:"Mainstage",
+    speakers:["Heike Lari (Director Partner Marketing | Zalando Marketing Services)"],
+    desc:"Wirkung entsteht durch ganzheitliches Funnel-Denken, Kundenverständnis und KI-gestütztes Marketing. Personalisierung, immersives Storytelling und kulturell relevante Inhalte."},
+  {id:"d2-4",day:2,time:"10:45",end:"11:00",title:"Take Off to Tomorrow – Marken am Flughafen München",type:"main",room:"Mainstage",
+    speakers:["Markus Preiß (Head of Marketing | Flughafen München)","Lisanne Oschwald (Leiterin Airport Media | Flughafen München)","Mod: Frank Behrendt (Serviceplan)"],
+    desc:"Einblicke in die Marketingplattform Flughafen München: Top-Cases, neue Flächen für Markeninszenierungen und wie sich reale Erlebnisse digital verlängern lassen."},
+  {id:"d2-5",day:2,time:"11:00",end:"11:30",title:"W&V PANEL: Tech ist Commodity. Marke ist Differenzierung.",type:"main",room:"Mainstage",
+    speakers:["Dörte Kaschdailis (Gründerin | Opexxia)","Hendrik Reuter (Director E-Commerce | Olymp Bezner KG)","Mod: Hannes Altmann (pinops)"],
+    desc:"KI, Payment, Personalisierung – die Infrastruktur wird austauschbar. Was bleibt, ist die Marke. Wie wird Commerce mehr als Conversion?"},
+  {id:"d2-6",day:2,time:"11:30",end:"12:00",title:"PANEL: Retail Media – wer im Funnel noch Umsatz verschenkt",type:"main",room:"Mainstage",
+    speakers:["Sabine Jünger (Direktorin Advertising Services | Otto)","Eva Adelsgruber (GF | DeutschlandCard)","Mod: Manuela Pauker (W&V)"],
+    desc:"Klassische Funnel-Modelle halten mit Kaufentscheidungen kaum Schritt. Retail Media nutzt datenstarke Kundennähe für Wirkung, wenn sie zählt."},
+  {id:"d2-7",day:2,time:"12:00",end:"12:15",title:"Future of Search & Agentic Commerce",type:"main",room:"Mainstage",
+    speakers:["Timo Benzin (Director Performance & Data | Google Germany)"],
+    desc:"Nutzer von AI Overviews entscheiden 77% schneller und 75% sicherer. Wie Future of Search und Agentic Commerce Inspiration in Kaufabschlüsse verwandeln."},
+  {id:"d2-8",day:2,time:"12:15",end:"12:30",title:"Von Chaos zu Klarheit: Marketingstrategien für die KI-Ära",type:"main",room:"Mainstage",
+    speakers:["Stephan Giest (CEO | Philipp & Keuntje)","Fabian Roser (Managing Partner | superspring)"],
+    desc:"Steigende Komplexität, schrumpfende Ressourcen. KI ist nicht das Problem, sondern der Katalysator für überfällige Entscheidungen. Zwei konkrete Anwendungsbeispiele."},
+  {id:"d2-9",day:2,time:"12:30",end:"13:30",title:"Lunch & Networking",type:"break",speakers:[],desc:"",room:""},
+  {id:"d2-dd1a",day:2,time:"13:30",end:"14:15",title:"Von Aufmerksamkeit zu Vertrauen – Starke Marken denken anders",type:"deep-dive",room:"Kleine Lokhalle",
+    speakers:["Ben Elias (Head of Strategic Planning | Edelman)","Nils Giese (CEO | Edelman)","Mod: Christiane Treckmann (W&V)"],
+    desc:"Aufmerksamkeit lässt sich nicht erzwingen – sie wird nur gewährt, wo Vertrauen besteht. Marken müssen vom Absender zum Trust Broker werden: Aufmerksamkeit geben, um sie zu erhalten."},
+  {id:"d2-dd1b",day:2,time:"13:30",end:"14:15",title:"Markenkonsistenz weltweit: RE/MAX x Canva",type:"deep-dive",room:"Rollenprüfstand",
+    speakers:["Lisa Pribik (Marketingdirektorin | RE/MAX)","Daniela Nyarko (Head of Strategic Sales EMEA | Canva)"],
+    desc:"Premiummarke in 40 Ländern mit 30.000 Fachanwendern konsistent halten – und trotzdem lokale Freiheit geben. Canva als Schlüssel zur Skalierung."},
+  {id:"d2-dd1c",day:2,time:"13:30",end:"14:15",title:"Attention-Messung im Marketing: Misst du noch oder optimierst du schon?",type:"deep-dive",room:"Hans Joachim Strietzel Stuck",
+    speakers:["Thorsten Schüttler (GF | Permodo)","Prof. Dr. Michael Fretschner (NORDAKADEMIE)","Julia-Christin Wagner (Dir. Marketing | Norwegian Cruise Line)","Mod: Manuela Pauker (W&V)"],
+    desc:"Permodo zeigt ein neues, wissenschaftlich validiertes Modell zur Attention-Messung: Wahrnehmung messbar, vergleichbar und optimierbar machen."},
+  {id:"d2-10",day:2,time:"14:30",end:"15:00",title:"PANEL: Vertrauen in Echtzeit – zwischen AI-Content, Plattformdruck und Kontrollverlust",type:"main",room:"Mainstage",
+    speakers:["Tim Christiansen (GM DACH | Snap)","Max Anzile (AI Pirates)","Mirjam Jentschke (Head of Marketing | SMEG)","Mod: Lena Herrmann"],
+    desc:"Was bedeutet Markenvertrauen für eine Generation, die Werbung sofort erkennt und ignoriert? Vertrauen als strategisches Wachstumsfeld statt klassisches Brand-Safety-Narrativ."},
+  {id:"d2-11",day:2,time:"15:00",end:"15:30",title:"W&V PANEL: The Future Marketing Ecosystem",type:"main",room:"Mainstage",
+    speakers:["Florian Haller (CEO | Serviceplan)","Matthias Schrader (CEO | OH!SO Digital)","Nina Haller (GF | Muehlhausmoers)"],
+    desc:"Eine Diskussion über zukünftige Wertschöpfung, die Entwicklung des Ökosystems, notwendige Skills und innovative Agenturmodelle."},
+  {id:"d2-12",day:2,time:"15:30",end:"15:45",title:"Neue Spielregeln: Der Digital Omnibus und seine Folgen",type:"main",room:"Mainstage",
+    speakers:["Kerstin Niederauer-Kopf (CEO | AGF Videoforschung)","Interview: Rolf Schröter (W&V)"],
+    desc:"Folgen des Digital Omnibus für Transparenz, Wettbewerb und Standards im Medienmarkt."},
+  {id:"d2-13",day:2,time:"15:45",end:"16:15",title:"W&V PANEL: Digitale Souveränität – Wie abhängig ist der deutsche Werbemarkt?",type:"main",room:"Mainstage",
+    speakers:["Philipp Westerhoff (Rechtsanwalt | Geradin Partners)","Dr. Christian Loefert (CMO | T-Systems)","Kerstin Niederauer-Kopf (CEO | AGF Videoforschung)","Mod: Rolf Schröter (W&V)"],
+    desc:"Plattformen entscheiden über Sichtbarkeit, Clouds über Daten. Wie viel Autonomie bleibt Marken, Agenturen und Publishern? Welche Alternativen gibt es in Europa?"},
+  {id:"d2-14",day:2,time:"16:15",end:"16:30",title:"Closing",type:"main",speakers:[],desc:"",room:"Mainstage"},
+];
+
+// State
+let currentDay = 1;
+let currentFilter = "all";
+let showFavsOnly = false;
+let expandedIds = {};
+let favs = {};
+let searchQuery = "";
+let shouldScrollToLive = true;
+
+// localStorage
+function loadFavs() {
+  try { favs = JSON.parse(localStorage.getItem("wuv26_favs")) || {}; } catch(e) { favs = {}; }
+}
+function saveFavs() {
+  try { localStorage.setItem("wuv26_favs", JSON.stringify(favs)); } catch(e) {}
+}
+loadFavs();
+
+function timeToMin(t) { const p = t.split(":"); return parseInt(p[0],10)*60+parseInt(p[1],10); }
+const _escEl = document.createElement("div");
+function esc(s) { _escEl.textContent = s; return _escEl.innerHTML; }
+
+function onSearch(val) {
+  searchQuery = val.trim().toLowerCase();
+  document.getElementById("searchClear").style.display = searchQuery ? "flex" : "none";
+  shouldScrollToLive = false;
+  render();
+}
+function clearSearch() {
+  searchQuery = "";
+  document.getElementById("searchInput").value = "";
+  document.getElementById("searchClear").style.display = "none";
+  render();
+}
+
+function shareSession(id, e) {
+  if (e) e.stopPropagation();
+  const s = S.find(function(x) { return x.id === id; });
+  if (!s) return;
+  const day = s.day === 1 ? "Mi 11.03." : "Do 12.03.";
+  const text = s.title + "\n" + day + " " + s.time + "–" + s.end + (s.room ? " | " + s.room : "") + "\n" + (s.speakers.length ? s.speakers.join(", ") : "") + "\n\n#WuVSummit";
+
+  if (navigator.share) {
+    navigator.share({ title: s.title, text: text }).catch(function() {});
+  } else {
+    navigator.clipboard.writeText(text).then(function() { showToast("Kopiert!"); }).catch(function() {});
+  }
+}
+
+function showToast(msg) {
+  const t = document.createElement("div");
+  t.className = "share-toast";
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function() { t.remove(); }, 1500);
+}
+
+function localDateStr(d) {
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+function setDay(d) {
+  currentDay = d;
+  shouldScrollToLive = true;
+  document.querySelectorAll(".day-tab").forEach(function(b) { b.classList.toggle("active", parseInt(b.dataset.day,10)===d); });
+  render();
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  shouldScrollToLive = false;
+  document.querySelectorAll(".filter-pill:not(.fav)").forEach(function(b) { b.classList.toggle("active", b.dataset.filter===f); });
+  render();
+}
+
+function toggleFavFilter() {
+  showFavsOnly = !showFavsOnly;
+  shouldScrollToLive = false;
+  document.querySelector(".filter-pill.fav").classList.toggle("active", showFavsOnly);
+  render();
+}
+
+function toggleFav(id, e) {
+  if (e) e.stopPropagation();
+  favs[id] = !favs[id];
+  if (!favs[id]) delete favs[id];
+  saveFavs();
+  render();
+}
+
+function toggleExpand(id) {
+  expandedIds[id] = !expandedIds[id];
+  render();
+}
+
+function render() {
+  const now = new Date();
+  const dayDate = currentDay === 1 ? "2026-03-11" : "2026-03-12";
+  const isToday = localDateStr(now) === dayDate;
+  const nowMin = now.getHours()*60+now.getMinutes();
+
+  const currentIds = new Set();
+  let nextId = null;
+
+  if (isToday) {
+    const ds = S.filter(function(s) { return s.day===currentDay && s.type!=="break"; });
+    for (let i = 0; i < ds.length; i++) {
+      const s = ds[i];
+      if (nowMin>=timeToMin(s.time) && nowMin<timeToMin(s.end)) currentIds.add(s.id);
+    }
+    if (!currentIds.size) {
+      for (let i = 0; i < ds.length; i++) {
+        if (timeToMin(ds[i].time)>nowMin) { nextId=ds[i].id; break; }
+      }
+    }
+  }
+
+  const filtered = S.filter(function(s) {
+    if (s.day !== currentDay) return false;
+    if (showFavsOnly && !favs[s.id]) return false;
+    if (currentFilter==="main" && s.type==="deep-dive") return false;
+    if (currentFilter==="deep-dive" && s.type!=="deep-dive") return false;
+    if (searchQuery) {
+      const hay = (s.title + " " + s.speakers.join(" ") + " " + s.room + " " + s.desc).toLowerCase();
+      if (!hay.includes(searchQuery)) return false;
+    }
+    return true;
+  });
+
+  const groups = [];
+  let lastT = null;
+  for (let i = 0; i < filtered.length; i++) {
+    const s = filtered[i];
+    if (s.time !== lastT) { groups.push({time:s.time,sessions:[s]}); lastT=s.time; }
+    else groups[groups.length-1].sessions.push(s);
+  }
+
+  const tl = document.getElementById("timeline");
+  if (!groups.length) {
+    tl.innerHTML = '<div class="empty">'+(searchQuery?'Keine Treffer für \u201E'+esc(searchQuery)+'\u201C':showFavsOnly?'Keine Favoriten für diesen Tag.':'Keine Sessions gefunden.')+'</div>';
+    return;
+  }
+
+  let html = '';
+
+  for (let gi = 0; gi < groups.length; gi++) {
+    const g = groups[gi];
+    html += '<div class="time-marker"><div class="time-label">'+esc(g.time)+'</div><div class="time-line"></div></div>';
+
+    for (let si = 0; si < g.sessions.length; si++) {
+      const s = g.sessions[si];
+      const isCur = currentIds.has(s.id);
+      const isNxt = s.id===nextId;
+      const isExp = expandedIds[s.id];
+      const isFav = favs[s.id];
+      const isBrk = s.type==="break";
+      const hasDesc = !isBrk && s.desc;
+
+      let cls = "session";
+      if (isBrk) cls += " is-break";
+      if (hasDesc) cls += " is-expandable";
+      if (isCur) cls += " is-current";
+      if (isNxt) cls += " is-next";
+
+      const scrollId = (isCur || (isNxt && !currentIds.size)) ? ' id="scroll-target"' : '';
+
+      html += '<div class="'+cls+'" role="listitem"'+scrollId+(hasDesc?' onclick="toggleExpand(\''+s.id+'\')" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();toggleExpand(\''+s.id+'\')}"':'')+'>';
+
+      // Top row
+      html += '<div class="session-top">';
+      if (isCur) html += '<span class="badge badge-now">JETZT</span>';
+      if (isNxt) html += '<span class="badge badge-next">Als Nächstes</span>';
+
+      if (isBrk) html += '<span class="badge badge-break">Pause</span>';
+      else if (s.type==="deep-dive") html += '<span class="badge badge-deep">Deep Dive</span>';
+      else html += '<span class="badge badge-main">Main Stage</span>';
+
+      if (s.room && !isBrk) html += '<span class="room-tag">\ud83d\udccd '+esc(s.room)+'</span>';
+      if (!isBrk) html += '<button type="button" class="share-btn" onclick="shareSession(\''+s.id+'\',event)" aria-label="Session teilen">\u{1F4E4}</button><button type="button" class="fav-btn'+(isFav?' is-fav':'')+'" onclick="toggleFav(\''+s.id+'\',event)" aria-label="'+(isFav?'Favorit entfernen':'Als Favorit markieren')+'">'+(isFav?'\u2605':'\u2606')+'</button>';
+      html += '</div>';
+
+      // Title
+      if (isBrk) {
+        html += '<div class="session-title">'+esc(s.time)+' \u2013 '+esc(s.end)+' \u00b7 '+esc(s.title)+'</div>';
+      } else {
+        html += '<div class="session-title">'+esc(s.title)+'<span class="session-time-inline">'+esc(s.time)+'\u2013'+esc(s.end)+'</span></div>';
+      }
+
+      // Speakers
+      if (s.speakers.length) {
+        html += '<div class="session-speakers">'+s.speakers.map(esc).join(' \u00b7 ')+'</div>';
+      }
+
+      // Description
+      if (isExp && s.desc) {
+        html += '<div class="session-desc">'+esc(s.desc)+'</div>';
+      }
+
+      // Expand hint
+      if (hasDesc && !isExp) {
+        html += '<div class="expand-hint">\u25be Details antippen</div>';
+      }
+
+      html += '</div>';
+    }
+  }
+
+  tl.innerHTML = html;
+
+  // Scroll to current/next only on initial load or day switch
+  if (shouldScrollToLive) {
+    const target = document.getElementById("scroll-target");
+    if (target) setTimeout(function() { target.scrollIntoView({behavior:"smooth",block:"center"}); }, 300);
+    shouldScrollToLive = false;
+  }
+}
+
+// Auto-detect correct day
+(function autoDetectDay() {
+  const today = localDateStr(new Date());
+  if (today === "2026-03-12") setDay(2);
+  else setDay(1);
+})();
+
+// Refresh every 30s for live tracking, pause when tab is hidden
+let refreshInterval = setInterval(render, 30000);
+document.addEventListener("visibilitychange", function() {
+  if (document.hidden) {
+    clearInterval(refreshInterval);
+  } else {
+    shouldScrollToLive = true;
+    render();
+    refreshInterval = setInterval(render, 30000);
+  }
+});
+</script>
+
+</body>
+</html>
