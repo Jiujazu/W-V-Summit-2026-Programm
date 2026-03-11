@@ -623,6 +623,7 @@ button:focus-visible, .search-input:focus-visible {
   flex-shrink: 0;
 }
 .theme-toggle:active { transform: scale(0.92); }
+.synthwave-toggle.is-active { box-shadow: 0 0 12px rgba(213,84,213,0.5), 0 0 24px rgba(255,107,53,0.3); background: linear-gradient(135deg, rgba(255,107,53,0.2), rgba(213,84,213,0.2)); }
 
 /* Accessibility: reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
@@ -642,7 +643,8 @@ button:focus-visible, .search-input:focus-visible {
     </div>
     <div class="header-meta">11.–12. März<br>München</div>
     <button type="button" class="music-toggle" id="musicToggle" onclick="toggleMusic()" aria-label="Synthwave Musik an/aus">🔇</button>
-    <button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Theme wechseln">☀️</button>
+    <button type="button" class="theme-toggle synthwave-toggle" id="synthToggle" onclick="toggleSynthwave()" aria-label="Synthwave Modus">🌈</button>
+    <button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Theme wechseln">🌙</button>
   </div>
   <div class="day-tabs">
     <button type="button" class="day-tab active" data-day="1" onclick="setDay(1)">Mi 11. März</button>
@@ -1098,32 +1100,53 @@ document.getElementById("timeline").addEventListener("keydown", function(e) {
   else setDay(1);
 })();
 
-// Theme toggle: light -> dark -> retro -> light
-var THEMES = ["light", "dark", "retro"];
-var THEME_ICONS = {light: "\uD83C\uDF19", dark: "\uD83C\uDF1F", retro: "\u2600\uFE0F"};
+// Theme: light <-> dark (separate toggle)
+// Synthwave: overlay on top of light/dark (separate button)
+var baseTheme = "light"; // "light" or "dark"
+var synthwaveOn = false;
 var THEME_COLORS = {light: "#f5f5f7", dark: "#0e0e12", retro: "#1a1028"};
 
 function applyTheme(theme) {
   if (theme === "light") document.documentElement.removeAttribute("data-theme");
   else document.documentElement.setAttribute("data-theme", theme);
-  var nextTheme = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
-  document.getElementById("themeToggle").textContent = THEME_ICONS[nextTheme];
-  document.getElementById("metaThemeColor").setAttribute("content", THEME_COLORS[theme]);
+  document.getElementById("metaThemeColor").setAttribute("content", THEME_COLORS[theme] || THEME_COLORS.light);
   try { localStorage.setItem("wuv26_theme", theme); } catch(e) {}
 }
 
+function updateThemeUI() {
+  var effective = synthwaveOn ? "retro" : baseTheme;
+  applyTheme(effective);
+  // Light/dark toggle icon: show opposite
+  document.getElementById("themeToggle").textContent = baseTheme === "light" ? "\uD83C\uDF19" : "\u2600\uFE0F";
+  // Synthwave button glow
+  var synthBtn = document.getElementById("synthToggle");
+  synthBtn.classList.toggle("is-active", synthwaveOn);
+  // Music toggle visibility managed by CSS [data-theme="retro"]
+}
+
 function toggleTheme() {
-  var current = document.documentElement.getAttribute("data-theme") || "light";
-  var idx = THEMES.indexOf(current);
-  var next = THEMES[(idx + 1) % THEMES.length];
-  applyTheme(next);
+  baseTheme = baseTheme === "light" ? "dark" : "light";
+  try { localStorage.setItem("wuv26_base", baseTheme); } catch(e) {}
+  updateThemeUI();
+}
+
+function toggleSynthwave() {
+  synthwaveOn = !synthwaveOn;
+  try { localStorage.setItem("wuv26_synth", synthwaveOn ? "1" : "0"); } catch(e) {}
+  updateThemeUI();
 }
 
 (function initTheme() {
-  var saved = null;
-  try { saved = localStorage.getItem("wuv26_theme"); } catch(e) {}
-  if (saved && THEMES.indexOf(saved) !== -1) applyTheme(saved);
-  else document.getElementById("themeToggle").textContent = THEME_ICONS.dark;
+  try { baseTheme = localStorage.getItem("wuv26_base") || "light"; } catch(e) {}
+  if (baseTheme !== "light" && baseTheme !== "dark") baseTheme = "light";
+  try { synthwaveOn = localStorage.getItem("wuv26_synth") === "1"; } catch(e) {}
+  // Migrate old theme storage
+  try {
+    var old = localStorage.getItem("wuv26_theme");
+    if (old === "retro") { synthwaveOn = true; baseTheme = "dark"; localStorage.removeItem("wuv26_theme"); localStorage.setItem("wuv26_base", baseTheme); localStorage.setItem("wuv26_synth", "1"); }
+    else if (old === "dark") { baseTheme = "dark"; localStorage.removeItem("wuv26_theme"); localStorage.setItem("wuv26_base", "dark"); }
+  } catch(e) {}
+  updateThemeUI();
 })();
 
 // === SYNTHWAVE STARS ===
