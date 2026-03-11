@@ -567,11 +567,10 @@ button:focus-visible, .search-input:focus-visible {
 .speaker-name { font-weight: 600; color: var(--text); }
 .speaker-role { font-size: 11px; color: var(--text-dim); }
 .speaker-company { font-size: 10px; font-weight: 600; color: var(--text-dim); background: var(--pill-bg); padding: 1px 6px; border-radius: 10px; white-space: nowrap; }
-/* Description — expanded details */
+/* Description — always visible */
 .session-desc {
-  font-size: 12.5px; color: var(--desc-color); margin-top: 10px;
-  line-height: 1.65; border-top: 1px solid var(--border); padding-top: 10px;
-  animation: fadeIn .25s ease;
+  font-size: 12.5px; color: var(--desc-color); margin-top: 8px;
+  line-height: 1.65;
 }
 /* Expand hint — colored, clearly tappable */
 .expand-hint {
@@ -1332,11 +1331,11 @@ function render() {
       const isExp = expandedIds[s.id];
       const isFav = favs[s.id];
       const isBrk = s.type==="break";
-      const hasDesc = !isBrk && s.desc;
+      const hasSpeakers = !isBrk && s.speakers.length > 0;
 
       let cls = "session";
       if (isBrk) cls += " is-break";
-      if (hasDesc) cls += " is-expandable";
+      if (hasSpeakers) cls += " is-expandable";
       if (isCur) cls += " is-current";
       if (isNxt) cls += " is-next";
 
@@ -1344,7 +1343,7 @@ function render() {
       if (needsScroll) scrollTargetAssigned = true;
       let scrollAttr = needsScroll ? ' id="scroll-target"' : '';
 
-      html += '<div class="'+cls+'" role="listitem" data-sid="'+esc(s.id)+'"'+scrollAttr+(hasDesc?' tabindex="0" aria-expanded="'+(isExp?'true':'false')+'"':'')+'>';
+      html += '<div class="'+cls+'" role="listitem" data-sid="'+esc(s.id)+'"'+scrollAttr+(hasSpeakers?' tabindex="0" aria-expanded="'+(isExp?'true':'false')+'"':'')+'>';
 
       // Top row
       html += '<div class="session-top">';
@@ -1367,22 +1366,23 @@ function render() {
         html += '<div class="session-title">'+esc(s.title)+'<span class="session-time-inline">'+esc(s.time)+'\u2013'+esc(s.end)+'</span></div>';
       }
 
-      // Speakers (formatted: name bold, company as pill)
-      if (s.speakers.length) {
-        var compact = s.speakers.length >= 3;
-        html += '<div class="session-speakers">'+s.speakers.map(function(sp) { return '<span class="speaker-line">'+formatSpeakerHtml(sp, compact)+'</span>'; }).join('')+'</div>';
-      }
-
-      // Description
-      if (isExp && s.desc) {
+      // Description (always visible if available)
+      if (s.desc) {
         html += '<div class="session-desc">'+esc(s.desc)+'</div>';
       }
 
-      // Expand/collapse hint
-      if (hasDesc && !isExp) {
-        html += '<div class="expand-hint">\u25be Details anzeigen</div>';
-      } else if (hasDesc && isExp) {
-        html += '<div class="expand-hint">\u25b4 Weniger anzeigen</div>';
+      // Speakers: collapsed by default, expand on tap
+      if (s.speakers.length && !isBrk) {
+        if (isExp) {
+          var compact = s.speakers.length >= 3;
+          html += '<div class="session-speakers">'+s.speakers.map(function(sp) { return '<span class="speaker-line">'+formatSpeakerHtml(sp, compact)+'</span>'; }).join('')+'</div>';
+          html += '<div class="expand-hint">\u25b4 Speaker ausblenden</div>';
+        } else {
+          // Show compact speaker summary when collapsed
+          var names = s.speakers.map(function(sp) { return parseSpeaker(sp).name; });
+          var summary = names.length <= 2 ? names.join(', ') : names.slice(0,2).join(', ') + ' +' + (names.length - 2);
+          html += '<div class="expand-hint">\u25be '+esc(summary)+'</div>';
+        }
       }
 
       html += '</div>';
@@ -1406,7 +1406,7 @@ document.getElementById("timeline").addEventListener("click", function(e) {
   var id = card.dataset.sid;
   if (e.target.closest(".fav-btn")) { toggleFav(id, e); return; }
   var s = S.find(function(x) { return x.id === id; });
-  if (s && s.type !== "break" && s.desc) toggleExpand(id);
+  if (s && s.type !== "break" && s.speakers.length) toggleExpand(id);
 });
 document.getElementById("timeline").addEventListener("keydown", function(e) {
   if (e.key !== "Enter" && e.key !== " ") return;
@@ -1414,7 +1414,7 @@ document.getElementById("timeline").addEventListener("keydown", function(e) {
   if (!card) return;
   var id = card.dataset.sid;
   var s = S.find(function(x) { return x.id === id; });
-  if (s && s.type !== "break" && s.desc) { e.preventDefault(); toggleExpand(id); }
+  if (s && s.type !== "break" && s.speakers.length) { e.preventDefault(); toggleExpand(id); }
 });
 
 // Auto-detect correct day

@@ -1,4 +1,4 @@
-var CACHE = "wuv26-v5";
+var CACHE = "wuv26-v6";
 var ASSETS = ["/", "/index.html", "/music01.mp3", "/nyan-cat.gif"];
 
 self.addEventListener("install", function(e) {
