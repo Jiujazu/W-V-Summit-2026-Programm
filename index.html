@@ -336,27 +336,15 @@
 .vhs-glitch:nth-child(1) { top: 30%; animation: vhsGlitch 8s linear infinite; }
 .vhs-glitch:nth-child(2) { top: 65%; animation: vhsGlitch 11s linear infinite 3s; }
 
-/* Nyan Cat (small, retro only, easter-egg only) */
-@keyframes nyanFly {
-  0% { transform: translateX(-80px) translateY(0); }
-  25% { transform: translateX(25vw) translateY(-10px); }
-  50% { transform: translateX(50vw) translateY(5px); }
-  75% { transform: translateX(75vw) translateY(-8px); }
-  100% { transform: translateX(calc(100vw + 80px)) translateY(0); }
-}
+/* Nyan Cat — static, centered below footer, retro only */
 .nyan-cat-wrap { display: none; }
-.easter-active[data-theme="retro"] .nyan-cat-wrap {
-  display: block;
-  position: fixed; top: 12vh; left: 0; width: 100%; height: 50px;
-  pointer-events: none; z-index: 50; overflow: hidden;
+[data-theme="retro"] .nyan-cat-wrap {
+  display: block; text-align: center; padding: 8px 0 24px;
 }
 .nyan-cat-img {
-  position: absolute; top: 0; left: -80px;
-  width: 40px; height: auto;
+  width: 48px; height: auto;
   image-rendering: pixelated;
-  animation: nyanFly 12s linear infinite;
-  will-change: transform;
-  font-size: 0; color: transparent; /* hide alt text if image fails */
+  font-size: 0; color: transparent;
 }
 
 /* Retro cards — subtle glow, NO rainbow border animation (performance) */
@@ -387,13 +375,21 @@ body { scrollbar-width: none; }
 
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
 @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideDown { from{opacity:0;max-height:0} to{opacity:1;max-height:300px} }
+@keyframes popIn { 0%{transform:scale(0.6);opacity:0} 60%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+@keyframes starPop { 0%{transform:scale(1)} 40%{transform:scale(1.35)} 100%{transform:scale(1)} }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
 
 /* Search */
 .search-wrap {
   position: relative; margin-top: 6px;
   display: none;
 }
-.search-wrap.is-open { display: block; }
+.search-wrap.is-open { display: block; animation: fadeIn .2s ease; }
 .search-toggle {
   background: var(--toggle-bg); border: none; cursor: pointer;
   width: 32px; height: 32px; border-radius: 50%;
@@ -464,6 +460,7 @@ body { scrollbar-width: none; }
   border: 1px dashed var(--border);
   background: transparent;
 }
+.filter-pill:active { transform: scale(0.93); }
 .filter-pill.active { background: var(--pill-active-bg); color: var(--pill-active-color); }
 .fav-toggle { flex-shrink: 0; }
 .fav-toggle .filter-pill { margin-left: 0; }
@@ -513,6 +510,7 @@ button:focus-visible, .search-input:focus-visible {
   transition: all .2s;
 }
 .session.is-expandable { cursor: pointer; }
+.session.is-expandable:active { transform: scale(0.985); }
 .session.is-break { background: var(--card-break); }
 .session.is-current {
   background: var(--current-bg);
@@ -546,7 +544,7 @@ button:focus-visible, .search-input:focus-visible {
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.fav-btn.is-fav { color: var(--gold); }
+.fav-btn.is-fav { color: var(--gold); animation: starPop .3s ease; }
 
 /* Session Content */
 .session-title {
@@ -562,6 +560,7 @@ button:focus-visible, .search-input:focus-visible {
 .session-speakers {
   font-size: 12px; color: var(--speakers-color); margin-top: 8px; padding-top: 8px;
   border-top: 1px solid var(--border); line-height: 1.6;
+  animation: slideDown .25s ease;
 }
 .speaker-line { display: block; margin-bottom: 1px; }
 .speaker-name { font-weight: 600; color: var(--text); }
@@ -570,7 +569,7 @@ button:focus-visible, .search-input:focus-visible {
 /* Description — always visible */
 .session-desc {
   font-size: 12.5px; color: var(--desc-color); margin-top: 8px;
-  line-height: 1.65;
+  line-height: 1.65; animation: fadeIn .2s ease;
 }
 /* Expand hint — colored, clearly tappable */
 .expand-hint {
@@ -763,17 +762,16 @@ button:focus-visible, .search-input:focus-visible {
   · <a href="https://vandieken.com" target="_blank" rel="noopener noreferrer" class="secondary">vandieken.com</a>
 </div>
 
+<div class="nyan-cat-wrap">
+  <img class="nyan-cat-img" src="nyan-cat.gif" alt="Nyan Cat" loading="lazy">
+</div>
+
 <!-- Synthwave Retro Effects -->
 <div class="retro-stars" id="retroStars"></div>
 <div class="retro-sun"></div>
 <div class="retro-grid"></div>
 <div class="retro-vignette"></div>
 <div class="retro-scanlines"></div>
-
-<!-- Nyan Cat (small, local) -->
-<div class="nyan-cat-wrap">
-  <img class="nyan-cat-img" src="nyan-cat.gif" alt="Nyan Cat" loading="lazy">
-</div>
 
 <!-- VHS Glitch Lines -->
 <div class="vhs-glitch"></div>
