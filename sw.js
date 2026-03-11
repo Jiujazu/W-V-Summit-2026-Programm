@@ -1,5 +1,5 @@
-var CACHE = "wuv26-v1";
-var ASSETS = ["/", "/index.html", "/music01.mp3"];
+var CACHE = "wuv26-v2";
+var ASSETS = ["/", "/index.html", "/music01.mp3", "/nyan-cat.gif"];
 
 self.addEventListener("install", function(e) {
   e.waitUntil(
