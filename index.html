@@ -313,7 +313,11 @@
 }
 .music-toggle:active { transform: scale(0.92); }
 .music-toggle.playing { box-shadow: 0 0 12px rgba(213,84,213,0.4); }
-[data-theme="retro"] .music-toggle { display: flex; }
+[data-theme="retro"] .music-toggle { display: flex; animation: musicGlow 2s ease-in-out infinite; }
+@keyframes musicGlow {
+  0%,100% { box-shadow: 0 0 6px rgba(213,84,213,0.3); }
+  50% { box-shadow: 0 0 16px rgba(213,84,213,0.7), 0 0 30px rgba(255,107,53,0.3); }
+}
 
 /* CRT vignette effect */
 [data-theme="retro"] .retro-vignette {
