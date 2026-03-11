@@ -210,13 +210,57 @@
   0%, 100% { opacity: 0.2; }
   50% { opacity: 1; }
 }
-@keyframes chromaShift {
-  0%, 100% { filter: hue-rotate(0deg); }
-  50% { filter: hue-rotate(15deg); }
-}
 @keyframes synthPulse {
   0%, 100% { box-shadow: 0 0 5px rgba(255,107,53,0.2); }
   50% { box-shadow: 0 0 15px rgba(213,84,213,0.3), 0 0 30px rgba(255,107,53,0.15); }
+}
+@keyframes nyanFly {
+  0% { transform: translateX(-200px) translateY(0); }
+  25% { transform: translateX(25vw) translateY(-20px); }
+  50% { transform: translateX(50vw) translateY(10px); }
+  75% { transform: translateX(75vw) translateY(-15px); }
+  100% { transform: translateX(calc(100vw + 200px)) translateY(0); }
+}
+@keyframes rainbowTrail {
+  0% { transform: translateX(-200px) translateY(0) scaleX(1); opacity: 0.7; }
+  25% { transform: translateX(25vw) translateY(-20px) scaleX(1); opacity: 0.7; }
+  50% { transform: translateX(50vw) translateY(10px) scaleX(1); opacity: 0.7; }
+  75% { transform: translateX(75vw) translateY(-15px) scaleX(1); opacity: 0.7; }
+  100% { transform: translateX(calc(100vw + 200px)) translateY(0) scaleX(1); opacity: 0; }
+}
+@keyframes shootingStar {
+  0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 0; }
+  5% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateX(300px) translateY(200px) rotate(-35deg); opacity: 0; }
+}
+@keyframes vhsGlitch {
+  0%, 95%, 100% { transform: translateX(0); opacity: 0; }
+  96% { transform: translateX(-5px); opacity: 0.8; }
+  97% { transform: translateX(10px); opacity: 0.6; }
+  98% { transform: translateX(-3px); opacity: 0.7; }
+  99% { transform: translateX(7px); opacity: 0; }
+}
+@keyframes sparkleFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translateY(-60px) scale(1.3); opacity: 0.8; }
+  90% { opacity: 0.2; }
+  100% { transform: translateY(-120px) scale(0.5); opacity: 0; }
+}
+@keyframes rainbowBorder {
+  0% { border-color: #ff6b35; }
+  25% { border-color: #d554d5; }
+  50% { border-color: #00e5c6; }
+  75% { border-color: #ffb43c; }
+  100% { border-color: #ff6b35; }
+}
+@keyframes crtFlicker {
+  0%, 100% { opacity: 1; }
+  50.1% { opacity: 0.98; }
+  50.2% { opacity: 1; }
+  75.1% { opacity: 0.97; }
+  75.3% { opacity: 1; }
 }
 
 /* Retro scanline overlay */
@@ -314,6 +358,120 @@
 }
 .retro-vignette { display: none; }
 
+/* Nyan Cat */
+[data-theme="retro"] .nyan-cat-wrap {
+  display: block;
+  position: fixed; top: 15vh; left: 0; width: 100%; height: 80px;
+  pointer-events: none; z-index: 50; overflow: hidden;
+}
+.nyan-cat-wrap { display: none; }
+.nyan-cat {
+  position: absolute; top: 0; left: 0;
+  width: 54px; height: 36px;
+  image-rendering: pixelated;
+  animation: nyanFly 8s linear infinite;
+  will-change: transform;
+  /* CSS pixel-art Nyan Cat: poptart body + cat features */
+  background:
+    /* poptart body */
+    linear-gradient(#ffcc99, #ffcc99) 9px 6px / 36px 24px no-repeat,
+    /* frosting */
+    linear-gradient(#ff99aa, #ff99aa) 12px 9px / 30px 18px no-repeat,
+    /* sprinkles */
+    linear-gradient(#ff3366, #ff3366) 15px 12px / 3px 3px no-repeat,
+    linear-gradient(#33ccff, #33ccff) 24px 15px / 3px 3px no-repeat,
+    linear-gradient(#ffff33, #ffff33) 33px 12px / 3px 3px no-repeat,
+    linear-gradient(#33ff66, #33ff66) 21px 21px / 3px 3px no-repeat,
+    linear-gradient(#ff3366, #ff3366) 30px 21px / 3px 3px no-repeat,
+    linear-gradient(#33ccff, #33ccff) 18px 15px / 3px 3px no-repeat,
+    /* cat head */
+    linear-gradient(#999, #999) 39px 9px / 12px 15px no-repeat,
+    /* ears */
+    linear-gradient(#999, #999) 39px 3px / 3px 6px no-repeat,
+    linear-gradient(#999, #999) 48px 3px / 3px 6px no-repeat,
+    /* ear inner */
+    linear-gradient(#ff99aa, #ff99aa) 39px 6px / 3px 3px no-repeat,
+    linear-gradient(#ff99aa, #ff99aa) 48px 6px / 3px 3px no-repeat,
+    /* eyes */
+    linear-gradient(#333, #333) 42px 12px / 3px 3px no-repeat,
+    linear-gradient(#333, #333) 48px 12px / 3px 3px no-repeat,
+    /* mouth/cheeks */
+    linear-gradient(#ff6688, #ff6688) 42px 18px / 3px 3px no-repeat,
+    linear-gradient(#ff6688, #ff6688) 48px 18px / 3px 3px no-repeat,
+    /* feet */
+    linear-gradient(#999, #999) 12px 30px / 6px 6px no-repeat,
+    linear-gradient(#999, #999) 30px 30px / 6px 6px no-repeat,
+    /* tail */
+    linear-gradient(#999, #999) 0px 15px / 12px 3px no-repeat;
+}
+.nyan-rainbow {
+  position: absolute; top: 8px; left: 0;
+  width: 80px; height: 24px;
+  background: linear-gradient(180deg,
+    #ff0000 0%, #ff0000 16.6%,
+    #ff9900 16.6%, #ff9900 33.2%,
+    #ffff00 33.2%, #ffff00 49.8%,
+    #33ff00 49.8%, #33ff00 66.4%,
+    #0099ff 66.4%, #0099ff 83%,
+    #6633ff 83%, #6633ff 100%
+  );
+  border-radius: 2px;
+  animation: rainbowTrail 8s linear infinite;
+  animation-delay: -0.15s;
+  opacity: 0.7;
+  will-change: transform;
+}
+
+/* Shooting stars */
+[data-theme="retro"] .shooting-star {
+  display: block;
+  position: fixed; pointer-events: none; z-index: -1;
+  width: 80px; height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+  border-radius: 2px;
+  will-change: transform, opacity;
+}
+.shooting-star { display: none; }
+.shooting-star:nth-child(1) { top: 8%; left: 10%; animation: shootingStar 3s ease-out infinite 0s; }
+.shooting-star:nth-child(2) { top: 22%; left: 60%; animation: shootingStar 4s ease-out infinite 2.5s; }
+.shooting-star:nth-child(3) { top: 5%; left: 35%; animation: shootingStar 3.5s ease-out infinite 5s; }
+
+/* VHS glitch line */
+[data-theme="retro"] .vhs-glitch {
+  display: block;
+  position: fixed; left: 0; width: 100%; height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4) 20%, rgba(213,84,213,0.3) 50%, rgba(255,107,53,0.3) 80%, transparent);
+  pointer-events: none; z-index: 9996;
+  will-change: transform, opacity;
+}
+.vhs-glitch { display: none; }
+.vhs-glitch:nth-child(1) { top: 30%; animation: vhsGlitch 8s linear infinite; }
+.vhs-glitch:nth-child(2) { top: 65%; animation: vhsGlitch 11s linear infinite 3s; }
+
+/* Sparkle particles */
+[data-theme="retro"] .sparkle-container { display: block; }
+.sparkle-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 49; overflow: hidden; }
+.sparkle {
+  position: absolute; font-size: 14px;
+  animation: sparkleFloat 4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Rainbow borders on retro cards */
+[data-theme="retro"] .session { animation: rainbowBorder 6s linear infinite; }
+[data-theme="retro"] .session.is-current { animation: rainbowBorder 3s linear infinite, synthPulse 3s ease-in-out infinite; }
+
+/* CRT screen flicker */
+[data-theme="retro"] body { animation: crtFlicker 0.15s infinite; }
+
+/* Konami mode - extra crazy */
+[data-theme="retro"].konami-active .retro-scanlines { background: repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 2px); }
+[data-theme="retro"].konami-active .nyan-cat { transform: scale(1.5); }
+[data-theme="retro"].konami-active .nyan-rainbow { width: 120px; height: 36px; }
+[data-theme="retro"].konami-active .nyan-cat-wrap { animation: none; }
+.konami-active .session { transition: all 0.3s; }
+.konami-active .session:hover, .konami-active .session:active { transform: scale(1.02) rotate(0.5deg); }
+
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { background: var(--bg); }
 body {
@@ -361,7 +519,7 @@ body { scrollbar-width: none; }
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
   background: var(--teal); color: #000; padding: 8px 18px;
   border-radius: 20px; font-size: 12px; font-weight: 700;
-  z-index: 1000; animation: fadeIn .2s ease;
+  z-index: 99999; animation: fadeIn .2s ease;
   pointer-events: none;
 }
 
@@ -497,6 +655,12 @@ button:focus-visible, .search-input:focus-visible {
   flex-shrink: 0;
 }
 .theme-toggle:active { transform: scale(0.92); }
+.synthwave-toggle.is-active { box-shadow: 0 0 12px rgba(213,84,213,0.5), 0 0 24px rgba(255,107,53,0.3); background: linear-gradient(135deg, rgba(255,107,53,0.2), rgba(213,84,213,0.2)); }
+
+/* Accessibility: reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
 </style>
 
 </head>
@@ -507,11 +671,12 @@ button:focus-visible, .search-input:focus-visible {
     <div>
       <div class="header-label">W&V Summit 2026</div>
       <div class="header-title">Programm</div>
-      <div class="header-subtitle">Der komplett inoffizielle Pocket-Guide</div>
+      <div class="header-subtitle">Julians komplett inoffizieller Pocket-Guide</div>
     </div>
     <div class="header-meta">11.–12. März<br>München</div>
     <button type="button" class="music-toggle" id="musicToggle" onclick="toggleMusic()" aria-label="Synthwave Musik an/aus">🔇</button>
-    <button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Theme wechseln">☀️</button>
+    <button type="button" class="theme-toggle synthwave-toggle" id="synthToggle" onclick="toggleSynthwave()" aria-label="Synthwave Modus">🌈</button>
+    <button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Theme wechseln">🌙</button>
   </div>
   <div class="day-tabs">
     <button type="button" class="day-tab active" data-day="1" onclick="setDay(1)">Mi 11. März</button>
@@ -541,8 +706,7 @@ button:focus-visible, .search-input:focus-visible {
 <div class="footer">
   ⚠️ Komplett inoffiziell · Alle Angaben ohne Gewähr<br>
   Auf die Schnelle vibe-gecodet von <a href="https://www.linkedin.com/in/julianvandieken/" target="_blank" rel="noopener noreferrer" class="primary">Julian van Dieken</a>
-  · <a href="https://vandieken.com" target="_blank" rel="noopener noreferrer" class="secondary">vandieken.com</a><br>
-  <span class="footer-disclaimer">Bugs sind Features · Irrtümer sind Absicht · Beschwerden bitte an /dev/null</span>
+  · <a href="https://vandieken.com" target="_blank" rel="noopener noreferrer" class="secondary">vandieken.com</a>
 </div>
 
 <!-- Synthwave Retro Effects -->
@@ -551,6 +715,24 @@ button:focus-visible, .search-input:focus-visible {
 <div class="retro-grid"></div>
 <div class="retro-vignette"></div>
 <div class="retro-scanlines"></div>
+
+<!-- Nyan Cat -->
+<div class="nyan-cat-wrap">
+  <div class="nyan-rainbow"></div>
+  <div class="nyan-cat" aria-hidden="true"></div>
+</div>
+
+<!-- Shooting Stars -->
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+<div class="shooting-star"></div>
+
+<!-- VHS Glitch Lines -->
+<div class="vhs-glitch"></div>
+<div class="vhs-glitch"></div>
+
+<!-- Sparkle Particles -->
+<div class="sparkle-container" id="sparkleContainer"></div>
 
 <script>
 "use strict";
@@ -807,7 +989,7 @@ function render() {
     if (!currentIds.size) {
       let nextTime = null;
       for (let i = 0; i < ds.length; i++) {
-        var t = timeToMin(ds[i].time);
+        let t = timeToMin(ds[i].time);
         if (t > nowMin) {
           if (nextTime === null) nextTime = t;
           if (t === nextTime) nextIds.add(ds[i].id);
@@ -852,7 +1034,7 @@ function render() {
 
   for (let gi = 0; gi < groups.length; gi++) {
     const g = groups[gi];
-    html += '<div class="time-marker"><div class="time-label">'+esc(g.time)+'</div><div class="time-line"></div></div>';
+    html += '<div class="time-marker" role="presentation"><div class="time-label">'+esc(g.time)+'</div><div class="time-line"></div></div>';
 
     for (let si = 0; si < g.sessions.length; si++) {
       const s = g.sessions[si];
@@ -869,11 +1051,11 @@ function render() {
       if (isCur) cls += " is-current";
       if (isNxt) cls += " is-next";
 
-      var needsScroll = !scrollTargetAssigned && (isCur || isNxt);
+      let needsScroll = !scrollTargetAssigned && (isCur || isNxt);
       if (needsScroll) scrollTargetAssigned = true;
-      var scrollAttr = needsScroll ? ' id="scroll-target"' : '';
+      let scrollAttr = needsScroll ? ' id="scroll-target"' : '';
 
-      html += '<div class="'+cls+'" role="listitem" data-sid="'+esc(s.id)+'"'+scrollAttr+(hasDesc?' tabindex="0"':'')+'>';
+      html += '<div class="'+cls+'" role="listitem" data-sid="'+esc(s.id)+'"'+scrollAttr+(hasDesc?' tabindex="0" aria-expanded="'+(isExp?'true':'false')+'"':'')+'>';
 
       // Top row
       html += '<div class="session-top">';
@@ -907,7 +1089,7 @@ function render() {
 
       // Expand hint
       if (hasDesc && !isExp) {
-        html += '<div class="expand-hint">\u25be Details antippen</div>';
+        html += '<div class="expand-hint">\u25be Details anzeigen</div>';
       }
 
       html += '</div>';
@@ -950,31 +1132,53 @@ document.getElementById("timeline").addEventListener("keydown", function(e) {
   else setDay(1);
 })();
 
-// Theme toggle: light -> dark -> retro -> light
-var THEMES = ["light", "dark", "retro"];
-var THEME_ICONS = {light: "\uD83C\uDF19", dark: "\uD83C\uDF15", retro: "\u2600\uFE0F"};
+// Theme: light <-> dark (separate toggle)
+// Synthwave: overlay on top of light/dark (separate button)
+var baseTheme = "light"; // "light" or "dark"
+var synthwaveOn = false;
 var THEME_COLORS = {light: "#f5f5f7", dark: "#0e0e12", retro: "#1a1028"};
 
 function applyTheme(theme) {
   if (theme === "light") document.documentElement.removeAttribute("data-theme");
   else document.documentElement.setAttribute("data-theme", theme);
-  document.getElementById("themeToggle").textContent = THEME_ICONS[theme];
-  document.getElementById("metaThemeColor").setAttribute("content", THEME_COLORS[theme]);
+  document.getElementById("metaThemeColor").setAttribute("content", THEME_COLORS[theme] || THEME_COLORS.light);
   try { localStorage.setItem("wuv26_theme", theme); } catch(e) {}
 }
 
+function updateThemeUI() {
+  var effective = synthwaveOn ? "retro" : baseTheme;
+  applyTheme(effective);
+  // Light/dark toggle icon: show opposite
+  document.getElementById("themeToggle").textContent = baseTheme === "light" ? "\uD83C\uDF19" : "\u2600\uFE0F";
+  // Synthwave button glow
+  var synthBtn = document.getElementById("synthToggle");
+  synthBtn.classList.toggle("is-active", synthwaveOn);
+  // Music toggle visibility managed by CSS [data-theme="retro"]
+}
+
 function toggleTheme() {
-  var current = document.documentElement.getAttribute("data-theme") || "light";
-  var idx = THEMES.indexOf(current);
-  var next = THEMES[(idx + 1) % THEMES.length];
-  applyTheme(next);
+  baseTheme = baseTheme === "light" ? "dark" : "light";
+  try { localStorage.setItem("wuv26_base", baseTheme); } catch(e) {}
+  updateThemeUI();
+}
+
+function toggleSynthwave() {
+  synthwaveOn = !synthwaveOn;
+  try { localStorage.setItem("wuv26_synth", synthwaveOn ? "1" : "0"); } catch(e) {}
+  updateThemeUI();
 }
 
 (function initTheme() {
-  var saved = null;
-  try { saved = localStorage.getItem("wuv26_theme"); } catch(e) {}
-  if (saved && THEMES.indexOf(saved) !== -1) applyTheme(saved);
-  else document.getElementById("themeToggle").textContent = THEME_ICONS.light;
+  try { baseTheme = localStorage.getItem("wuv26_base") || "light"; } catch(e) {}
+  if (baseTheme !== "light" && baseTheme !== "dark") baseTheme = "light";
+  try { synthwaveOn = localStorage.getItem("wuv26_synth") === "1"; } catch(e) {}
+  // Migrate old theme storage
+  try {
+    var old = localStorage.getItem("wuv26_theme");
+    if (old === "retro") { synthwaveOn = true; baseTheme = "dark"; localStorage.removeItem("wuv26_theme"); localStorage.setItem("wuv26_base", baseTheme); localStorage.setItem("wuv26_synth", "1"); }
+    else if (old === "dark") { baseTheme = "dark"; localStorage.removeItem("wuv26_theme"); localStorage.setItem("wuv26_base", "dark"); }
+  } catch(e) {}
+  updateThemeUI();
 })();
 
 // === SYNTHWAVE STARS ===
@@ -993,134 +1197,75 @@ function toggleTheme() {
   }
 })();
 
-// === SYNTHWAVE MUSIC ENGINE (Web Audio API) ===
-var synthCtx = null;
+// === SPARKLE PARTICLES ===
+(function initSparkles() {
+  var container = document.getElementById("sparkleContainer");
+  if (!container) return;
+  var sparkles = ["✨", "⭐", "💫", "🌟", "✨", "⭐", "💫", "✨"];
+  for (var i = 0; i < sparkles.length; i++) {
+    var el = document.createElement("span");
+    el.className = "sparkle";
+    el.textContent = sparkles[i];
+    el.style.left = (5 + Math.random() * 90) + "%";
+    el.style.top = (20 + Math.random() * 70) + "%";
+    el.style.animationDelay = (Math.random() * 6) + "s";
+    el.style.animationDuration = (3 + Math.random() * 3) + "s";
+    el.style.fontSize = (10 + Math.random() * 10) + "px";
+    container.appendChild(el);
+  }
+})();
+
+// === KONAMI CODE EASTER EGG ===
+(function initKonami() {
+  var code = [38,38,40,40,37,39,37,39,66,65]; // up up down down left right left right B A
+  var pos = 0;
+  document.addEventListener("keydown", function(e) {
+    if (e.keyCode === code[pos]) {
+      pos++;
+      if (pos === code.length) {
+        pos = 0;
+        document.documentElement.classList.toggle("konami-active");
+        var isActive = document.documentElement.classList.contains("konami-active");
+        if (isActive) {
+          showToast("🌈 KONAMI MODE ACTIVATED! 🌈");
+          // Start music if in retro theme and not playing
+          var theme = document.documentElement.getAttribute("data-theme");
+          if (theme === "retro" && !synthPlaying) toggleMusic();
+        } else {
+          showToast("Konami mode deactivated");
+        }
+      }
+    } else {
+      pos = 0;
+    }
+  });
+})();
+
+// === SYNTHWAVE MUSIC (MP3) ===
+var synthAudio = null;
 var synthPlaying = false;
-var synthNodes = [];
-var synthIntervals = [];
-
-function createSynthwaveMusic() {
-  if (synthCtx) return synthCtx;
-  synthCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-  // Master volume
-  var master = synthCtx.createGain();
-  master.gain.value = 0.15;
-  master.connect(synthCtx.destination);
-
-  // Bass synth - deep pulsing bass
-  function playBass() {
-    var bassNotes = [55, 55, 65.41, 73.42]; // A1, A1, C2, D2
-    var noteIdx = 0;
-    var interval = setInterval(function() {
-      if (!synthPlaying) return;
-      var osc = synthCtx.createOscillator();
-      var gain = synthCtx.createGain();
-      osc.type = "sawtooth";
-      osc.frequency.value = bassNotes[noteIdx % bassNotes.length];
-      gain.gain.setValueAtTime(0.3, synthCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, synthCtx.currentTime + 0.4);
-      osc.connect(gain);
-      gain.connect(master);
-      osc.start();
-      osc.stop(synthCtx.currentTime + 0.45);
-      noteIdx++;
-    }, 500);
-    synthIntervals.push(interval);
-  }
-
-  // Pad synth - dreamy chords
-  function playPad() {
-    var chords = [[220, 277.18, 329.63], [196, 246.94, 293.66], [174.61, 220, 261.63], [196, 246.94, 329.63]];
-    var chordIdx = 0;
-    var interval = setInterval(function() {
-      if (!synthPlaying) return;
-      var chord = chords[chordIdx % chords.length];
-      chord.forEach(function(freq) {
-        var osc = synthCtx.createOscillator();
-        var gain = synthCtx.createGain();
-        var filter = synthCtx.createBiquadFilter();
-        osc.type = "sine";
-        osc.frequency.value = freq;
-        filter.type = "lowpass";
-        filter.frequency.value = 800;
-        gain.gain.setValueAtTime(0, synthCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.08, synthCtx.currentTime + 0.3);
-        gain.gain.linearRampToValueAtTime(0, synthCtx.currentTime + 1.8);
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(master);
-        osc.start();
-        osc.stop(synthCtx.currentTime + 2);
-      });
-      chordIdx++;
-    }, 2000);
-    synthIntervals.push(interval);
-  }
-
-  // Arpeggio - sparkling high notes
-  function playArp() {
-    var notes = [523.25, 659.25, 783.99, 659.25, 523.25, 392, 523.25, 659.25]; // C5 E5 G5 etc
-    var noteIdx = 0;
-    var interval = setInterval(function() {
-      if (!synthPlaying) return;
-      var osc = synthCtx.createOscillator();
-      var gain = synthCtx.createGain();
-      var filter = synthCtx.createBiquadFilter();
-      osc.type = "triangle";
-      osc.frequency.value = notes[noteIdx % notes.length];
-      filter.type = "lowpass";
-      filter.frequency.value = 2000;
-      gain.gain.setValueAtTime(0.06, synthCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, synthCtx.currentTime + 0.3);
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(master);
-      osc.start();
-      osc.stop(synthCtx.currentTime + 0.35);
-      noteIdx++;
-    }, 250);
-    synthIntervals.push(interval);
-  }
-
-  // Kick drum
-  function playKick() {
-    var interval = setInterval(function() {
-      if (!synthPlaying) return;
-      var osc = synthCtx.createOscillator();
-      var gain = synthCtx.createGain();
-      osc.frequency.setValueAtTime(150, synthCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(0.01, synthCtx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.4, synthCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, synthCtx.currentTime + 0.15);
-      osc.connect(gain);
-      gain.connect(master);
-      osc.start();
-      osc.stop(synthCtx.currentTime + 0.2);
-    }, 1000);
-    synthIntervals.push(interval);
-  }
-
-  playBass();
-  playPad();
-  playArp();
-  playKick();
-
-  return synthCtx;
-}
 
 function toggleMusic() {
   var btn = document.getElementById("musicToggle");
   if (!synthPlaying) {
+    if (!synthAudio) {
+      synthAudio = new Audio("music01.mp3");
+      synthAudio.loop = true;
+      synthAudio.volume = 0.4;
+    }
+    synthAudio.play().then(function() {
+      synthPlaying = true;
+      btn.textContent = "🔊";
+      btn.classList.add("playing");
+    }).catch(function() {
+      showToast("Audio konnte nicht gestartet werden");
+    });
     synthPlaying = true;
-    createSynthwaveMusic();
     btn.textContent = "🔊";
     btn.classList.add("playing");
   } else {
     synthPlaying = false;
-    synthIntervals.forEach(function(id) { clearInterval(id); });
-    synthIntervals = [];
-    if (synthCtx) { synthCtx.close(); synthCtx = null; }
+    if (synthAudio) synthAudio.pause();
     btn.textContent = "🔇";
     btn.classList.remove("playing");
   }
@@ -1140,7 +1285,6 @@ let refreshInterval = setInterval(render, 30000);
 document.addEventListener("visibilitychange", function() {
   clearInterval(refreshInterval);
   if (!document.hidden) {
-    shouldScrollToLive = true;
     render();
     refreshInterval = setInterval(render, 30000);
   }
