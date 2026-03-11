@@ -459,8 +459,9 @@ body { scrollbar-width: none; }
 }
 .day-tab.active { background: var(--accent); color: #fff; }
 
-/* Filter Pills */
-.filters { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+/* Filter row: scrollable pills + fixed fav button */
+.filter-row { display: flex; gap: 6px; align-items: center; }
+.filters { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px; flex: 1; min-width: 0; }
 .filters::-webkit-scrollbar { display: none; }
 .filter-pill {
   padding: 8px 14px; border: none; border-radius: 20px; cursor: pointer;
@@ -473,7 +474,8 @@ body { scrollbar-width: none; }
   background: transparent;
 }
 .filter-pill.active { background: var(--pill-active-bg); color: var(--pill-active-color); }
-.filter-pill.fav { margin-left: auto; }
+.fav-toggle { flex-shrink: 0; }
+.fav-toggle .filter-pill { margin-left: 0; }
 .filter-pill.fav.active { background: var(--fav-active-bg); color: var(--gold); }
 
 /* Focus styles for accessibility */
@@ -527,7 +529,7 @@ button:focus-visible, .search-input:focus-visible {
 }
 .session.is-next { border-color: var(--next-border); }
 
-.session-top { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
+.session-top { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
 .session.is-break .session-top { margin-bottom: 0; }
 
 /* Badges */
@@ -542,15 +544,16 @@ button:focus-visible, .search-input:focus-visible {
 .badge-now { background: var(--accent); color: #fff; font-weight: 800; letter-spacing: 1px; animation: pulse 2s infinite; }
 .badge-next { background: var(--fav-active-bg); color: var(--gold); }
 
-.room-tag { font-size: 11px; font-weight: 600; color: var(--text-dim); margin-left: 2px; white-space: nowrap; background: var(--pill-bg); padding: 2px 8px; border-radius: 12px; }
+.room-tag { font-size: 11px; font-weight: 600; color: var(--text-dim); margin-left: 2px; white-space: nowrap; background: var(--pill-bg); padding: 2px 8px; border-radius: 12px; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
 
 /* Fav Star */
 .fav-btn {
-  margin-left: 0; background: none; border: none; cursor: pointer;
+  margin-left: auto; background: none; border: none; cursor: pointer;
   font-size: 20px; padding: 0; line-height: 1;
   color: var(--text-faint); transition: color .15s;
   min-width: 44px; min-height: 44px;
   display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
 .fav-btn.is-fav { color: var(--gold); }
 
@@ -564,10 +567,12 @@ button:focus-visible, .search-input:focus-visible {
   margin-top: 0;
 }
 .session-time-inline { font-size: 12px; font-weight: 600; color: var(--text-dim); margin-left: 6px; font-variant-numeric: tabular-nums; }
-.session-speakers { font-size: 12px; color: var(--speakers-color); margin-top: 4px; line-height: 1.8; }
+.session-speakers { font-size: 12px; color: var(--speakers-color); margin-top: 6px; line-height: 1.5; }
+.speaker-line { display: block; margin-bottom: 2px; }
+.speaker-separator { display: none; }
 .speaker-name { font-weight: 600; color: var(--text); }
 .speaker-role { font-size: 11px; color: var(--text-dim); }
-.speaker-company { font-size: 10px; font-weight: 600; color: var(--teal); background: var(--badge-deep-bg); padding: 1px 6px; border-radius: 10px; white-space: nowrap; }
+.speaker-company { font-size: 10px; font-weight: 600; color: var(--text-dim); background: var(--pill-bg); padding: 1px 6px; border-radius: 10px; white-space: nowrap; }
 .session-desc {
   font-size: 12.5px; color: var(--desc-color); margin-top: 10px;
   line-height: 1.65; border-top: 1px solid var(--border); padding-top: 10px;
@@ -581,11 +586,11 @@ button:focus-visible, .search-input:focus-visible {
 /* Footer */
 .footer {
   text-align: center; padding: 32px 16px 16px;
-  font-size: 10px; color: var(--footer-color); line-height: 1.8;
+  font-size: 11px; color: var(--text-dim); line-height: 1.8;
 }
 .footer a { text-decoration: none; transition: color .15s; }
-.footer a.primary { color: var(--footer-primary); text-decoration: underline; text-underline-offset: 2px; }
-.footer a.secondary { color: var(--footer-secondary); }
+.footer a.primary { color: var(--text); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.footer a.secondary { color: var(--text-dim); text-decoration: underline; text-underline-offset: 2px; }
 
 /* Theme Toggle */
 .theme-toggle {
@@ -683,14 +688,18 @@ button:focus-visible, .search-input:focus-visible {
     <button type="button" class="day-tab active" data-day="1" onclick="setDay(1)">Mi 11. März</button>
     <button type="button" class="day-tab" data-day="2" onclick="setDay(2)">Do 12. März</button>
   </div>
-  <div class="filters">
-    <button type="button" class="filter-pill active" data-filter="all" onclick="setFilter('all')">Alle</button>
-    <button type="button" class="filter-pill" data-filter="main" onclick="setFilter('main')">Main Stage</button>
-    <button type="button" class="filter-pill" data-filter="deep-dive" onclick="setFilter('deep-dive')">Deep Dives</button>
-    <button type="button" class="filter-pill filter-pill-action" onclick="openDirectory('people')">👤 Speaker</button>
-    <button type="button" class="filter-pill filter-pill-action" onclick="openDirectory('companies')">🏢 Firmen</button>
-    <a href="https://motorworld.de/wp-content/uploads/2022/04/MW-M_Event-Tagung_Wegefuehrung-Besucher_2021-09-.pdf" target="_blank" rel="noopener noreferrer" class="filter-pill filter-pill-action" style="text-decoration:none">🗺 Lageplan ↗</a>
-    <button type="button" class="filter-pill fav" data-filter="fav" onclick="toggleFavFilter()" aria-label="Nur Favoriten anzeigen">★ Favoriten</button>
+  <div class="filter-row">
+    <div class="filters">
+      <button type="button" class="filter-pill active" data-filter="all" onclick="setFilter('all')">Alle</button>
+      <button type="button" class="filter-pill" data-filter="main" onclick="setFilter('main')">Main Stage</button>
+      <button type="button" class="filter-pill" data-filter="deep-dive" onclick="setFilter('deep-dive')">Deep Dives</button>
+      <button type="button" class="filter-pill filter-pill-action" onclick="openDirectory('people')">👤 Speaker</button>
+      <button type="button" class="filter-pill filter-pill-action" onclick="openDirectory('companies')">🏢 Firmen</button>
+      <a href="https://motorworld.de/wp-content/uploads/2022/04/MW-M_Event-Tagung_Wegefuehrung-Besucher_2021-09-.pdf" target="_blank" rel="noopener noreferrer" class="filter-pill filter-pill-action" style="text-decoration:none">🗺 Lageplan ↗</a>
+    </div>
+    <div class="fav-toggle">
+      <button type="button" class="filter-pill fav" data-filter="fav" onclick="toggleFavFilter()" aria-label="Nur Favoriten anzeigen">★ Favoriten</button>
+    </div>
   </div>
   <div class="search-wrap" id="searchWrap">
     <label for="searchInput" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Sessions durchsuchen</label>
@@ -1272,11 +1281,29 @@ function render() {
 
   const tl = document.getElementById("timeline");
   if (!groups.length) {
-    tl.innerHTML = '<div class="empty">'+(isSearching?'Keine Treffer für \u201E'+esc(searchQuery)+'\u201C':showFavsOnly?'Keine Favoriten für diesen Tag.<br><span style="font-size:12px;opacity:0.6">Tippe auf ☆ neben einer Session, um sie als Favorit zu speichern.</span>':'Keine Sessions gefunden.')+'</div>';
+    var emptyMsg;
+    if (isSearching) {
+      emptyMsg = 'Keine Treffer f\u00fcr \u201E'+esc(searchQuery)+'\u201C';
+    } else if (showFavsOnly) {
+      var hasFavs = Object.keys(favs).length > 0;
+      if (hasFavs) {
+        emptyMsg = 'Keine Favoriten f\u00fcr diesen Tag.<br><span style="font-size:12px;opacity:0.6">Deine Favoriten sind auf dem anderen Tag.</span>';
+      } else {
+        emptyMsg = 'Du hast noch keine Favoriten gespeichert.<br><span style="font-size:12px;opacity:0.6">Tippe auf \u2606 neben einer Session, um sie zu merken.</span><br><br><button type="button" onclick="toggleFavFilter()" style="background:var(--pill-active-bg);color:var(--pill-active-color);border:none;padding:8px 16px;border-radius:20px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer">Alle Sessions anzeigen</button>';
+      }
+    } else {
+      emptyMsg = 'Keine Sessions gefunden.';
+    }
+    tl.innerHTML = '<div class="empty">'+emptyMsg+'</div>';
     return;
   }
 
   let html = '';
+  // Show active filter hint when favorites are active
+  if (showFavsOnly && !isSearching) {
+    var favCount = filtered.filter(function(s) { return s.type !== "break"; }).length;
+    html += '<div style="text-align:center;padding:6px 0 2px;font-size:11px;color:var(--gold);font-weight:600;opacity:0.7">\u2605 '+favCount+' Favorit'+(favCount!==1?'en':'')+' \u00b7 <span onclick="toggleFavFilter()" style="text-decoration:underline;cursor:pointer">Filter aufheben</span></div>';
+  }
   let scrollTargetAssigned = false;
 
   for (let gi = 0; gi < groups.length; gi++) {
@@ -1313,8 +1340,9 @@ function render() {
       else if (s.type==="deep-dive") html += '<span class="badge badge-deep">Deep Dive</span>';
       else html += '<span class="badge badge-main">Main Stage</span>';
 
-      if (s.room && !isBrk) html += '<span class="room-tag">\ud83d\udccd '+esc(s.room)+'</span>';
-      if (!isBrk) html += '<button type="button" class="share-btn" aria-label="Session teilen">\u{1F4E4}</button><button type="button" class="fav-btn'+(isFav?' is-fav':'')+'" aria-label="'+(isFav?'Favorit entfernen':'Als Favorit markieren')+'">'+(isFav?'\u2605':'\u2606')+'</button>';
+      // Only show room tag if it adds information (not redundant with badge)
+      if (s.room && !isBrk && s.room !== "Mainstage") html += '<span class="room-tag">\ud83d\udccd '+esc(s.room)+'</span>';
+      if (!isBrk) html += '<button type="button" class="fav-btn'+(isFav?' is-fav':'')+'" aria-label="'+(isFav?'Favorit entfernen':'Als Favorit markieren')+'">'+(isFav?'\u2605':'\u2606')+'</button>';
       html += '</div>';
 
       // Title
@@ -1326,7 +1354,7 @@ function render() {
 
       // Speakers (formatted: name bold, company as pill)
       if (s.speakers.length) {
-        html += '<div class="session-speakers">'+s.speakers.map(formatSpeakerHtml).join(' · ')+'</div>';
+        html += '<div class="session-speakers">'+s.speakers.map(function(sp) { return '<span class="speaker-line">'+formatSpeakerHtml(sp)+'</span>'; }).join('')+'</div>';
       }
 
       // Description
@@ -1359,7 +1387,6 @@ document.getElementById("timeline").addEventListener("click", function(e) {
   if (!card) return;
   var id = card.dataset.sid;
   if (e.target.closest(".fav-btn")) { toggleFav(id, e); return; }
-  if (e.target.closest(".share-btn")) { shareSession(id, e); return; }
   var s = S.find(function(x) { return x.id === id; });
   if (s && s.type !== "break" && s.desc) toggleExpand(id);
 });
@@ -1405,6 +1432,11 @@ function updateThemeUI() {
 }
 
 function toggleTheme() {
+  // If synthwave is on, turn it off first and go to the toggled base theme
+  if (synthwaveOn) {
+    synthwaveOn = false;
+    try { localStorage.setItem("wuv26_synth", "0"); } catch(e) {}
+  }
   baseTheme = baseTheme === "light" ? "dark" : "light";
   try { localStorage.setItem("wuv26_base", baseTheme); } catch(e) {}
   updateThemeUI();
@@ -1451,10 +1483,9 @@ function toggleSynthwave() {
     document.documentElement.classList.toggle("easter-active");
     var isActive = document.documentElement.classList.contains("easter-active");
     if (isActive) {
-      showToast("🌈 EASTER EGG ACTIVATED! 🌈");
+      showToast("🌈 EASTER EGG! Tippe 🔇 für Musik");
       // Auto-enable synthwave if not already on
       if (!synthwaveOn) toggleSynthwave();
-      if (!synthPlaying) toggleMusic();
     } else {
       showToast("Easter egg deactivated");
     }
@@ -1515,16 +1546,25 @@ function toggleSynthwave() {
 // === SYNTHWAVE MUSIC (MP3) ===
 var synthAudio = null;
 var synthPlaying = false;
+var audioUnlocked = false;
 
-// Pre-create audio element on first user touch to unlock audio on iOS/Safari
-document.addEventListener("touchstart", function unlockAudio() {
+// Unlock audio on first user interaction (iOS/Safari require play() in gesture)
+function unlockAudioContext() {
+  if (audioUnlocked) return;
   if (!synthAudio) {
     synthAudio = new Audio("music01.mp3");
     synthAudio.loop = true;
     synthAudio.volume = 0.4;
   }
-  document.removeEventListener("touchstart", unlockAudio);
-}, { once: true });
+  // Play+pause immediately to unlock the audio element
+  synthAudio.play().then(function() {
+    synthAudio.pause();
+    synthAudio.currentTime = 0;
+    audioUnlocked = true;
+  }).catch(function() {});
+}
+document.addEventListener("touchstart", unlockAudioContext, { once: true });
+document.addEventListener("click", unlockAudioContext, { once: true });
 
 function toggleMusic() {
   var btn = document.getElementById("musicToggle");
@@ -1534,22 +1574,18 @@ function toggleMusic() {
       synthAudio.loop = true;
       synthAudio.volume = 0.4;
     }
-    var playPromise = synthAudio.play();
-    if (playPromise) {
-      playPromise.then(function() {
-        synthPlaying = true;
-        btn.textContent = "🔊";
-        btn.classList.add("playing");
-      }).catch(function(err) {
-        synthPlaying = false;
-        btn.textContent = "🔇";
-        btn.classList.remove("playing");
-        showToast("Audio: Tippe den 🔇 Button nochmal");
-      });
-    }
+    synthAudio.play().then(function() {
+      synthPlaying = true;
+      btn.textContent = "🔊";
+      btn.classList.add("playing");
+    }).catch(function() {
+      synthPlaying = false;
+      btn.textContent = "🔇";
+      btn.classList.remove("playing");
+    });
   } else {
     synthPlaying = false;
-    if (synthAudio) synthAudio.pause();
+    synthAudio.pause();
     btn.textContent = "🔇";
     btn.classList.remove("playing");
   }
