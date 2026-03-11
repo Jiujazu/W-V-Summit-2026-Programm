@@ -1275,15 +1275,14 @@ function render() {
 
   const filtered = S.filter(function(s) {
     if (s.day !== currentDay) return false;
-    if (showFavsOnly && !isSearching && !favs[s.id]) return false;
-    if (!isSearching) {
-      if (currentFilter==="main" && (s.type==="deep-dive")) return false;
-      if (currentFilter==="deep-dive" && s.type!=="deep-dive") return false;
-      // Hide breaks when filtering by track (only show in "all" view)
-      if (currentFilter!=="all" && s.type==="break") return false;
-    }
+    // Filters always apply, even during search
+    if (showFavsOnly && !favs[s.id]) return false;
+    if (currentFilter==="main" && s.type==="deep-dive") return false;
+    if (currentFilter==="deep-dive" && s.type!=="deep-dive") return false;
+    if (currentFilter!=="all" && s.type==="break") return false;
+    // Search narrows results further
     if (isSearching) {
-      const hay = (s.title + " " + s.speakers.join(" ") + " " + s.room + " " + s.desc).toLowerCase();
+      var hay = (s.title + " " + s.speakers.join(" ") + " " + s.room + " " + s.desc).toLowerCase();
       if (!hay.includes(searchQuery)) return false;
     }
     return true;
@@ -1422,8 +1421,8 @@ document.getElementById("timeline").addEventListener("keydown", function(e) {
 
 // Auto-detect correct day
 (function autoDetectDay() {
-  const today = localDateStr(new Date());
-  if (today === DAY_DATES[2]) setDay(2);
+  var today = localDateStr(new Date());
+  if (today >= DAY_DATES[2]) setDay(2);  // Day 2 or after conference
   else setDay(1);
 })();
 
