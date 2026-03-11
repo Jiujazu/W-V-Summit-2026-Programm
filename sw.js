@@ -1,4 +1,4 @@
-var CACHE = "wuv26-v3";
+var CACHE = "wuv26-v4";
 var ASSETS = ["/", "/index.html", "/music01.mp3", "/nyan-cat.gif"];
 
 self.addEventListener("install", function(e) {
@@ -37,7 +37,8 @@ self.addEventListener("fetch", function(e) {
         }
         return response;
       }).catch(function() {
-        return caches.match("/index.html");
+        // Only serve index.html fallback for navigation requests (not images/audio)
+        if (e.request.mode === "navigate") return caches.match("/index.html");
       });
     })
   );
