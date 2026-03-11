@@ -550,25 +550,34 @@ button:focus-visible, .search-input:focus-visible {
 
 /* Session Content */
 .session-title {
-  font-size: 14px; font-weight: 700; line-height: 1.35; color: var(--text);
-  margin-top: 2px;
+  font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--text);
+  margin-top: 4px;
 }
 .session.is-break .session-title {
   font-size: 13px; font-weight: 500; color: var(--text-dim);
   margin-top: 0;
 }
-.session-time-inline { font-size: 12px; font-weight: 600; color: var(--text-dim); margin-left: 6px; font-variant-numeric: tabular-nums; }
-.session-speakers { font-size: 12px; color: var(--speakers-color); margin-top: 6px; line-height: 1.5; }
-.speaker-line { display: block; margin-bottom: 2px; }
+.session-time-inline { font-size: 12px; font-weight: 500; color: var(--text-dim); margin-left: 6px; font-variant-numeric: tabular-nums; }
+/* Speaker block — visually separated from title */
+.session-speakers {
+  font-size: 12px; color: var(--speakers-color); margin-top: 8px; padding-top: 8px;
+  border-top: 1px solid var(--border); line-height: 1.6;
+}
+.speaker-line { display: block; margin-bottom: 1px; }
 .speaker-name { font-weight: 600; color: var(--text); }
 .speaker-role { font-size: 11px; color: var(--text-dim); }
 .speaker-company { font-size: 10px; font-weight: 600; color: var(--text-dim); background: var(--pill-bg); padding: 1px 6px; border-radius: 10px; white-space: nowrap; }
+/* Description — expanded details */
 .session-desc {
   font-size: 12.5px; color: var(--desc-color); margin-top: 10px;
   line-height: 1.65; border-top: 1px solid var(--border); padding-top: 10px;
   animation: fadeIn .25s ease;
 }
-.expand-hint { font-size: 11px; color: var(--text-dim); margin-top: 4px; opacity: 0.7; }
+/* Expand hint — colored, clearly tappable */
+.expand-hint {
+  font-size: 11px; font-weight: 600; color: var(--teal); margin-top: 8px;
+  padding: 4px 0;
+}
 
 /* Empty State */
 .empty { text-align: center; padding: 40px; color: var(--text-dim); font-size: 14px; }
@@ -591,7 +600,31 @@ button:focus-visible, .search-input:focus-visible {
   flex-shrink: 0;
 }
 .theme-toggle:active { transform: scale(0.92); }
-.synthwave-toggle.is-active { box-shadow: 0 0 12px rgba(213,84,213,0.5), 0 0 24px rgba(255,107,53,0.3); background: linear-gradient(135deg, rgba(255,107,53,0.2), rgba(213,84,213,0.2)); }
+/* Rainbow button: hidden by default, only visible when retro is active */
+.synthwave-toggle { display: none; }
+.synthwave-toggle.is-active { display: flex; box-shadow: 0 0 12px rgba(213,84,213,0.5), 0 0 24px rgba(255,107,53,0.3); background: linear-gradient(135deg, rgba(255,107,53,0.2), rgba(213,84,213,0.2)); }
+
+/* Jump to Now floating button */
+.jump-now {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--accent); color: #fff; border: none; cursor: pointer;
+  padding: 10px 20px; border-radius: 24px; font-family: inherit;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  z-index: 90; display: none; align-items: center; gap: 6px;
+  transition: opacity .2s, transform .2s;
+}
+.jump-now:active { transform: translateX(-50%) scale(0.95); }
+.jump-now.is-visible { display: flex; }
+
+/* Offline banner */
+.offline-banner {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: var(--gold); color: #000; text-align: center;
+  padding: 4px 16px; font-size: 11px; font-weight: 600;
+  z-index: 9999; display: none;
+}
+.offline-banner.is-visible { display: block; }
 
 /* Directory overlay (People / Companies) */
 .directory-overlay {
@@ -661,6 +694,8 @@ button:focus-visible, .search-input:focus-visible {
 </head>
 <body>
 
+<div class="offline-banner" id="offlineBanner">Offline – Du siehst die zuletzt geladene Version</div>
+
 <div class="header" id="header">
   <div class="header-row">
     <div>
@@ -722,6 +757,8 @@ button:focus-visible, .search-input:focus-visible {
   </div>
   <div class="directory-list" id="directoryList"></div>
 </div>
+
+<button type="button" class="jump-now" id="jumpNow" onclick="jumpToNow()">↑ Zurück zu Jetzt</button>
 
 <div class="footer">
   ⚠️ Komplett inoffiziell · Alle Angaben ohne Gewähr<br>
@@ -930,13 +967,18 @@ function parseSpeaker(raw) {
   return { name: name, role: role, company: company, isMod: isMod, raw: raw };
 }
 
-function formatSpeakerHtml(raw) {
+function formatSpeakerHtml(raw, compact) {
   var p = parseSpeaker(raw);
   var h = '';
   if (p.isMod) h += '<span class="speaker-role">Mod: </span>';
   h += '<span class="speaker-name">' + esc(p.name) + '</span>';
-  if (p.role) h += ' <span class="speaker-role">' + esc(p.role) + '</span>';
-  if (p.company) h += ' <span class="speaker-company">' + esc(p.company) + '</span>';
+  // In compact mode (many speakers): only show company, skip role
+  if (compact) {
+    if (p.company) h += ' <span class="speaker-company">' + esc(p.company) + '</span>';
+  } else {
+    if (p.role) h += ' <span class="speaker-role">' + esc(p.role) + '</span>';
+    if (p.company) h += ' <span class="speaker-company">' + esc(p.company) + '</span>';
+  }
   return h;
 }
 
@@ -1017,7 +1059,7 @@ function renderDirectory() {
   if (directoryMode === "people") {
     var filtered = peopleIndex.filter(function(p) {
       if (!directoryFilterText) return true;
-      return (p.name + " " + p.company + " " + p.role).toLowerCase().indexOf(directoryFilterText) > -1;
+      return (p.name + " " + p.company).toLowerCase().indexOf(directoryFilterText) > -1;
     });
     for (var i = 0; i < filtered.length; i++) {
       var p = filtered[i];
@@ -1235,8 +1277,10 @@ function render() {
     if (s.day !== currentDay) return false;
     if (showFavsOnly && !isSearching && !favs[s.id]) return false;
     if (!isSearching) {
-      if (currentFilter==="main" && s.type==="deep-dive") return false;
+      if (currentFilter==="main" && (s.type==="deep-dive")) return false;
       if (currentFilter==="deep-dive" && s.type!=="deep-dive") return false;
+      // Hide breaks when filtering by track (only show in "all" view)
+      if (currentFilter!=="all" && s.type==="break") return false;
     }
     if (isSearching) {
       const hay = (s.title + " " + s.speakers.join(" ") + " " + s.room + " " + s.desc).toLowerCase();
@@ -1307,7 +1351,7 @@ function render() {
 
       // Top row
       html += '<div class="session-top">';
-      if (isCur) html += '<span class="badge badge-now">JETZT</span>';
+      if (isCur) html += '<span class="badge badge-now">JETZT \u00b7 bis '+esc(s.end)+'</span>';
       if (isNxt) html += '<span class="badge badge-next">Als N\u00e4chstes</span>';
 
       if (isBrk) html += '<span class="badge badge-break">Pause</span>';
@@ -1328,7 +1372,8 @@ function render() {
 
       // Speakers (formatted: name bold, company as pill)
       if (s.speakers.length) {
-        html += '<div class="session-speakers">'+s.speakers.map(function(sp) { return '<span class="speaker-line">'+formatSpeakerHtml(sp)+'</span>'; }).join('')+'</div>';
+        var compact = s.speakers.length >= 3;
+        html += '<div class="session-speakers">'+s.speakers.map(function(sp) { return '<span class="speaker-line">'+formatSpeakerHtml(sp, compact)+'</span>'; }).join('')+'</div>';
       }
 
       // Description
@@ -1336,9 +1381,11 @@ function render() {
         html += '<div class="session-desc">'+esc(s.desc)+'</div>';
       }
 
-      // Expand hint
+      // Expand/collapse hint
       if (hasDesc && !isExp) {
         html += '<div class="expand-hint">\u25be Details anzeigen</div>';
+      } else if (hasDesc && isExp) {
+        html += '<div class="expand-hint">\u25b4 Weniger anzeigen</div>';
       }
 
       html += '</div>';
@@ -1518,52 +1565,66 @@ function toggleSynthwave() {
 })();
 
 // === SYNTHWAVE MUSIC (MP3) ===
-var synthAudio = null;
+// Audio element created eagerly so it's ready when user taps play.
+// On iOS/Safari, play() must happen in a direct user gesture (click/touchend).
+// The onclick="toggleMusic()" on the button IS a direct user gesture.
+var synthAudio = new Audio("music01.mp3");
+synthAudio.loop = true;
+synthAudio.volume = 0.4;
+synthAudio.preload = "auto";
 var synthPlaying = false;
-var audioUnlocked = false;
-
-// Unlock audio on first user interaction (iOS/Safari require play() in gesture)
-function unlockAudioContext() {
-  if (audioUnlocked) return;
-  if (!synthAudio) {
-    synthAudio = new Audio("music01.mp3");
-    synthAudio.loop = true;
-    synthAudio.volume = 0.4;
-  }
-  // Play+pause immediately to unlock the audio element
-  synthAudio.play().then(function() {
-    synthAudio.pause();
-    synthAudio.currentTime = 0;
-    audioUnlocked = true;
-  }).catch(function() {});
-}
-document.addEventListener("touchstart", unlockAudioContext, { once: true });
-document.addEventListener("click", unlockAudioContext, { once: true });
 
 function toggleMusic() {
   var btn = document.getElementById("musicToggle");
   if (!synthPlaying) {
-    if (!synthAudio) {
-      synthAudio = new Audio("music01.mp3");
-      synthAudio.loop = true;
-      synthAudio.volume = 0.4;
-    }
+    // Direct user gesture → play() is allowed by browser
     synthAudio.play().then(function() {
       synthPlaying = true;
-      btn.textContent = "🔊";
+      btn.textContent = "\uD83D\uDD0A";
       btn.classList.add("playing");
-    }).catch(function() {
+    }).catch(function(err) {
       synthPlaying = false;
-      btn.textContent = "🔇";
+      btn.textContent = "\uD83D\uDD07";
       btn.classList.remove("playing");
+      showToast("Audio konnte nicht gestartet werden");
     });
   } else {
     synthPlaying = false;
     synthAudio.pause();
-    btn.textContent = "🔇";
+    btn.textContent = "\uD83D\uDD07";
     btn.classList.remove("playing");
   }
 }
+
+// === JUMP TO NOW BUTTON ===
+function jumpToNow() {
+  var target = document.getElementById("scroll-target");
+  if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+  document.getElementById("jumpNow").classList.remove("is-visible");
+}
+
+// Show/hide jump-to-now based on scroll position
+(function initJumpButton() {
+  var jumpBtn = document.getElementById("jumpNow");
+  var lastScroll = 0;
+  window.addEventListener("scroll", function() {
+    var target = document.getElementById("scroll-target");
+    if (!target) { jumpBtn.classList.remove("is-visible"); return; }
+    var rect = target.getBoundingClientRect();
+    // Show button if current session is above or below viewport
+    var offScreen = rect.bottom < 0 || rect.top > window.innerHeight;
+    jumpBtn.classList.toggle("is-visible", offScreen);
+  }, { passive: true });
+})();
+
+// === OFFLINE INDICATOR ===
+(function initOfflineIndicator() {
+  var banner = document.getElementById("offlineBanner");
+  function update() { banner.classList.toggle("is-visible", !navigator.onLine); }
+  window.addEventListener("online", update);
+  window.addEventListener("offline", update);
+  update();
+})();
 
 // Register service worker for offline support
 if ("serviceWorker" in navigator) {
