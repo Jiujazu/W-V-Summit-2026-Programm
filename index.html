@@ -343,6 +343,28 @@
 .vhs-glitch:nth-child(1) { top: 30%; animation: vhsGlitch 8s linear infinite; }
 .vhs-glitch:nth-child(2) { top: 65%; animation: vhsGlitch 11s linear infinite 3s; }
 
+/* Nyan Cat (small, retro only) */
+@keyframes nyanFly {
+  0% { transform: translateX(-80px) translateY(0); }
+  25% { transform: translateX(25vw) translateY(-10px); }
+  50% { transform: translateX(50vw) translateY(5px); }
+  75% { transform: translateX(75vw) translateY(-8px); }
+  100% { transform: translateX(calc(100vw + 80px)) translateY(0); }
+}
+[data-theme="retro"] .nyan-cat-wrap {
+  display: block;
+  position: fixed; top: 12vh; left: 0; width: 100%; height: 50px;
+  pointer-events: none; z-index: 50; overflow: hidden;
+}
+.nyan-cat-wrap { display: none; }
+.nyan-cat-img {
+  position: absolute; top: 0; left: 0;
+  width: 40px; height: auto;
+  image-rendering: pixelated;
+  animation: nyanFly 12s linear infinite;
+  will-change: transform;
+}
+
 /* Rainbow borders on retro cards */
 [data-theme="retro"] .session { animation: rainbowBorder 6s linear infinite; }
 [data-theme="retro"] .session.is-current { animation: rainbowBorder 3s linear infinite, synthPulse 3s ease-in-out infinite; }
@@ -350,10 +372,11 @@
 /* CRT screen flicker */
 [data-theme="retro"] body { animation: crtFlicker 0.15s infinite; }
 
-/* Konami mode - extra crazy */
-[data-theme="retro"].konami-active .retro-scanlines { background: repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 2px); }
-.konami-active .session { transition: all 0.3s; }
-.konami-active .session:hover, .konami-active .session:active { transform: scale(1.02) rotate(0.5deg); }
+/* Easter egg mode (shake or Konami) */
+[data-theme="retro"].easter-active .retro-scanlines { background: repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 2px); }
+.easter-active .session { transition: all 0.3s; }
+.easter-active .session:hover, .easter-active .session:active { transform: scale(1.02) rotate(0.5deg); }
+.easter-active .nyan-cat-img { width: 70px; }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { background: var(--bg); }
@@ -633,6 +656,11 @@ button:focus-visible, .search-input:focus-visible {
 <div class="retro-grid"></div>
 <div class="retro-vignette"></div>
 <div class="retro-scanlines"></div>
+
+<!-- Nyan Cat (small, local) -->
+<div class="nyan-cat-wrap">
+  <img class="nyan-cat-img" src="nyan-cat.gif" alt="Nyan Cat" loading="lazy">
+</div>
 
 <!-- VHS Glitch Lines -->
 <div class="vhs-glitch"></div>
@@ -1150,29 +1178,70 @@ function toggleSynthwave() {
   }
 })();
 
-// === KONAMI CODE EASTER EGG ===
-(function initKonami() {
-  var code = [38,38,40,40,37,39,37,39,66,65]; // up up down down left right left right B A
+// === EASTER EGG: SHAKE TO ACTIVATE (mobile) + KONAMI CODE (desktop) ===
+(function initEasterEgg() {
+  function toggleEasterEgg() {
+    document.documentElement.classList.toggle("easter-active");
+    var isActive = document.documentElement.classList.contains("easter-active");
+    if (isActive) {
+      showToast("🌈 EASTER EGG ACTIVATED! 🌈");
+      // Auto-enable synthwave if not already on
+      if (!synthwaveOn) toggleSynthwave();
+      if (!synthPlaying) toggleMusic();
+    } else {
+      showToast("Easter egg deactivated");
+    }
+  }
+
+  // Shake detection for mobile
+  var shakeThreshold = 25;
+  var lastX = null, lastY = null, lastZ = null;
+  var shakeCount = 0;
+  var shakeTimer = null;
+
+  function onMotion(e) {
+    var acc = e.accelerationIncludingGravity;
+    if (!acc || acc.x === null) return;
+    if (lastX !== null) {
+      var dx = Math.abs(acc.x - lastX);
+      var dy = Math.abs(acc.y - lastY);
+      var dz = Math.abs(acc.z - lastZ);
+      if (dx + dy + dz > shakeThreshold) {
+        shakeCount++;
+        if (shakeCount >= 3) {
+          shakeCount = 0;
+          toggleEasterEgg();
+        }
+        clearTimeout(shakeTimer);
+        shakeTimer = setTimeout(function() { shakeCount = 0; }, 1000);
+      }
+    }
+    lastX = acc.x; lastY = acc.y; lastZ = acc.z;
+  }
+
+  if (window.DeviceMotionEvent) {
+    // iOS 13+ requires permission
+    if (typeof DeviceMotionEvent.requestPermission === "function") {
+      // Will be requested on first user interaction
+      document.addEventListener("click", function reqPerm() {
+        DeviceMotionEvent.requestPermission().then(function(state) {
+          if (state === "granted") window.addEventListener("devicemotion", onMotion);
+        }).catch(function() {});
+        document.removeEventListener("click", reqPerm);
+      }, { once: true });
+    } else {
+      window.addEventListener("devicemotion", onMotion);
+    }
+  }
+
+  // Konami code for desktop
+  var code = [38,38,40,40,37,39,37,39,66,65];
   var pos = 0;
   document.addEventListener("keydown", function(e) {
     if (e.keyCode === code[pos]) {
       pos++;
-      if (pos === code.length) {
-        pos = 0;
-        document.documentElement.classList.toggle("konami-active");
-        var isActive = document.documentElement.classList.contains("konami-active");
-        if (isActive) {
-          showToast("🌈 KONAMI MODE ACTIVATED! 🌈");
-          // Start music if in retro theme and not playing
-          var theme = document.documentElement.getAttribute("data-theme");
-          if (theme === "retro" && !synthPlaying) toggleMusic();
-        } else {
-          showToast("Konami mode deactivated");
-        }
-      }
-    } else {
-      pos = 0;
-    }
+      if (pos === code.length) { pos = 0; toggleEasterEgg(); }
+    } else { pos = 0; }
   });
 })();
 
@@ -1193,11 +1262,11 @@ function toggleMusic() {
       btn.textContent = "🔊";
       btn.classList.add("playing");
     }).catch(function() {
-      showToast("Audio konnte nicht gestartet werden");
+      synthPlaying = false;
+      btn.textContent = "🔇";
+      btn.classList.remove("playing");
+      showToast("Audio: Tippe nochmal (Browser braucht User-Interaktion)");
     });
-    synthPlaying = true;
-    btn.textContent = "🔊";
-    btn.classList.add("playing");
   } else {
     synthPlaying = false;
     if (synthAudio) synthAudio.pause();
