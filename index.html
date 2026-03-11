@@ -1209,134 +1209,31 @@ function toggleSynthwave() {
   });
 })();
 
-// === SYNTHWAVE MUSIC ENGINE (Web Audio API) ===
-var synthCtx = null;
+// === SYNTHWAVE MUSIC (MP3) ===
+var synthAudio = null;
 var synthPlaying = false;
-var synthIntervals = [];
-
-function createSynthwaveMusic() {
-  if (synthCtx && synthIntervals.length) return synthCtx;
-  synthCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-  // Master volume
-  var master = synthCtx.createGain();
-  master.gain.value = 0.15;
-  master.connect(synthCtx.destination);
-
-  // Bass synth - deep pulsing bass
-  function playBass() {
-    var bassNotes = [55, 55, 65.41, 73.42]; // A1, A1, C2, D2
-    var noteIdx = 0;
-    var interval = setInterval(function() {
-      if (!synthPlaying) return;
-      var osc = synthCtx.createOscillator();
-      var gain = synthCtx.createGain();
-      osc.type = "sawtooth";
-      osc.frequency.value = bassNotes[noteIdx % bassNotes.length];
-      gain.gain.setValueAtTime(0.3, synthCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, synthCtx.currentTime + 0.4);
-      osc.connect(gain);
-      gain.connect(master);
-      osc.start();
-      osc.stop(synthCtx.currentTime + 0.45);
-      noteIdx++;
-    }, 500);
-    synthIntervals.push(interval);
-  }
-
-  // Pad synth - dreamy chords
-  function playPad() {
-    var chords = [[220, 277.18, 329.63], [196, 246.94, 293.66], [174.61, 220, 261.63], [196, 246.94, 329.63]];
-    var chordIdx = 0;
-    var interval = setInterval(function() {
-      if (!synthPlaying) return;
-      var chord = chords[chordIdx % chords.length];
-      chord.forEach(function(freq) {
-        var osc = synthCtx.createOscillator();
-        var gain = synthCtx.createGain();
-        var filter = synthCtx.createBiquadFilter();
-        osc.type = "sine";
-        osc.frequency.value = freq;
-        filter.type = "lowpass";
-        filter.frequency.value = 800;
-        gain.gain.setValueAtTime(0, synthCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.08, synthCtx.currentTime + 0.3);
-        gain.gain.linearRampToValueAtTime(0, synthCtx.currentTime + 1.8);
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(master);
-        osc.start();
-        osc.stop(synthCtx.currentTime + 2);
-      });
-      chordIdx++;
-    }, 2000);
-    synthIntervals.push(interval);
-  }
-
-  // Arpeggio - sparkling high notes
-  function playArp() {
-    var notes = [523.25, 659.25, 783.99, 659.25, 523.25, 392, 523.25, 659.25]; // C5 E5 G5 etc
-    var noteIdx = 0;
-    var interval = setInterval(function() {
-      if (!synthPlaying) return;
-      var osc = synthCtx.createOscillator();
-      var gain = synthCtx.createGain();
-      var filter = synthCtx.createBiquadFilter();
-      osc.type = "triangle";
-      osc.frequency.value = notes[noteIdx % notes.length];
-      filter.type = "lowpass";
-      filter.frequency.value = 2000;
-      gain.gain.setValueAtTime(0.06, synthCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, synthCtx.currentTime + 0.3);
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(master);
-      osc.start();
-      osc.stop(synthCtx.currentTime + 0.35);
-      noteIdx++;
-    }, 250);
-    synthIntervals.push(interval);
-  }
-
-  // Kick drum
-  function playKick() {
-    var interval = setInterval(function() {
-      if (!synthPlaying) return;
-      var osc = synthCtx.createOscillator();
-      var gain = synthCtx.createGain();
-      osc.frequency.setValueAtTime(150, synthCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(0.01, synthCtx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.4, synthCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, synthCtx.currentTime + 0.15);
-      osc.connect(gain);
-      gain.connect(master);
-      osc.start();
-      osc.stop(synthCtx.currentTime + 0.2);
-    }, 1000);
-    synthIntervals.push(interval);
-  }
-
-  playBass();
-  playPad();
-  playArp();
-  playKick();
-
-  return synthCtx;
-}
 
 function toggleMusic() {
   var btn = document.getElementById("musicToggle");
   if (!synthPlaying) {
+    if (!synthAudio) {
+      synthAudio = new Audio("music01.mp3");
+      synthAudio.loop = true;
+      synthAudio.volume = 0.4;
+    }
+    synthAudio.play().then(function() {
+      synthPlaying = true;
+      btn.textContent = "🔊";
+      btn.classList.add("playing");
+    }).catch(function() {
+      showToast("Audio konnte nicht gestartet werden");
+    });
     synthPlaying = true;
-    createSynthwaveMusic();
-    if (synthCtx && synthCtx.state === "suspended") synthCtx.resume();
     btn.textContent = "🔊";
     btn.classList.add("playing");
   } else {
     synthPlaying = false;
-    synthIntervals.forEach(function(id) { clearInterval(id); });
-    synthIntervals = [];
-    if (synthCtx) { synthCtx.suspend(); }
+    if (synthAudio) synthAudio.pause();
     btn.textContent = "🔇";
     btn.classList.remove("playing");
   }
