@@ -24,8 +24,8 @@
 <meta name="twitter:image" content="https://jiujazu.github.io/W-V-Summit-2026-Programm/og-image.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,500;9..40,700;9..40,800&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,500;9..40,700;9..40,800&display=swap" rel="stylesheet">
 
 <style>
 /* Light Mode (default) */
@@ -376,7 +376,7 @@
 
 /* Retro cards — subtle glow, NO rainbow border animation (performance) */
 [data-theme="retro"] .session { border-color: rgba(255,180,60,0.15); }
-[data-theme="retro"] .session.is-current { animation: synthPulse 3s ease-in-out infinite; }
+/* synthPulse for .is-current is set at line ~356; not duplicated here to avoid overriding sessionDance */
 
 /* CRT screen flicker — subtle, long interval */
 [data-theme="retro"] body { animation: crtFlicker 4s infinite; }
