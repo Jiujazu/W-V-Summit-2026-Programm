@@ -711,9 +711,6 @@ button:focus-visible, .search-input:focus-visible {
     <button type="button" class="theme-toggle synthwave-toggle" id="synthToggle" onclick="toggleSynthwave()" aria-label="Synthwave Modus">🌈</button>
     <button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Theme wechseln">🌙</button>
   </div>
-  <div class="nyan-cat-wrap">
-    <img class="nyan-cat-img" src="nyan-cat.gif" alt="" loading="eager">
-  </div>
   <div class="day-tabs">
     <button type="button" class="day-tab active" data-day="1" onclick="setDay(1)">Mi 11. März</button>
     <button type="button" class="day-tab" data-day="2" onclick="setDay(2)">Do 12. März</button>
@@ -1387,6 +1384,11 @@ function render() {
       }
 
       html += '</div>';
+
+      // Nyan Cat after lunch break (retro mode only — CSS handles visibility)
+      if (isBrk && s.title.indexOf("Lunch") > -1) {
+        html += '<div class="nyan-cat-wrap"><img class="nyan-cat-img" src="nyan-cat.gif" alt="" loading="lazy"></div>';
+      }
     }
   }
 
