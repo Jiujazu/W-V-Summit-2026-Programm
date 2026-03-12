@@ -1550,8 +1550,10 @@ function toggleMusic() {
     synthAudio.preload = "auto";
 
     synthAudio.onerror = function() {
+      if (!synthLoading && !synthPlaying) return; // already handled by catch
       synthPlaying = false;
       synthLoading = false;
+      synthAudio = null;
       btn.textContent = "\uD83D\uDD07";
       btn.classList.remove("playing");
       showToast("Audio konnte nicht geladen werden");
@@ -1568,8 +1570,10 @@ function toggleMusic() {
         btn.textContent = "\uD83D\uDD0A";
         btn.classList.add("playing");
       }).catch(function(err) {
+        if (!synthLoading && !synthPlaying) return; // already handled by onerror
         synthPlaying = false;
         synthLoading = false;
+        synthAudio = null;
         btn.textContent = "\uD83D\uDD07";
         btn.classList.remove("playing");
         if (err.name === "NotAllowedError") {
@@ -1580,6 +1584,12 @@ function toggleMusic() {
           showToast("Audio: " + (err.message || "Fehler"));
         }
       });
+    } else {
+      // Legacy browsers: play() returns undefined — assume success
+      synthPlaying = true;
+      synthLoading = false;
+      btn.textContent = "\uD83D\uDD0A";
+      btn.classList.add("playing");
     }
   } else {
     synthPlaying = false;
