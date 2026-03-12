@@ -26,6 +26,9 @@ jobs:
           mkdir -p _site
           cp index.html _site/
           test -f og-image.jpg && cp og-image.jpg _site/ || true
+          test -f music01.mp3 && cp music01.mp3 _site/ || true
+          test -f nyan-cat.gif && cp nyan-cat.gif _site/ || true
+          test -f sw.js && cp sw.js _site/ || true
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

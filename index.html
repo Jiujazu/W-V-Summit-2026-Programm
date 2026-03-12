@@ -451,7 +451,14 @@ body { scrollbar-width: none; }
 
 /* Filter row: scrollable pills + fixed fav button */
 .filter-row { display: flex; gap: 6px; align-items: center; }
-.filters { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px; flex: 1; min-width: 0; }
+.filters-wrap { position: relative; flex: 1; min-width: 0; }
+.filters-wrap::after {
+  content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 32px;
+  background: linear-gradient(to right, transparent, var(--bg));
+  pointer-events: none; transition: opacity .2s; z-index: 1;
+}
+.filters-wrap.scrolled-end::after { opacity: 0; }
+.filters { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
 .filters::-webkit-scrollbar { display: none; }
 .filter-pill {
   padding: 8px 14px; border: none; border-radius: 20px; cursor: pointer;
@@ -716,6 +723,7 @@ button:focus-visible, .search-input:focus-visible {
     <button type="button" class="day-tab" data-day="2" onclick="setDay(2)">Do 12. März</button>
   </div>
   <div class="filter-row">
+    <div class="filters-wrap">
     <div class="filters">
       <button type="button" class="filter-pill active" data-filter="all" onclick="setFilter('all')">Alle</button>
       <button type="button" class="filter-pill" data-filter="main" onclick="setFilter('main')">Main Stage</button>
@@ -723,6 +731,7 @@ button:focus-visible, .search-input:focus-visible {
       <button type="button" class="filter-pill filter-pill-action" onclick="openDirectory('people')">👤 Speaker</button>
       <button type="button" class="filter-pill filter-pill-action" onclick="openDirectory('companies')">🏢 Firmen</button>
       <a href="https://motorworld.de/wp-content/uploads/2022/04/MW-M_Event-Tagung_Wegefuehrung-Besucher_2021-09-.pdf" target="_blank" rel="noopener noreferrer" class="filter-pill filter-pill-action">🗺 Lageplan ↗</a>
+    </div>
     </div>
     <div class="fav-toggle">
       <button type="button" class="filter-pill fav" data-filter="fav" onclick="toggleFavFilter()" aria-label="Nur Favoriten anzeigen">★ Favoriten</button>
@@ -1588,6 +1597,20 @@ function jumpToNow() {
   if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
   document.getElementById("jumpNow").classList.remove("is-visible");
 }
+
+// Fade hint for horizontally scrollable filter pills
+(function initFilterScrollHint() {
+  var wrap = document.querySelector(".filters-wrap");
+  var filters = document.querySelector(".filters");
+  if (!wrap || !filters) return;
+  function check() {
+    var atEnd = filters.scrollLeft + filters.clientWidth >= filters.scrollWidth - 4;
+    wrap.classList.toggle("scrolled-end", atEnd);
+  }
+  filters.addEventListener("scroll", check, {passive: true});
+  check();
+  new ResizeObserver(check).observe(filters);
+})();
 
 // Show/hide jump-to-now based on scroll position
 (function initJumpButton() {
