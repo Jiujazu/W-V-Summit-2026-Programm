@@ -376,7 +376,7 @@
 
 /* Retro cards — subtle glow, NO rainbow border animation (performance) */
 [data-theme="retro"] .session { border-color: rgba(255,180,60,0.15); }
-[data-theme="retro"] .session.is-current { animation: synthPulse 3s ease-in-out infinite; }
+[data-theme="retro"]:not(.music-playing) .session.is-current { animation: synthPulse 3s ease-in-out infinite; }
 
 /* CRT screen flicker — subtle, long interval */
 [data-theme="retro"] body { animation: crtFlicker 4s infinite; }
