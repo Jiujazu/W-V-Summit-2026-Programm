@@ -1,4 +1,4 @@
-var CACHE = "wuv26-v10";
+var CACHE = "wuv26-v11";
 // Use relative paths so it works in any subdirectory (e.g. GitHub Pages /repo-name/)
 var BASE = self.registration.scope;
 var ASSET_PATHS = ["", "index.html", "music01.mp3", "nyan-cat.gif"];
