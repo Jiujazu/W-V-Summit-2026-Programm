@@ -345,7 +345,7 @@
   display: block; text-align: center; padding: 4px 0 2px;
 }
 .nyan-cat-img {
-  width: 100%; height: auto;
+  width: 50%; height: auto;
   image-rendering: pixelated;
   font-size: 0; color: transparent;
 }
@@ -574,11 +574,20 @@ button:focus-visible, .search-input:focus-visible {
   font-size: 12.5px; color: var(--desc-color); margin-top: 8px;
   line-height: 1.65; animation: fadeIn .2s ease;
 }
-/* Expand hint — colored, clearly tappable */
+/* Expand hint — pill button style */
 .expand-hint {
-  font-size: 11px; font-weight: 600; color: var(--teal); margin-top: 8px;
-  padding: 4px 0;
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; color: var(--teal);
+  background: var(--pill-bg); border-radius: 20px;
+  padding: 5px 12px; margin-top: 10px;
+  transition: background .15s;
 }
+.expand-hint:active { background: var(--border); }
+.expand-hint .chevron {
+  display: inline-block; transition: transform .2s ease;
+  font-size: 10px; line-height: 1;
+}
+.expand-hint .chevron.up { transform: rotate(180deg); }
 
 /* Empty State */
 .empty { text-align: center; padding: 40px; color: var(--text-dim); font-size: 14px; }
@@ -1376,9 +1385,9 @@ function render() {
         if (isExp) {
           var compact = s.speakers.length >= 3;
           html += '<div class="session-speakers">'+s.speakers.map(function(sp) { return '<span class="speaker-line">'+formatSpeakerHtml(sp, compact)+'</span>'; }).join('')+'</div>';
-          html += '<div class="expand-hint">\u25b4 Speaker ausblenden</div>';
+          html += '<div class="expand-hint"><span class="chevron up">▾</span> Personen ausblenden</div>';
         } else {
-          html += '<div class="expand-hint">\u25be Personen anzeigen ('+s.speakers.length+')</div>';
+          html += '<div class="expand-hint"><span class="chevron">▾</span> '+s.speakers.length+' Personen</div>';
         }
       }
 
@@ -1521,45 +1530,53 @@ var synthLoading = false;
 
 function toggleMusic() {
   var btn = document.getElementById("musicToggle");
-
-  // Prevent double-tap while loading
   if (synthLoading) return;
 
   if (!synthPlaying) {
-    // Create audio element on first use (in user gesture context for iOS)
-    if (!synthAudio) {
-      synthAudio = new Audio("music01.mp3");
-      synthAudio.loop = true;
-      synthAudio.volume = 0.6;
-    }
+    // Always create a fresh Audio in the user gesture context (iOS requirement)
+    synthAudio = new Audio("music01.mp3");
+    synthAudio.loop = true;
+    synthAudio.volume = 0.6;
+    synthAudio.preload = "auto";
 
-    // Show loading state
-    synthLoading = true;
-    btn.textContent = "\u23F3"; // ⏳
-
-    synthAudio.play().then(function() {
-      synthPlaying = true;
-      synthLoading = false;
-      btn.textContent = "\uD83D\uDD0A"; // 🔊
-      btn.classList.add("playing");
-    }).catch(function(err) {
+    synthAudio.onerror = function() {
       synthPlaying = false;
       synthLoading = false;
-      btn.textContent = "\uD83D\uDD07"; // 🔇
+      btn.textContent = "\uD83D\uDD07";
       btn.classList.remove("playing");
-      // Show specific error to help debug
-      if (err.name === "NotAllowedError") {
-        showToast("Audio blockiert \u2013 Stumm-Modus aus?");
-      } else if (err.name === "NotSupportedError") {
-        showToast("Audio-Format nicht unterst\u00fctzt");
-      } else {
-        showToast("Audio: " + (err.message || "Fehler"));
-      }
-    });
+      showToast("Audio konnte nicht geladen werden");
+    };
+
+    synthLoading = true;
+    btn.textContent = "\u23F3";
+
+    var playPromise = synthAudio.play();
+    if (playPromise && playPromise.then) {
+      playPromise.then(function() {
+        synthPlaying = true;
+        synthLoading = false;
+        btn.textContent = "\uD83D\uDD0A";
+        btn.classList.add("playing");
+      }).catch(function(err) {
+        synthPlaying = false;
+        synthLoading = false;
+        btn.textContent = "\uD83D\uDD07";
+        btn.classList.remove("playing");
+        if (err.name === "NotAllowedError") {
+          showToast("Audio blockiert \u2013 Stumm-Modus aus?");
+        } else if (err.name === "NotSupportedError") {
+          showToast("Audio-Format nicht unterst\u00fctzt");
+        } else {
+          showToast("Audio: " + (err.message || "Fehler"));
+        }
+      });
+    }
   } else {
     synthPlaying = false;
     synthAudio.pause();
-    btn.textContent = "\uD83D\uDD07"; // 🔇
+    synthAudio.currentTime = 0;
+    synthAudio = null;
+    btn.textContent = "\uD83D\uDD07";
     btn.classList.remove("playing");
   }
 }
