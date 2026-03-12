@@ -1,10 +1,12 @@
-var CACHE = "wuv26-v9";
-var ASSETS = ["/", "/index.html", "/music01.mp3", "/nyan-cat.gif"];
+var CACHE = "wuv26-v10";
+// Use relative paths so it works in any subdirectory (e.g. GitHub Pages /repo-name/)
+var BASE = self.registration.scope;
+var ASSET_PATHS = ["", "index.html", "music01.mp3", "nyan-cat.gif"];
 
 self.addEventListener("install", function(e) {
   e.waitUntil(
     caches.open(CACHE).then(function(cache) {
-      return cache.addAll(ASSETS);
+      return cache.addAll(ASSET_PATHS.map(function(p) { return BASE + p; }));
     })
   );
   self.skipWaiting();
@@ -38,7 +40,7 @@ self.addEventListener("fetch", function(e) {
         return response;
       }).catch(function() {
         // Only serve index.html fallback for navigation requests (not images/audio)
-        if (e.request.mode === "navigate") return caches.match("/index.html");
+        if (e.request.mode === "navigate") return caches.match(BASE + "index.html");
       });
     })
   );
