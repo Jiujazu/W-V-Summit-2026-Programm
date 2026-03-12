@@ -1521,45 +1521,53 @@ var synthLoading = false;
 
 function toggleMusic() {
   var btn = document.getElementById("musicToggle");
-
-  // Prevent double-tap while loading
   if (synthLoading) return;
 
   if (!synthPlaying) {
-    // Create audio element on first use (in user gesture context for iOS)
-    if (!synthAudio) {
-      synthAudio = new Audio("music01.mp3");
-      synthAudio.loop = true;
-      synthAudio.volume = 0.6;
-    }
+    // Always create a fresh Audio in the user gesture context (iOS requirement)
+    synthAudio = new Audio("music01.mp3");
+    synthAudio.loop = true;
+    synthAudio.volume = 0.6;
+    synthAudio.preload = "auto";
 
-    // Show loading state
-    synthLoading = true;
-    btn.textContent = "\u23F3"; // ⏳
-
-    synthAudio.play().then(function() {
-      synthPlaying = true;
-      synthLoading = false;
-      btn.textContent = "\uD83D\uDD0A"; // 🔊
-      btn.classList.add("playing");
-    }).catch(function(err) {
+    synthAudio.onerror = function() {
       synthPlaying = false;
       synthLoading = false;
-      btn.textContent = "\uD83D\uDD07"; // 🔇
+      btn.textContent = "\uD83D\uDD07";
       btn.classList.remove("playing");
-      // Show specific error to help debug
-      if (err.name === "NotAllowedError") {
-        showToast("Audio blockiert \u2013 Stumm-Modus aus?");
-      } else if (err.name === "NotSupportedError") {
-        showToast("Audio-Format nicht unterst\u00fctzt");
-      } else {
-        showToast("Audio: " + (err.message || "Fehler"));
-      }
-    });
+      showToast("Audio konnte nicht geladen werden");
+    };
+
+    synthLoading = true;
+    btn.textContent = "\u23F3";
+
+    var playPromise = synthAudio.play();
+    if (playPromise && playPromise.then) {
+      playPromise.then(function() {
+        synthPlaying = true;
+        synthLoading = false;
+        btn.textContent = "\uD83D\uDD0A";
+        btn.classList.add("playing");
+      }).catch(function(err) {
+        synthPlaying = false;
+        synthLoading = false;
+        btn.textContent = "\uD83D\uDD07";
+        btn.classList.remove("playing");
+        if (err.name === "NotAllowedError") {
+          showToast("Audio blockiert \u2013 Stumm-Modus aus?");
+        } else if (err.name === "NotSupportedError") {
+          showToast("Audio-Format nicht unterst\u00fctzt");
+        } else {
+          showToast("Audio: " + (err.message || "Fehler"));
+        }
+      });
+    }
   } else {
     synthPlaying = false;
     synthAudio.pause();
-    btn.textContent = "\uD83D\uDD07"; // 🔇
+    synthAudio.currentTime = 0;
+    synthAudio = null;
+    btn.textContent = "\uD83D\uDD07";
     btn.classList.remove("playing");
   }
 }
