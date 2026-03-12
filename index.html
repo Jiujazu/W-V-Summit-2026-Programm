@@ -1336,7 +1336,7 @@ function render() {
 
       let cls = "session";
       if (isBrk) cls += " is-break";
-      if (hasSpeakers) cls += " is-expandable";
+      if (hasSpeakers && s.speakers.length > 1) cls += " is-expandable";
       if (isCur) cls += " is-current";
       if (isNxt) cls += " is-next";
 
@@ -1344,7 +1344,8 @@ function render() {
       if (needsScroll) scrollTargetAssigned = true;
       let scrollAttr = needsScroll ? ' id="scroll-target"' : '';
 
-      html += '<div class="'+cls+'" role="listitem" data-sid="'+esc(s.id)+'"'+scrollAttr+(hasSpeakers?' tabindex="0" aria-expanded="'+(isExp?'true':'false')+'"':'')+'>';
+      var isExpandable = hasSpeakers && s.speakers.length > 1;
+      html += '<div class="'+cls+'" role="listitem" data-sid="'+esc(s.id)+'"'+scrollAttr+(isExpandable?' tabindex="0" aria-expanded="'+(isExp?'true':'false')+'"':'')+'>';
 
       // Top row
       html += '<div class="session-top">';
@@ -1372,9 +1373,12 @@ function render() {
         html += '<div class="session-desc">'+esc(s.desc)+'</div>';
       }
 
-      // Speakers: collapsed by default, expand on tap
+      // Speakers: 1 speaker shown inline, 2+ collapsed with expand
       if (s.speakers.length && !isBrk) {
-        if (isExp) {
+        if (s.speakers.length === 1) {
+          // Single speaker: always show inline, no expand needed
+          html += '<div class="session-speakers">'+formatSpeakerHtml(s.speakers[0], false)+'</div>';
+        } else if (isExp) {
           var compact = s.speakers.length >= 3;
           html += '<div class="session-speakers">'+s.speakers.map(function(sp) { return '<span class="speaker-line">'+formatSpeakerHtml(sp, compact)+'</span>'; }).join('')+'</div>';
           html += '<div class="expand-hint"><span class="chevron up">▾</span> Personen ausblenden</div>';
@@ -1409,7 +1413,7 @@ document.getElementById("timeline").addEventListener("click", function(e) {
   var id = card.dataset.sid;
   if (e.target.closest(".fav-btn")) { toggleFav(id, e); return; }
   var s = S.find(function(x) { return x.id === id; });
-  if (s && s.type !== "break" && s.speakers.length) toggleExpand(id);
+  if (s && s.type !== "break" && s.speakers.length > 1) toggleExpand(id);
 });
 document.getElementById("timeline").addEventListener("keydown", function(e) {
   if (e.key !== "Enter" && e.key !== " ") return;
@@ -1417,7 +1421,7 @@ document.getElementById("timeline").addEventListener("keydown", function(e) {
   if (!card) return;
   var id = card.dataset.sid;
   var s = S.find(function(x) { return x.id === id; });
-  if (s && s.type !== "break" && s.speakers.length) { e.preventDefault(); toggleExpand(id); }
+  if (s && s.type !== "break" && s.speakers.length > 1) { e.preventDefault(); toggleExpand(id); }
 });
 
 // Auto-detect correct day
